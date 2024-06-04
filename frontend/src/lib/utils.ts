@@ -23,7 +23,8 @@ export const formSchema = (type: string)=> z
   password: z.string().min(6),
   address: z.array(addressSchema).optional(),
   role: type === 'login' ? z.enum(['administrator', 'responsible', 'client']).optional() : z.enum(['administrator', 'responsible', 'client']),
-  phone: z.string().optional()
+  phone: z.string().optional(),
+  image:  z.custom<File>()
 })
 
 
@@ -40,5 +41,5 @@ export const productSchema = z
     message: "Image is required"
   })
 })
-
+export const parseStringify = (value: any) => JSON.parse(JSON.stringify(value));
 

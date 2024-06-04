@@ -1,7 +1,7 @@
 
 import UsersTable from '@/components/users/UsersTable'
 import { getAllusers } from '@/lib/actions/user.actions'
-import { useLoader } from '@/lib/hooks/LoaderProvider';
+
 import React, { Suspense } from 'react'
 
 const  page = async({ searchParams: { page } }: SearchParamProps) =>  {
@@ -13,9 +13,9 @@ const  page = async({ searchParams: { page } }: SearchParamProps) =>  {
 
   return (
     <div>
-      <Suspense fallback={<p>Fetching blog posts...</p>}>
+      <Suspense fallback={<p>Fetching data...</p>}>
       <UsersTable users={users} />
-</Suspense>
+      </Suspense>
 
     </div>
   )

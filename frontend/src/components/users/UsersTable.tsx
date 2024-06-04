@@ -1,75 +1,143 @@
+"use client";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import {
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from "@/components/ui/table";
-import Link from "next/link";
+import { deleteUser } from "@/lib/actions/user.actions";
+import { useState } from "react";
 import { sharedIcons } from "../../../constants";
 import CustomSvg from "../CustomSvg";
 import CustomPagination from "../Pagination";
+import Toast from "../Toast";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { useState } from "react";
-import { useLoader } from "@/lib/hooks/LoaderProvider";
 
-const UsersTable = ({users}:{users:UsersTableProps}) => {
+
+
+
+const UsersTable = ({ users }: { users: UsersTableProps }) => {
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>()
+  const [isDeleted, setIsDeleted] = useState<boolean>(false);
+  const handleDelete = async (id?: string) => {
+    try {
+      const response = await deleteUser(id);
+      setShowAlert(true);
+      setMessage('User deleted successfully');
+      setIsDeleted(true);
+    } catch (e) {
+      setShowAlert(true);
+      setMessage('Cannot delete this user');
+    }
+  };
 
 
   return (
-    <div className="relative w-full overflow-auto bg-white rounded-sm py-6 px-4">
-      <div className="flex justify-between mb-2">
-      <Input className="w-1/3 max-lg:w-1/2" type="text" placeholder="Search here..."/>
-      <Link href='/users/add-user'>
-      <Button className="justify-end md:px-10">+ Add new</Button>
-      </Link>
-      </div>
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">User</TableHead>
-          <TableHead>Phone</TableHead>
-          <TableHead>Email</TableHead>
-          <TableHead className="text-right">Actions</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {users.data.map((item, index) => (
-          <TableRow key={index}>
-            <TableCell className="flex flex-col gap-1">
-              <p className="font-semibold">{item.fullname}</p>
-              <p className="font-sm text-gray-400">{item.role}</p>
-              </TableCell>
-            <TableCell>{item.phone}</TableCell>
-            <TableCell>{item.email}</TableCell>
-            <TableCell className="flex justify-end gap-4">
-              {sharedIcons.actions.map((item)=> {
-                return     <CustomSvg
-                title={item.title}
-                style="w-6 h-6"
-                color={item.color}
-                d={item.d}
-                stroke={item.stroke}
-                strokeLine={item.strokeLine}
-                strokeWidth={item.strokeWidth}
-                viewBox={item.viewBox}
-              />
-              })}
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <>
+    <Toast open={showAlert} close={()=>{setShowAlert(false)}} message={message} deleted={isDeleted}/>
+    <div className=" w-full overflow-auto bg-white rounded-sm py-6 px-4">
 
-    <CustomPagination 
-    page={users.page} 
-    totalPages={users.totalPages} 
-    nextPage={users.nextPage} 
-    previousPage={users.previousPage}
-    />
-    </div>
-  )
-}
- export default UsersTable;
+      <div className="flex justify-between mb-2">
+        <Input
+          className="w-1/3 max-lg:w-1/2"
+          type="text"
+          placeholder="Search here..." />
+       
+          <Button className="justify-end md:px-10">+ Add new</Button>
+       
+      </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">User</TableHead>
+            <TableHead>Phone</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {users.data.map((item, index) => (
+            <TableRow key={index}>
+              <TableCell className="flex flex-col gap-1">
+                <p className="font-semibold">{item.fullname}</p>
+                <p className="font-sm text-gray-400">{item.role}</p>
+              </TableCell>
+              <TableCell>{item.phone}</TableCell>
+              <TableCell>{item.email}</TableCell>
+              <TableCell className="flex justify-end gap-4">
+                <div
+                >
+                  <CustomSvg
+                    title={sharedIcons.trash.title}
+                    style="w-6 h-6 cursor-pointer"
+                    color={sharedIcons.pen.color}
+                    d={sharedIcons.pen.d}
+                    stroke={sharedIcons.pen.stroke}
+                    strokeLine={sharedIcons.pen.strokeLine}
+                    strokeWidth={sharedIcons.pen.strokeWidth}
+                    viewBox={sharedIcons.pen.viewBox} />
+                </div>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <div>
+                      <CustomSvg
+                        title={sharedIcons.trash.title}
+                        style="w-6 h-6 cursor-pointer"
+                        color={sharedIcons.trash.color}
+                        d={sharedIcons.trash.d}
+                        stroke={sharedIcons.trash.stroke}
+                        strokeLine={sharedIcons.trash.strokeLine}
+                        strokeWidth={sharedIcons.trash.strokeWidth}
+                        viewBox={sharedIcons.trash.viewBox} />
+                    </div>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Delet user</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Are you sure you want to delete {item.fullname} ?
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => {
+                        handleDelete(item._id);
+                      } }>Continue</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+      <CustomPagination
+        page={users.page}
+        totalPages={users.totalPages}
+        nextPage={users.nextPage}
+        previousPage={users.previousPage} />
+    </div></>
+  );
+};
+
+
+
+
+
+export default UsersTable;

@@ -8,7 +8,7 @@ import {
     PaginationNext,
     PaginationPrevious,
   } from "@/components/ui/pagination"
-import { useLoader } from "@/lib/hooks/LoaderProvider";
+
   import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useState } from "react";
 
@@ -16,13 +16,6 @@ import { useState } from "react";
  const CustomPagination = ({page, totalPages, nextPage, previousPage}: PaginationProps) => {
   const router = useRouter()
   const path = usePathname()
-  const searchParams = useSearchParams()
-
-  const [employees, setEmployees] = useState<UsersTableProps>()
-  const loader = useLoader()
-
-  
-
 
   const handleNavigation = (pageIndex: number) => {
 

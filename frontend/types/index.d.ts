@@ -86,3 +86,10 @@ declare type SearchParamProps = {
   params: { [key: string]: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }
+
+declare type ToastProps = {
+  open:boolean;
+  close: ()=> void;
+  message?: string;
+  deleted?: boolean
+}

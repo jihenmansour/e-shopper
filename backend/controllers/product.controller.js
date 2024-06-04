@@ -17,7 +17,7 @@ const upload = multer({ storage: storage });
 
 createProduct = async (req, res) => {
     try {
-       path.join(__dirname, '..', 'uploads', req.file.filename);
+
         const obj = {
             name: req.body.name,
             price: req.body.price,
@@ -26,8 +26,6 @@ createProduct = async (req, res) => {
         };
 
         const product = await Product.create(obj);
-        const newFilePath = path.join(__dirname, 'uploads', `${product.name}`);
-
         res.status(200).json(product);
     } catch (error) {
         res.status(500).json({ message: error.message });
