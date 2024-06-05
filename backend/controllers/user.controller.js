@@ -19,28 +19,34 @@ const upload = multer({ storage: storage });
 
 const signUp = async (req, res) => {
   try {
-    const password = req.body.password;
-    const isValid = await User.findOne({ email: req.body.email }).exec();
+    const parsedData = JSON.parse(req.body.data);
+
+    const password = parsedData.password;
+    const isValid = await User.findOne({ email: parsedData.email }).exec();
 
     if (isValid) {
       return res.status(400).json({ message: "Email already registered" });
     }
-
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    const userData = { ...req.body, password: hashedPassword };
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : "";
+
+    const userData = {
+      ...parsedData,
+      password: hashedPassword,
+      image: imageUrl,
+    };
 
     const user = new User(userData);
     await user.validate();
 
     await user.save();
-    const imageUrl = req.file ? `/uploads/${req.file.filename}` : "";
 
     const { password: Password, ...userInfo } = user.toObject();
 
     res.json({
       message: "Account created successfully",
-      user: { ...userInfo, image: imageUrl },
+      user: userInfo,
     });
   } catch (error) {
     res.status(400).json({ message: error.message });

@@ -2,24 +2,25 @@
 
 import axios from "axios";
 import { cookies } from "next/headers";
-import { userInfo } from "os";
-import { parseStringify } from "../utils";
+import { formSchema, parseStringify } from "../utils";
+import { z } from "zod";
 
 const apiURL = process.env.NEXT_PUBLIC_APP_API_URL;
 
 
 
-export const signUp = async (user: userProps) => {
+export const signUp = async (user: FormData) => {
     try {
       const response = await axios.post(`${apiURL}/signup`, user, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }});
       
-      return (response);
+      return (response.data);
     } catch (error) {
-      console.error('Error', error);
-    }
+      if(error.response.data.message){
+      }
+  }
   };
 
   export const login = async ({ email, password }: LoginProps) => {

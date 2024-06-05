@@ -10,6 +10,7 @@ router.post('/login', login)
 router.post('/auth', authentification)
 router.get('/users', getUsers)
 router.delete("/user",preventSelfDeletion, deleteUser);
+router.post('/upload', upload.single('image'))
 
 
 

@@ -20,6 +20,7 @@ declare interface userProps {
   address?:Array<addressProps>;
   role?: string;
   phone?: string;
+  image?: any;
   }
 
 
@@ -91,5 +92,5 @@ declare type ToastProps = {
   open:boolean;
   close: ()=> void;
   message?: string;
-  deleted?: boolean
+  success?: boolean
 }

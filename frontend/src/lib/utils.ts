@@ -2,6 +2,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { z } from "zod";
+import { zfd } from "zod-form-data";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -24,7 +25,7 @@ export const formSchema = (type: string)=> z
   address: z.array(addressSchema).optional(),
   role: type === 'login' ? z.enum(['administrator', 'responsible', 'client']).optional() : z.enum(['administrator', 'responsible', 'client']),
   phone: z.string().optional(),
-  image:  z.custom<File>()
+  image:  z.any().optional()
 })
 
 

@@ -33,13 +33,13 @@ import { Input } from "../ui/input";
 const UsersTable = ({ users }: { users: UsersTableProps }) => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [message, setMessage] = useState<string>()
-  const [isDeleted, setIsDeleted] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const handleDelete = async (id?: string) => {
     try {
       const response = await deleteUser(id);
       setShowAlert(true);
       setMessage('User deleted successfully');
-      setIsDeleted(true);
+      setIsSuccess(true);
     } catch (e) {
       setShowAlert(true);
       setMessage('Cannot delete this user');
@@ -49,7 +49,7 @@ const UsersTable = ({ users }: { users: UsersTableProps }) => {
 
   return (
     <>
-    <Toast open={showAlert} close={()=>{setShowAlert(false)}} message={message} deleted={isDeleted}/>
+    <Toast open={showAlert} close={()=>{setShowAlert(false)}} message={message} success={isSuccess}/>
     <div className=" w-full overflow-auto bg-white rounded-sm py-6 px-4">
 
       <div className="flex justify-between mb-2">
