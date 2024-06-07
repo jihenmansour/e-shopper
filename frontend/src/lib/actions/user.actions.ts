@@ -2,10 +2,7 @@
 
 import axios from "axios";
 import { cookies } from "next/headers";
-import { formSchema, parseStringify } from "../utils";
-import { z } from "zod";
-
-const apiURL = process.env.NEXT_PUBLIC_APP_API_URL;
+import { apiURL, parseStringify } from "../utils";
 
 
 
@@ -51,21 +48,36 @@ export const signUp = async (user: FormData) => {
     
   };
 
+export const getUser = async (id: string): Promise<userProps> => {
+
+    const response = await axios.get(`${apiURL}/user/${id}`);
+    return response.data.user
+
+}
+
 
 export const getAllusers = async (page: number): Promise<UsersTableProps> => {
     const response = await axios.get(`${apiURL}/users?page=${page}`);
     return parseStringify(response.data)
   };
 
+  export const updateUser = async ({id, user}: {id?: string, user:userProps}) => {
+    try {
+      const response = await axios.put(`${apiURL}/user/${id}`, user);
+      return parseStringify(response.data)
+    } catch (error) {
+      console.log('error: ', error)
+    }
+
+  };
 
 export const deleteUser = async (id?: string) => {
-    try {
+try{
       const user = await getUserInfo()
-      const response = await axios.delete(`${apiURL}/user`, {
-        data:{id, loggedId: user.user._id}
-      });
+      const response = await axios.delete(`${apiURL}/user/${id}`);
+      return parseStringify(response.data)
+}catch(error){
+  console.log('error: ', error)
+}
+}
 
-    } catch (error) {
-      return (error);
-    }
-  }

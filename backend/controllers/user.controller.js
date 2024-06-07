@@ -1,13 +1,15 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/user.model");
-const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const path = require("path");
+const CustomError = require("../error/custom.error");
+const { createJWT, isTokenValid } = require("../utils/jwt");
+const { hashPassword } = require("../utils/password");
 
-const saltRounds = 10;
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads");
+    cb(null, "public/images");
   },
 
   filename: (req, file, cb) => {
@@ -18,159 +20,157 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 const signUp = async (req, res) => {
-  try {
-    const parsedData = JSON.parse(req.body.data);
+  const parsedData = JSON.parse(req.body.data);
 
-    const password = parsedData.password;
-    const isValid = await User.findOne({ email: parsedData.email }).exec();
+  const password = parsedData.password;
 
-    if (isValid) {
-      return res.status(400).json({ message: "Email already registered" });
-    }
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+  const hashedPassword = hashPassword(password);
 
-    const imageUrl = req.file ? `/uploads/${req.file.filename}` : "";
+  const imageUrl = req.file ? req.file.filename : "";
 
-    const userData = {
-      ...parsedData,
-      password: hashedPassword,
-      image: imageUrl,
-    };
+  const userData = {
+    ...parsedData,
+    password: hashedPassword,
+    image: imageUrl,
+  };
 
-    const user = new User(userData);
-    await user.validate();
+  const user = new User(userData);
+  await user.validate();
 
-    await user.save();
+  await user.save();
 
-    const { password: Password, ...userInfo } = user.toObject();
+  const { password: Password, ...userInfo } = user.toObject();
 
-    res.json({
-      message: "Account created successfully",
-      user: userInfo,
-    });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
+  res.json({
+    message: "Account created successfully",
+    user: userInfo,
+  });
 };
 
 const login = async (req, res) => {
   const { email, password } = req.body;
+  const user = await User.findOne({ email: email });
 
-  try {
-    const user = await User.findOne({ email: email }).exec();
-    if (user) {
-      const match = await bcrypt.compare(password, user.password);
+  const oneDay = 1000 * 60 * 60 * 24;
+  res.cookie("cookies", "cookies", {
+    httpOnly: true,
+    expires: new Date(Date.now() + oneDay),
+    secure: true,
+    sameSite: "None",
+  });
 
-      if (match) {
-        const { password, ...userInfo } = user.toObject();
+  if (user) {
+    const match = await bcrypt.compare(password, user.password);
 
-        const token = jwt.sign(
-          { user: userInfo },
-          process.env.JWT_LOGIN_TOKEN,
-          {
-            expiresIn: "1d",
-          }
-        );
+    if (match) {
+      const { password, ...userInfo } = user.toObject();
+      const token = createJWT(userInfo);
 
-        res.json({
-          message: "Login Successful",
-          token,
-        });
-      } else {
-        res.status(400).json({ message: "Username or Password incorrect" });
-      }
+      res.json({
+        message: "Login Successful",
+        token: token,
+      });
     } else {
-      res.status(400).json({ message: "Username or Password incorrect" });
+      throw new CustomError("Password incorrect");
     }
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+  } else {
+    throw new CustomError("Username incorrect");
   }
 };
 
 const authentification = (req, res) => {
-  const { token } = req.body;
-
-  if (token) {
-    try {
-      const decode = jwt.verify(token, process.env.JWT_LOGIN_TOKEN);
-      res.json({
-        auth: true,
-        user: decode,
-      });
-    } catch (error) {
-      res.json({
-        auth: false,
-        message: error.message,
-      });
-    }
-  } else {
+  const token = req.body.token;
+  let user;
+  if (token && isTokenValid(token)) {
+    user = isTokenValid(token);
     res.json({
-      auth: false,
-      data: "No token found in request",
+      auth: true,
+      user,
     });
+  } else {
+    throw new CustomError("No token found");
   }
+};
+
+const getUser = async (req, res) => {
+  const { id } = req.params;
+
+  const user = await User.findById({ _id: id });
+  if (!user) {
+    throw new CustomError("No user found");
+  }
+
+  res.status(200).json({ user });
 };
 
 const getUsers = async (req, res) => {
-  try {
-    const page = req.query.page ? parseInt(req.query.page) : 1;
-    const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+  const page = req.query.page ? parseInt(req.query.page) : 1;
+  const limit = req.query.limit ? parseInt(req.query.limit) : 10;
 
-    const total = await User.find().count();
+  const total = await User.find().count();
 
-    const totalPages = Math.ceil(total / limit);
-    const nextPage = page < totalPages ? page + 1 : null;
-    const previousPage = page > 1 ? page - 1 : null;
-    const data = await User.find()
-      .sort({ createdAt: -1 })
-      .limit(limit)
-      .skip(limit * (page - 1));
+  const totalPages = Math.ceil(total / limit);
+  const nextPage = page < totalPages ? page + 1 : null;
+  const previousPage = page > 1 ? page - 1 : null;
+  const data = await User.find()
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .skip(limit * (page - 1));
 
-    res.status(200).json({
-      data,
-      page,
-      total,
-      totalPages,
-      nextPage,
-      previousPage,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+  res.status(200).json({
+    data,
+    page,
+    total,
+    totalPages,
+    nextPage,
+    previousPage,
+  });
 };
 
-const preventSelfDeletion = (req, res, next) => {
-  const { id, loggedId } = req.body;
+const updateUser = async (req, res) => {
+  const { id } = req.params;
+  const parsedData = JSON.parse(req.body.data);
+  console.log(parsedData)
 
-  if (id === loggedId) {
-    return res.status(400).json({ message: "Cannot delete this user" });
+  const password = parsedData.password;
+
+  const hashedPassword = hashPassword(password);
+
+  const imageUrl = req.file ? req.file.filename : "";
+
+  const updatedUser = {
+    ...parsedData,
+    password: hashedPassword,
+    image: imageUrl,
+  };
+
+  const user = await User.findOneAndUpdate({ _id: id }, updatedUser, {
+    new: true,
+    runValidators: true,
+  });
+  if (!user) {
+    throw new CustomError.BadRequestError(`No user found`);
   }
-
-  next();
+  res.status(200).json({ user });
 };
 
 const deleteUser = async (req, res) => {
-  try {
-    const { id } = req.body;
+  const { id } = req.params;
 
-    const user = await User.findByIdAndDelete(id);
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    res.status(200).json({ message: "User deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  const user = await User.findByIdAndDelete(id);
+  if (!user) {
+    throw new CustomError("User not found");
   }
+  res.status(200).json({ message: "User deleted successfully" });
 };
 
 module.exports = {
   signUp,
   login,
   authentification,
+  getUser,
   getUsers,
+  updateUser,
   deleteUser,
-  preventSelfDeletion,
   upload,
 };

@@ -30,7 +30,7 @@ import { useState } from "react";
              isDisable={previousPage?false:true}/>
           </PaginationItem>
           {[...Array(totalPages)].map((item,index)=> (
-            <PaginationItem>
+            <PaginationItem key={index}>
             <PaginationLink 
             onClick={()=>{handleNavigation(index+1)}} 
             isActive={page===index+1?true:false}

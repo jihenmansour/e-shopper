@@ -16,9 +16,9 @@ declare interface userProps {
   _id?: string
   fullname?: string;
   email: string;
-  password: string;
+  password?: string;
   address?:Array<addressProps>;
-  role?: string;
+  role?: 'administrator' | 'responsible' | 'client';
   phone?: string;
   image?: any;
   }

@@ -22,8 +22,8 @@ const ProductSection: FC<ProductSectionProps> = ({ products }) => {
       <section className=" text-gray-700 ">
         <div className="mx-auto max-w-screen-xl ">
           <div className=" grid grid-cols-2 gap-6 sm:grid-cols-4 sm:gap-4 ">
-            {products.slice(0,8).map((product) => (
-              <CustomCard product={product} />
+            {products.slice(0,8).map((product, index) => (
+              <CustomCard product={product} key={index}/>
             ))}
           </div>
         </div>

@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { signUp } from "@/lib/actions/user.actions";
+import { signUp, updateUser } from "@/lib/actions/user.actions";
 import { formSchema } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import CustomInput from "../CustomInput";
@@ -28,13 +28,15 @@ import {
 import { useState } from "react";
 import Toast from "../Toast";
 
-const UsersForm = ({ type }: { type: string }) => {
+const UsersForm = ({user}: {user?:userProps}) => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [message, setMessage] = useState<string>();
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const router = useRouter();
+  const [typeSchema, setTypeSchema] = useState<string>('');
 
-  const authformSchema = formSchema("sign in");
+  const router = useRouter();
+ 
+  const authformSchema = formSchema(user?'edit user': '');
 
   const form = useForm<z.infer<typeof authformSchema>>({
     resolver: zodResolver(authformSchema),
@@ -46,6 +48,10 @@ const UsersForm = ({ type }: { type: string }) => {
     form.append("image", data.image);
     form.append("data", JSON.stringify(data));
     try {
+      if(user){
+       const response = await updateUser({id: user._id, user: data})
+       setShowAlert(true)
+      }else{
       const response = await signUp(form);
       setShowAlert(true);
       if(response.user){
@@ -53,6 +59,7 @@ const UsersForm = ({ type }: { type: string }) => {
       setIsSuccess(true);
       router.push("/users");
       }
+    }
     } catch (error) {
      console.log(error)
     }
@@ -68,81 +75,44 @@ const UsersForm = ({ type }: { type: string }) => {
         message={message}
         success={isSuccess}
       />
-      <section>
-        <header className="flex flex-col gap-2 mb-4">
-          <h1 className="text-26 font-ibm-plex-serif font-bold text-black-1 ">
-            Add user
-          </h1>
-          <p className="text-sm text-muted-foreground">Create a new user</p>
-          <div
-            data-orientation="horizontal"
-            role="none"
-            className="shrink-0 bg-border h-[1px] w-full"
-          ></div>
-        </header>
+ 
 
         <>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <>
-                <div className="grid-cols-3 mt-3 gap-8 md:grid">
-                  <CustomInput
-                    control={form.control}
-                    name="fullname"
-                    label="Full name"
-                    placeholder="Enter your full name"
-                  />
-                  <CustomInput
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+              <div className="md:flex md:gap:4 bg-white py-6 px-4 rounded-sm">
+                <div className="flex flex-col w-1/2">
+                   <h1 className="text-lg font-bold">
+                      Account
+                   </h1>
+                   <p className="text-gray-600 text-[14px]">Fill in the information below to add a new account</p>
+                </div>
+                <div className="w-full">
+                <div className="grid-cols-2 mt-3 gap-8 md:grid">
+                <CustomInput
                     control={form.control}
                     name="email"
                     label="Email"
+                    data={user?.email}
                     placeholder="Enter your email"
                   />
-                  <CustomInput
+                   <CustomInput
                     control={form.control}
                     name="password"
                     label="Password"
                     placeholder="Enter your password"
                   />
-                </div>
-
-                <div className="grid-cols-3 mt-5 gap-8 md:grid">
-                  <CustomInput
+                    <CustomInput
                     control={form.control}
-                    name={`address.${0}.address`}
-                    label="Address"
-                    placeholder="Enter your full address"
+                    name="fullname"
+                    label="Full name"
+                    data={user?.fullname}
+                    placeholder="Enter your full name"
                   />
-                  <CustomInput
-                    control={form.control}
-                    name={`address.${0}.state`}
-                    label="State"
-                    placeholder="Enter your state"
-                  />
-                  <CustomInput
-                    control={form.control}
-                    name={`address.${0}.city`}
-                    label="City"
-                    placeholder="Enter your city"
-                  />
-                </div>
-
-                <div className="grid-cols-3 mt-5 gap-8 md:grid">
-                  <CustomInput
-                    control={form.control}
-                    name={`address.${0}.zip`}
-                    label="Zip"
-                    placeholder="Enter your zip"
-                  />
-                  <CustomInput
-                    control={form.control}
-                    name={`address.${0}.country`}
-                    label="Country"
-                    placeholder="Enter your country"
-                  />
-                  <FormField
+                    <FormField
                     control={form.control}
                     name="role"
+                    defaultValue={user?.role}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Role</FormLabel>
@@ -152,7 +122,8 @@ const UsersForm = ({ type }: { type: string }) => {
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Choose a role" />
+                              <SelectValue 
+                              placeholder="Choose a role" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -169,16 +140,68 @@ const UsersForm = ({ type }: { type: string }) => {
                       </FormItem>
                     )}
                   />
+                 
+
                 </div>
 
-                <div className="grid-cols-3 mt-5 gap-8 md:grid">
+                </div>
+              </div>
+
+
+
+
+              <div className="md:flex md:gap:4 bg-white py-6 px-4 rounded-sm">
+                <div className="flex flex-col w-1/2">
+                   <h1 className="text-lg font-bold">
+                   Additional Details
+                   </h1>
+                   <p className="text-gray-600 text-[14px]">Add more details to make your profile complete</p>
+                </div>
+                <div className="w-full">
+                <div className="grid-cols-2 mt-3 gap-8 md:grid">
+                <CustomInput
+                    control={form.control}
+                    name={`address.${0}.country`}
+                    label="Country"
+                    data={user?.address![0].country}
+                    placeholder="Enter your country"
+                  />
+                  <CustomInput
+                    control={form.control}
+                    name={`address.${0}.state`}
+                    label="State"
+                    data={user?.address![0].state}
+                    placeholder="Enter your state"
+                  />
+                  <CustomInput
+                    control={form.control}
+                    name={`address.${0}.city`}
+                    label="City"
+                    data={user?.address![0].city}
+                    placeholder="Enter your city"
+                  />
+                   <CustomInput
+                    control={form.control}
+                    name={`address.${0}.address`}
+                    label="Address"
+                    data={user?.address![0].address}
+                    placeholder="Enter your full address"
+                  />
+                   <CustomInput
+                    control={form.control}
+                    name={`address.${0}.zip`}
+                    label="Zip"
+                    data={user?.address![0].zip}
+                    placeholder="Enter your zip"
+                  />
                   <CustomInput
                     control={form.control}
                     name="phone"
                     label="Phone"
+                    data={user?.phone}
                     placeholder="Enter your phone"
                   />
-                  <FormField
+                 <FormField
                     control={form.control}
                     name="image"
                     render={({ field: { value, onChange, ...fieldProps } }) => (
@@ -201,18 +224,20 @@ const UsersForm = ({ type }: { type: string }) => {
                       </FormItem>
                     )}
                   />
-                </div>
-              </>
 
-              <div className="space-x-4">
+                </div>
+
+                </div>
+              </div>
+
+
+  
                 <Button className="ml-auto mt-4" type="submit">
                   create
                 </Button>
-              </div>
             </form>
           </Form>
         </>
-      </section>
     </>
   );
 };
