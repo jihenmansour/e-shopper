@@ -48,7 +48,7 @@ declare interface ProductSectionProps {
 
   declare interface MenuItemProps {
     imgURL?: string;
-    route: string;
+    route?: string;
     label: string;
     subMenuItems?: MenuItemProps[];
     icon?: SvgPros;
@@ -93,4 +93,9 @@ declare type ToastProps = {
   close: ()=> void;
   message?: string;
   success?: boolean
+}
+
+declare type ResponseProps = {
+  error?: string 
+  message? :string
 }

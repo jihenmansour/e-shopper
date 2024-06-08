@@ -47,3 +47,5 @@ export const productSchema = z
 })
 export const parseStringify = (value: any) => JSON.parse(JSON.stringify(value));
 
+export const parseStringifyError = (value: any) => JSON.parse(JSON.stringify({error: value}));
+

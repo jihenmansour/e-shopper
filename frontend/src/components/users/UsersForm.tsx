@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { signUp, updateUser } from "@/lib/actions/user.actions";
+import { register, updateUser } from "@/lib/actions/user.actions";
 import { formSchema } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import CustomInput from "../CustomInput";
@@ -25,14 +25,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Toast from "../Toast";
 
 const UsersForm = ({user}: {user?:userProps}) => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [message, setMessage] = useState<string>();
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const [typeSchema, setTypeSchema] = useState<string>('');
 
   const router = useRouter();
  
@@ -41,29 +40,35 @@ const UsersForm = ({user}: {user?:userProps}) => {
   const form = useForm<z.infer<typeof authformSchema>>({
     resolver: zodResolver(authformSchema),
   });
-
+  let response: { error: string | undefined; message: string | undefined; };
   const onSubmit = async (data: z.infer<typeof authformSchema>) => {
     const form = new FormData();
 
     form.append("image", data.image);
     form.append("data", JSON.stringify(data));
     try {
-      if(user){
-       const response = await updateUser({id: user._id, user: data})
-       setShowAlert(true)
-      }else{
-      const response = await signUp(form);
       setShowAlert(true);
-      if(response.user){
-      setMessage("User created successfully");
-      setIsSuccess(true);
-      router.push("/users");
-      }
+      if(user){
+      response = await updateUser({id: user._id, user: form})
+      }else{
+      response = await register(form);
     }
+
+    if (response.error) {
+      setIsSuccess(false);
+      setMessage(response.error);
+      
+    } else {
+      setIsSuccess(true);
+      setMessage(response.message);
+     
+    }
+    
     } catch (error) {
      console.log(error)
     }
   };
+
 
   return (
     <>
@@ -163,35 +168,35 @@ const UsersForm = ({user}: {user?:userProps}) => {
                     control={form.control}
                     name={`address.${0}.country`}
                     label="Country"
-                    data={user?.address![0].country}
+                    data={user?.address![0]?.country}
                     placeholder="Enter your country"
                   />
                   <CustomInput
                     control={form.control}
                     name={`address.${0}.state`}
                     label="State"
-                    data={user?.address![0].state}
+                    data={user?.address![0]?.state}
                     placeholder="Enter your state"
                   />
                   <CustomInput
                     control={form.control}
                     name={`address.${0}.city`}
                     label="City"
-                    data={user?.address![0].city}
+                    data={user?.address![0]?.city}
                     placeholder="Enter your city"
                   />
                    <CustomInput
                     control={form.control}
                     name={`address.${0}.address`}
                     label="Address"
-                    data={user?.address![0].address}
+                    data={user?.address![0]?.address}
                     placeholder="Enter your full address"
                   />
                    <CustomInput
                     control={form.control}
                     name={`address.${0}.zip`}
                     label="Zip"
-                    data={user?.address![0].zip}
+                    data={user?.address![0]?.zip}
                     placeholder="Enter your zip"
                   />
                   <CustomInput
@@ -233,7 +238,9 @@ const UsersForm = ({user}: {user?:userProps}) => {
 
   
                 <Button className="ml-auto mt-4" type="submit">
-                  create
+                  {user? 
+                  <p>update</p>: 
+                  <p>create</p>}
                 </Button>
             </form>
           </Form>

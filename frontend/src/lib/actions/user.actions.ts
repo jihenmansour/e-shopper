@@ -2,21 +2,19 @@
 
 import axios from "axios";
 import { cookies } from "next/headers";
-import { apiURL, parseStringify } from "../utils";
+import { apiURL, parseStringify, parseStringifyError } from "../utils";
 
 
 
-export const signUp = async (user: FormData) => {
+export const register = async (user: FormData) => {
     try {
-      const response = await axios.post(`${apiURL}/signup`, user, {
+      const response = await axios.post(`${apiURL}/register`, user, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }});
-      
-      return (response.data);
+      return response.data;
     } catch (error) {
-      if(error.response.data.message){
-      }
+      return parseStringifyError(error.response.data.message)
   }
   };
 
@@ -36,6 +34,14 @@ export const signUp = async (user: FormData) => {
     }
   };
 
+  export const logout = async () => {
+    try {
+      cookies().delete("token");
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
   export const getUserInfo = async () => {
     const token = cookies().get("token")?.value;
@@ -49,7 +55,6 @@ export const signUp = async (user: FormData) => {
   };
 
 export const getUser = async (id: string): Promise<userProps> => {
-
     const response = await axios.get(`${apiURL}/user/${id}`);
     return response.data.user
 
@@ -58,24 +63,23 @@ export const getUser = async (id: string): Promise<userProps> => {
 
 export const getAllusers = async (page: number): Promise<UsersTableProps> => {
     const response = await axios.get(`${apiURL}/users?page=${page}`);
-    return parseStringify(response.data)
+    return response.data
   };
 
-  export const updateUser = async ({id, user}: {id?: string, user:userProps}) => {
+  export const updateUser = async ({id, user}: {id?: string, user:FormData}) => {
     try {
       const response = await axios.put(`${apiURL}/user/${id}`, user);
-      return parseStringify(response.data)
+      return response.data
     } catch (error) {
-      console.log('error: ', error)
+      return parseStringifyError(error.response.data.message)
     }
 
   };
 
 export const deleteUser = async (id?: string) => {
 try{
-      const user = await getUserInfo()
       const response = await axios.delete(`${apiURL}/user/${id}`);
-      return parseStringify(response.data)
+      return response.data
 }catch(error){
   console.log('error: ', error)
 }

@@ -1,17 +1,25 @@
 "use client";
 
+import { logout } from "@/lib/actions/user.actions";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { sharedIcons, sidebarLinks } from "../../constants";
-import { Button } from "./ui/button";
-import { ChevronDown } from "lucide-react";
 import CustomSvg from "./CustomSvg";
 
 const Sidebar = () => {
-  const pathname = usePathname();
+  const router = useRouter()
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push("/login");
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <section className="sticky left-0 top-0 flex h-screen w-fit flex-col  justify-between border-r border-gray-200 bg-white pt-8 text-white max-md:hidden sm:p-4 xl:p-6 2xl:w-[355px]">
@@ -31,14 +39,29 @@ const Sidebar = () => {
         {sidebarLinks.map((item, index) => {
           return <MenuItem key={index} item={item} />;
         })}
-        USER
       </nav>
-      FOOTER
+      <footer 
+      className="group flex gap-3 cursor-pointer" 
+      onClick={()=>{handleLogout()}}>
+        <CustomSvg
+          title={sharedIcons.logout.title}
+          style="w-7 h-7 group-hover:fill-primary"
+          d={sharedIcons.logout.d}
+          viewBox={sharedIcons.logout.viewBox}
+        />
+        <p className="text-16 font-medium text-gray-800 group-hover:text-primary">Logout</p>
+      </footer>
     </section>
   );
 };
 
-const MenuItem = ({ item, setOpen}: { item: MenuItemProps, setOpen?: any}) => {
+const MenuItem = ({
+  item,
+  setOpen,
+}: {
+  item: MenuItemProps;
+  setOpen?: any;
+}) => {
   const pathname = usePathname();
   const isActive =
     pathname === item.route || pathname.startsWith(`${item.route}/`);
@@ -52,8 +75,8 @@ const MenuItem = ({ item, setOpen}: { item: MenuItemProps, setOpen?: any}) => {
         <div>
           <div
             className={cn(
-              "flex items-center justify-between py-1 2xl:p-4 max-sm:pr-4 rounded-lg cursor-pointer text-black",
-              { "bg-blue-100 text-blue-600": subMenuOpen }
+              "flex items-center justify-between py-1 2xl:p-4 max-sm:pr-4 rounded-lg cursor-pointer font-medium text-gray-800",
+              { "bg-primary text-white": subMenuOpen }
             )}
             onClick={toggleSubMenu}
             key={item.label}
@@ -69,38 +92,38 @@ const MenuItem = ({ item, setOpen}: { item: MenuItemProps, setOpen?: any}) => {
                   style="w-7 h-7"
                   color={
                     subMenuOpen && item.icon?.color !== "none"
-                      ? "#2563eb"
+                      ? "#ffff"
                       : item.icon?.color
                   }
                   d={item.icon?.d}
-                  stroke={subMenuOpen ? "#2563eb" : item.icon?.stroke}
+                  stroke={subMenuOpen ? "#ffff" : item.icon?.stroke}
                   strokeLine={item.icon?.strokeLine}
                   strokeWidth={item.icon?.strokeWidth}
                   viewBox={item.icon?.viewBox}
                 />
               </div>
-              <p className={cn("text-16 font-semibold")}>
-                {item.label}
-              </p>
+              <p>{item.label}</p>
             </div>
             <div
               className={`${
-                subMenuOpen ? "transition-all transform rotate-180" : ""
+                subMenuOpen
+                  ? "transition-all transform duration-500 rotate-180"
+                  : ""
               } flex`}
             >
               <CustomSvg
-                  title="arrow"
-                  style="w-4 h-4"
-                  color={
-                    subMenuOpen && sharedIcons.arrow?.color !== "none"
-                      ? "#2563eb"
-                      : sharedIcons.arrow?.color
-                  }
-                  width={sharedIcons.arrow?.width}
-                  height={sharedIcons.arrow?.height}
-                  d={sharedIcons.arrow.d}
-                  viewBox={sharedIcons.arrow?.viewBox}
-                />
+                title="arrow"
+                style="w-4 h-4"
+                color={
+                  subMenuOpen && sharedIcons.arrow?.color !== "none"
+                    ? "#ffff"
+                    : sharedIcons.arrow?.color
+                }
+                width={sharedIcons.arrow?.width}
+                height={sharedIcons.arrow?.height}
+                d={sharedIcons.arrow.d}
+                viewBox={sharedIcons.arrow?.viewBox}
+              />
             </div>
           </div>
 
@@ -108,14 +131,15 @@ const MenuItem = ({ item, setOpen}: { item: MenuItemProps, setOpen?: any}) => {
             <div className="flex flex-col">
               {item.subMenuItems.map((subItem, index) => {
                 return (
-                  
                   <Link
-                    href={subItem.route}
+                    href={subItem.route!}
                     key={index}
-                    onClick={(e) => {if (setOpen) setOpen(false); }}
+                    onClick={(e) => {
+                      if (setOpen) setOpen(false);
+                    }}
                     className={cn(
                       "flex gap-3 p-4 rounded-lg justify-center text-black font-semibold",
-                      { "text-blue-600": pathname === subItem.route }
+                      { "text-primary": pathname === subItem.route }
                     )}
                   >
                     {subItem.label}
@@ -127,31 +151,37 @@ const MenuItem = ({ item, setOpen}: { item: MenuItemProps, setOpen?: any}) => {
         </div>
       ) : (
         <Link
-          href={item.route}
+          href={item.route!}
           key={item.label}
-          onClick={(e) => {if (setOpen) setOpen(false); }}
+          onClick={(e) => {
+            if (setOpen) setOpen(false);
+          }}
           className={cn(
             "flex gap-3 items-center py-1 p-4 rounded-lg justify-start",
-            { "bg-blue-100 text-blue-600": pathname === item.route }
+            { "bg-primary text-white": pathname === item.route }
           )}
         >
           <div className="relative size-6">
-          <CustomSvg
-                  title={item.label}
-                  style="w-7 h-7"
-                  color={
-                    pathname === item.route && item.icon?.color !== "none"
-                      ? "#2563eb"
-                      : item.icon?.color
-                  }
-                  d={item.icon?.d}
-                  stroke={pathname === item.route ? "#2563eb" : item.icon?.stroke}
-                  strokeLine={item.icon?.strokeLine}
-                  strokeWidth={item.icon?.strokeWidth}
-                  viewBox={item.icon?.viewBox}
-                />
+            <CustomSvg
+              title={item.label}
+              style="w-7 h-7"
+              color={
+                pathname === item.route && item.icon?.color !== "none"
+                  ? "#ffff"
+                  : item.icon?.color
+              }
+              d={item.icon?.d}
+              stroke={pathname === item.route ? "#ffff" : item.icon?.stroke}
+              strokeLine={item.icon?.strokeLine}
+              strokeWidth={item.icon?.strokeWidth}
+              viewBox={item.icon?.viewBox}
+            />
           </div>
-          <p className={cn("text-16 font-semibold text-black", {"text-bkue-600": pathname === item.route})}>
+          <p
+            className={cn("text-16 font-medium text-gray-800", {
+              "text-white": pathname === item.route,
+            })}
+          >
             {item.label}
           </p>
         </Link>
@@ -160,5 +190,6 @@ const MenuItem = ({ item, setOpen}: { item: MenuItemProps, setOpen?: any}) => {
   );
 };
 
-export default Sidebar
- export {MenuItem}
+export default Sidebar;
+export { MenuItem };
+

@@ -27,7 +27,7 @@ import Toast from "../Toast";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import Link from "next/link";
-import Image from "next/image";
+import avatar from '../../../public/images/avatar-profile.png'
 import { apiURL } from "@/lib/utils";
 
 const UsersTable = ({ users }: { users: UsersTableProps }) => {
@@ -37,7 +37,6 @@ const UsersTable = ({ users }: { users: UsersTableProps }) => {
   const handleDelete = async (id?: string) => {
     try {
       const response = await deleteUser(id);
-      console.log(response);
       setShowAlert(true);
       setMessage("User deleted successfully");
       setIsSuccess(true);
@@ -46,6 +45,7 @@ const UsersTable = ({ users }: { users: UsersTableProps }) => {
       setMessage("Cannot delete this user");
     }
   };
+
 
   return (
     <>
@@ -64,8 +64,8 @@ const UsersTable = ({ users }: { users: UsersTableProps }) => {
             type="text"
             placeholder="Search here..."
           />
-          <Link href='/users/add-user'>
-          <Button className="justify-end md:px-10">+ Add new</Button>
+          <Link href="/users/add-user">
+            <Button className="justify-end md:px-10">+ Add new</Button>
           </Link>
         </div>
         <Table>
@@ -82,13 +82,11 @@ const UsersTable = ({ users }: { users: UsersTableProps }) => {
               <TableRow key={index}>
                 <TableCell className="flex gap-1">
                   <div className="w-12 h-12 rounded-sm ">
-                  <img 
-                  src={`${apiURL}/images/${item.image}`} 
-                  alt=""/>
+                    <img src={item.image?`${apiURL}/images/${item.image}`: avatar.src} alt="" className="object-cover h-full w-full rounded-sm"/>
                   </div>
                   <div className="flex flex-col">
-                  <p className="font-semibold">{item.fullname}</p>
-                  <p className="font-sm text-gray-400">{item.role}</p>
+                    <p className="font-semibold">{item.fullname}</p>
+                    <p className="font-sm text-gray-400">{item.role}</p>
                   </div>
                 </TableCell>
                 <TableCell>{item.phone}</TableCell>

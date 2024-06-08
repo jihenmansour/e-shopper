@@ -3,7 +3,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 require("express-async-errors")
 
-
+const authRoutes = require('./routes/auth.router')
 const userRoutes = require('./routes/user.router')
 const productRoutes = require('./routes/product.router')
 const orderRoutes = require('./routes/order.router')
@@ -28,7 +28,7 @@ try {
     console.log(error)
 }
 
-
+app.use('/', authRoutes)
 app.use('/', userRoutes)
 app.use('/', productRoutes)
 app.use('/', orderRoutes)
