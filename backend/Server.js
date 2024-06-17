@@ -5,6 +5,7 @@ require("express-async-errors")
 
 const authRoutes = require('./routes/auth.router')
 const userRoutes = require('./routes/user.router')
+const categoryRoutes = require('./routes/category.router')
 const productRoutes = require('./routes/product.router')
 const orderRoutes = require('./routes/order.router')
 const errorHandler = require('./middleware/error.handler')
@@ -16,8 +17,8 @@ const app = express()
 
 const PORT = process.env.PORT || 5000
 
-app.use(cors("*"))
 app.use(express.json())
+app.use(cors("*"))
 app.use(express.static('public'));
 
 try {
@@ -30,6 +31,7 @@ try {
 
 app.use('/', authRoutes)
 app.use('/', userRoutes)
+app.use('/', categoryRoutes)
 app.use('/', productRoutes)
 app.use('/', orderRoutes)
 

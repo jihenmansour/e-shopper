@@ -4,6 +4,7 @@ import React from "react";
 import { FormControl, FormField, FormLabel, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
 import { Control, FieldValues, Path, PathValue } from "react-hook-form";
+import { cn } from "@/lib/utils";
 
 interface CustomInputProps<T extends FieldValues> {
   control: Control<T>;
@@ -11,6 +12,7 @@ interface CustomInputProps<T extends FieldValues> {
   label: string;
   data?: PathValue<T, Path<T>>;
   placeholder: string;
+  isCol?:boolean
 }
 
 const CustomInput = <T extends FieldValues>({
@@ -19,6 +21,7 @@ const CustomInput = <T extends FieldValues>({
   data,
   label,
   placeholder,
+  isCol
 }: CustomInputProps<T>) => {
   return (
     <FormField
@@ -27,7 +30,8 @@ const CustomInput = <T extends FieldValues>({
       defaultValue={data}
       render={({ field }) => (
         <div className="form-item">
-          <FormLabel className="form-label font-bold text-[14px]">
+          <div className={cn({"md:flex md:gap:4": isCol})}>
+          <FormLabel className="form-label font-bold text-[14px] w-1/2">
             {label}
           </FormLabel>
           <div className="flex w-full flex-col">
@@ -39,6 +43,7 @@ const CustomInput = <T extends FieldValues>({
               />
             </FormControl>
             <FormMessage className="form-message mt-2" />
+          </div>
           </div>
         </div>
       )}

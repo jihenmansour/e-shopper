@@ -99,3 +99,19 @@ declare type ResponseProps = {
   error?: string 
   message? :string
 }
+
+declare interface categoryProps {
+  _id?: string
+  name?: string;
+  description?: string;
+  image?: any;
+  }
+
+  declare interface CatgoriesTableProps{
+    data: categoryProps[];
+    page: number;
+    total:number;
+    totalPages: number;
+    nextPage?: number;
+    previousPage?: number;
+  }

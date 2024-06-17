@@ -45,6 +45,14 @@ export const productSchema = z
     message: "Image is required"
   })
 })
+
+export const CategoriesSchema = z
+.object({
+  name: z.string(),
+  description: z.string().optional(),
+  image:   z.any().optional()
+})
+
 export const parseStringify = (value: any) => JSON.parse(JSON.stringify(value));
 
 export const parseStringifyError = (value: any) => JSON.parse(JSON.stringify({error: value}));
