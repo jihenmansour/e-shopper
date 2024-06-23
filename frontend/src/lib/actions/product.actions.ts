@@ -1,32 +1,61 @@
+"use server";
+
 import axios from "axios";
+import { apiURL, parseStringifyError } from "../utils";
 
-const apiURL = process.env.NEXT_PUBLIC_APP_API_URL;
+export const createProduct = async (product: FormData) => {
+  try {
 
-
-export const addProduct = async (product: productProps ) => {
-    try {
-      const response = await axios.post(`${apiURL}/product`, product, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      return (response);
-    } catch (error) {
-      console.error('Error', error);
-    }
-  };
-
-export const getAllproducts = async (): Promise<productProps[]> => {
-    const response = await axios.get(`${apiURL}/products`);
-    return response.data
-  };
-
-
- export const deleteProduct = async (id?: string) => {
-    try {
-      const response = await axios.delete(`${apiURL}/product/${id}`);
-      return (response);
-    } catch (error) {
-      console.error('Error', error);
-    }
+    const response = await axios.post(`${apiURL}/product`, product, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return parseStringifyError(error.response.data.message);
   }
+};
+
+export const getProduct = async (id: string): Promise<productProps> => {
+
+  const response = await axios.get(`${apiURL}/product/${id}`);
+  return response.data.product;
+};
+
+export const getAllproducts = async () => {
+  const response = await axios.get(`${apiURL}/products/all`);
+  return response.data
+}
+
+
+export const getProducts = async (
+  page: number
+): Promise<ProductsTableProps> => {
+  const response = await axios.get(`${apiURL}/products?page=${page}`);
+  return response.data;
+};
+
+export const updateProduct = async ({
+  id,
+  product,
+}: {
+  id?: string;
+  product: FormData;
+}) => {
+  try {
+    const response = await axios.put(`${apiURL}/product/${id}`, product);
+    return response.data;
+  } catch (error) {
+    return parseStringifyError(error.response.data.message);
+  }
+};
+
+export const deleteProduct = async (id?: string) => {
+  try {
+    const response = await axios.delete(`${apiURL}/product/${id}`);
+    return response.data;
+  } catch (error) {
+    console.log("error: ", error);
+  }
+};

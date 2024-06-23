@@ -5,6 +5,7 @@ import { apiURL, parseStringifyError } from "../utils";
 
 export const createCategory = async (category: FormData) => {
   try {
+
     const response = await axios.post(`${apiURL}/category`, category, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -16,15 +17,20 @@ export const createCategory = async (category: FormData) => {
   }
 };
 
+
+export const getAllcategories = async() =>{
+  const response = await axios.get(`${apiURL}/categories/all`)
+  return response.data;
+}
 export const getCategory = async (id: string): Promise<categoryProps> => {
 
   const response = await axios.get(`${apiURL}/category/${id}`);
   return response.data.category;
 };
 
-export const getAllcategories = async (
+export const getCategories = async (
   page: number
-): Promise<UsersTableProps> => {
+): Promise<CatgoriesTableProps> => {
   const response = await axios.get(`${apiURL}/categories?page=${page}`);
   return response.data;
 };

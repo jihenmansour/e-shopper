@@ -49,7 +49,7 @@ const Sidebar = () => {
           d={sharedIcons.logout.d}
           viewBox={sharedIcons.logout.viewBox}
         />
-        <p className="text-16 font-medium text-gray-800 group-hover:text-primary">Logout</p>
+        <p className="text-16 font-medium text-gray-800 transition group-hover:text-primary">Logout</p>
       </footer>
     </section>
   );
@@ -76,7 +76,7 @@ const MenuItem = ({
           <div
             className={cn(
               "flex items-center justify-between py-1 2xl:p-4 max-sm:pr-4 rounded-lg cursor-pointer font-medium text-gray-800",
-              { "bg-primary text-white": subMenuOpen }
+              { "transition-all duration-300 ease-in-out bg-primary text-white ": subMenuOpen }, {"group": !subMenuOpen}
             )}
             onClick={toggleSubMenu}
             key={item.label}
@@ -89,20 +89,14 @@ const MenuItem = ({
               <div className="relative size-6">
                 <CustomSvg
                   title={item.label}
-                  style="w-7 h-7"
-                  color={
-                    subMenuOpen && item.icon?.color !== "none"
-                      ? "#ffff"
-                      : item.icon?.color
-                  }
+                  style={cn(item.icon?.color,{[item.icon?.open!]: subMenuOpen}) }
                   d={item.icon?.d}
-                  stroke={subMenuOpen ? "#ffff" : item.icon?.stroke}
                   strokeLine={item.icon?.strokeLine}
                   strokeWidth={item.icon?.strokeWidth}
                   viewBox={item.icon?.viewBox}
                 />
               </div>
-              <p>{item.label}</p>
+              <p className="group-hover:text-primary">{item.label}</p>
             </div>
             <div
               className={`${
@@ -113,7 +107,7 @@ const MenuItem = ({
             >
               <CustomSvg
                 title="arrow"
-                style="w-4 h-4"
+                style="w-4 h-4 group-hover:fill-primary"
                 color={
                   subMenuOpen && sharedIcons.arrow?.color !== "none"
                     ? "#ffff"
@@ -158,27 +152,21 @@ const MenuItem = ({
           }}
           className={cn(
             "flex gap-3 items-center py-1 p-4 rounded-lg justify-start",
-            { "bg-primary text-white": pathname === item.route }
+            { "bg-primary text-white": pathname === item.route },{"group":pathname !== item.route}
           )}
         >
           <div className="relative size-6">
             <CustomSvg
               title={item.label}
-              style="w-7 h-7"
-              color={
-                pathname === item.route && item.icon?.color !== "none"
-                  ? "#ffff"
-                  : item.icon?.color
-              }
+              style={cn(item.icon?.color,{[item.icon?.open!]: pathname === item.route }) }
               d={item.icon?.d}
-              stroke={pathname === item.route ? "#ffff" : item.icon?.stroke}
               strokeLine={item.icon?.strokeLine}
               strokeWidth={item.icon?.strokeWidth}
               viewBox={item.icon?.viewBox}
             />
           </div>
           <p
-            className={cn("text-16 font-medium text-gray-800", {
+            className={cn("text-16 font-medium text-gray-800 group-hover:text-primary", {
               "text-white": pathname === item.route,
             })}
           >

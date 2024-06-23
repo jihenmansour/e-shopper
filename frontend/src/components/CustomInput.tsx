@@ -10,6 +10,7 @@ interface CustomInputProps<T extends FieldValues> {
   control: Control<T>;
   name: Path<T>;
   label: string;
+  type?: string,
   data?: PathValue<T, Path<T>>;
   placeholder: string;
   isCol?:boolean
@@ -20,6 +21,7 @@ const CustomInput = <T extends FieldValues>({
   name,
   data,
   label,
+  type,
   placeholder,
   isCol
 }: CustomInputProps<T>) => {
@@ -38,7 +40,7 @@ const CustomInput = <T extends FieldValues>({
             <FormControl>
               <Input
                 placeholder={placeholder}
-                type={name === "password" ? "password" : "text"}
+                type={type? type : "text"}
                 {...field}
               />
             </FormControl>

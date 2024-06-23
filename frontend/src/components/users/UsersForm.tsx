@@ -105,6 +105,7 @@ const UsersForm = ({user}: {user?:userProps}) => {
                     control={form.control}
                     name="password"
                     label="Password"
+                    type="password"
                     placeholder="Enter your password"
                   />
                     <CustomInput

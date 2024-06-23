@@ -1,10 +1,12 @@
 import CategoriesForm from '@/components/categories/CategoriesForm'
+import { getAllproducts } from '@/lib/actions/product.actions'
 import React from 'react'
 
-const page = () => {
+const page = async () => {
+  const products = await getAllproducts()
   return (
     <div>
-        <CategoriesForm/>
+        <CategoriesForm products={products}/>
     </div>
   )
 }

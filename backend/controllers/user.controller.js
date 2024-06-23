@@ -3,10 +3,12 @@ const CustomError = require("../error/custom.error");
 const { hashPassword } = require("../utils/password");
 
 
+
 // Get Users
 const getUsers = async (req, res) => {
   const page = req.query.page ? parseInt(req.query.page) : 1;
   const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+
 
   const total = await User.find().count();
 
@@ -17,14 +19,22 @@ const getUsers = async (req, res) => {
     .sort({ createdAt: -1 })
     .limit(limit)
     .skip(limit * (page - 1));
+ 
+let TotalCustomers = 0;
+ data.map((user) => {
+  if(user.role==='client'){
+    TotalCustomers =+ 1;
+  }
+ })
 
   res.status(200).json({
-    data,
+    users,
     page,
     total,
     totalPages,
     nextPage,
     previousPage,
+    TotalCustomers
   });
 };
 

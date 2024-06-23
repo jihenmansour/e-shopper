@@ -2,41 +2,41 @@
 
 import { Button } from "@/components/ui/button";
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormLabel,
-    FormMessage
+  Form,
+  FormControl,
+  FormField,
+  FormLabel,
+  FormMessage
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { createCategory, updateCategory } from "@/lib/actions/category.actions";
-import { CategoriesSchema } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { CategorySchema } from "@/lib/utils";
 import { useState } from "react";
 import CustomInput from "../CustomInput";
+import MultiSelect from "../CustomMultiSelector";
 import Toast from "../Toast";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 
-const CategoriesForm = ({ category }: { category?: categoryProps }) => {
+const CategoriesForm = ({ category, products }: { category?: categoryProps, products: productProps[] }) => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [message, setMessage] = useState<string>();
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
-  const router = useRouter();
 
-  const form = useForm<z.infer<typeof CategoriesSchema>>({
-    resolver: zodResolver(CategoriesSchema),
+  const form = useForm<z.infer<typeof CategorySchema>>({
+    resolver: zodResolver(CategorySchema),
   });
-  let response: { error: string | undefined; message: string | undefined };
-  const onSubmit = async (data: z.infer<typeof CategoriesSchema>) => {
-    const form = new FormData();
 
+  let response: { error: string | undefined; message: string | undefined; };
+  const onSubmit = async (data: z.infer<typeof CategorySchema>) => {
+    const form = new FormData();
     form.append("image", data.image);
-    form.append("data", JSON.stringify(data));
+    form.append("data", JSON.stringify({...data, products:data.products.map((item: productProps)=>item._id)}));
+
     try {
       setShowAlert(true);
       if (category) {
@@ -82,7 +82,7 @@ const CategoriesForm = ({ category }: { category?: categoryProps }) => {
                     name="name"
                     label="Name"
                     data={category?.name}
-                    placeholder="Enter your email"
+                    placeholder="Enter category name"
                     isCol={true}
                   />
                   <FormField
@@ -130,6 +130,14 @@ const CategoriesForm = ({ category }: { category?: categoryProps }) => {
                       </div>
                     )}
                   />
+                  <MultiSelect
+                    control={form.control}
+                    data={category?.products}
+                    isCol={true}
+                    label="products"
+                    name="products"
+                    placeholder="Enter category products"
+                    products={products} />
                 </div>
               </div>
             </div>

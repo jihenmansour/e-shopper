@@ -1,124 +1,173 @@
-'use client'
-import React from 'react'
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
+"use client";
+
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
   FormField,
-  FormItem,
   FormLabel,
   FormMessage
-} from "@/components/ui/form"
+} from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { useRouter } from 'next/navigation'
-import {productSchema } from '@/lib/utils'
-import CustomInput from '../CustomInput'
-import { Input } from '../ui/input'
-import { addProduct } from '@/lib/actions/product.actions'
-import { Textarea } from '../ui/textarea'
+import { createCategory, updateCategory } from "@/lib/actions/category.actions";
+import { CategorySchema, ProductSchema } from "@/lib/utils";
+import { useState } from "react";
+import CustomInput from "../CustomInput";
+import MultiSelect from "../CustomMultiSelector";
+import Toast from "../Toast";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { createProduct, updateProduct } from "@/lib/actions/product.actions";
 
-
-
-
-
-const ProductsForm = ({ type }: { type: string }) => {
-
-  const router = useRouter()
-
-
-  const form = useForm<z.infer<typeof productSchema>>({
-    resolver: zodResolver(productSchema)
-  })
+const ProductsForm = ({ product, categories }: { product?: productProps, categories: categoryProps[] }) => {
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>();
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
 
-  const fileRef = form.register("image");
-  const descriptionRef = form.register("description");
-  const onSubmit = async (data: z.infer<typeof productSchema>) => {
+  const form = useForm<z.infer<typeof ProductSchema>>({
+    resolver: zodResolver(ProductSchema),
+  });
 
+  let response: { error: string | undefined; message: string | undefined; };
+  const onSubmit = async (data: z.infer<typeof ProductSchema>) => {
+    const form = new FormData();
+    form.append("image", data.image);
+    form.append("data", JSON.stringify({...data, categories:data.categories.map((item: categoryProps)=>item._id)}));
     try {
-      console.log(data)
-      const newProduct = await addProduct(data)
-      router.push('/products')
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  }
+      setShowAlert(true);
+      if (product) {
+        response = await updateProduct({ id: product?._id, product: form });
+      } else {
+        response = await createProduct(form);
+      }
 
+      if (response.error) {
+        setIsSuccess(false);
+        setMessage(response.error);
+      } else {
+        setIsSuccess(true);
+        setMessage(response.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-    <section >
-      <header className='flex flex-col gap-2 mb-4'>
-        <h1 className='text-26 font-ibm-plex-serif font-bold text-black-1 '>
-          Add product
-        </h1>
-        <p className="text-sm text-muted-foreground">Create a new product</p>
-        <div data-orientation="horizontal" role="none" className="shrink-0 bg-border h-[1px] w-full"></div>
-      </header>
+    <>
+      <Toast
+        open={showAlert}
+        close={() => {
+          setShowAlert(false);
+        }}
+        message={message}
+        success={isSuccess}
+      />
 
       <>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} >
-
-            <>
-              <div className="grid-cols-3 mt-3 gap-8 md:grid">
-                <CustomInput control={form.control} name='name' label="Name" placeholder='Enter product name' />
-                <CustomInput control={form.control} name='price' label="Price" placeholder='Enter product price' />
-                <CustomInput control={form.control} name='quantity' label="Quantity" placeholder='Enter product quantity' />
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-4"
+          >
+            <div className="md:flex md:gap:4 bg-white py-6 px-4 rounded-sm">
+              <div className="w-full">
+                <div className="flex flex-col mt-3 gap-8 md:grid">
+                  <CustomInput
+                    control={form.control}
+                    name="name"
+                    label="Name"
+                    data={product?.name}
+                    placeholder="Enter product name"
+                    isCol={true}
+                  />
+                  <CustomInput
+                    control={form.control}
+                    name="price"
+                    label="Price"
+                    type="number"
+                    data={product?.price}
+                    placeholder="Enter product price"
+                    isCol={true}
+                  />
+                  <CustomInput
+                    control={form.control}
+                    name="quantity"
+                    label="Quantity"
+                    type="number"
+                    data={product?.quantity}
+                    placeholder="Enter product quantity"
+                    isCol={true}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    defaultValue={product?.description}
+                    render={({ field }) => (
+                        <div className="md:flex md:gap:4">
+                          <FormLabel className="font-bold text-[14px] w-1/2">
+                            description
+                          </FormLabel>
+                          <div className="flex w-full flex-col">
+                            <FormControl>
+                              <Textarea
+                               {...field}
+                               placeholder="description..." />
+                            </FormControl>
+                            <FormMessage className="form-message mt-2" />
+                          </div>
+                      </div>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="image"
+                    render={({ field: { value, onChange, ...fieldProps } }) => (
+                      <div className="md:flex">
+                        <FormLabel className="font-bold text-[14px] w-1/2">Picture</FormLabel>
+                        <div className="flex flex-col w-full">
+                        <FormControl>
+                          <Input
+                            {...fieldProps}
+                            placeholder="Picture"
+                            type="file"
+                            accept="image/*, application/pdf"
+                            onChange={(event) =>
+                              onChange(
+                                event.target.files && event.target.files[0]
+                              )
+                            }
+                          />
+                        </FormControl>
+                        <FormMessage />
+                        </div>
+                      </div>
+                    )}
+                  />
+                  <MultiSelect
+                    control={form.control}
+                    data={product?.categories}
+                    isCol={true}
+                    label="categories"
+                    name="categories"
+                    placeholder="Enter product categories"
+                    products={categories} />
                 </div>
-                <div className="grid-cols-3 mt-3 gap-8 md:grid">
-                <FormField
-                  control={form.control}
-                  name="image"
-                  render={() => {
-                    return (
-                      <FormItem>
-                        <FormLabel>File</FormLabel>
-                        <FormControl>
-                          <Input type="file" placeholder="shadcn" {...fileRef} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                 </div>
-                 <div className="grid-cols-3 mt-3 gap-8 md:grid">
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={(field) => {
-                    return (
-                      <FormItem>
-                        <FormLabel>Description</FormLabel>
-                        <FormControl>
-                          <Textarea placeholder="shadcn" {...descriptionRef} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-             </div>
-            </>
-
-            <div className="space-x-4">
-              <Button
-                className="ml-auto mt-4"
-                type="submit"
-
-              >
-                create
-              </Button>
+              </div>
             </div>
+
+            <Button className="ml-auto mt-4" type="submit">
+              {product ? <p>update</p> : <p>create</p>}
+            </Button>
           </form>
         </Form>
       </>
+    </>
+  );
+};
 
-    </section>
-  )
-}
-
-export default ProductsForm
+export default ProductsForm;

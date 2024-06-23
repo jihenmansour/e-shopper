@@ -7,20 +7,22 @@ const ProductSchema = mongoose.Schema(
       name: {
         type: String,
         required: [true, "Please enter product name"],
+        unique: true
       },
       price: {
         type: Number,
-        required: true,
-        default: 0,
+        required: [true, "Please enter product price"],
       },
 
       quantity: {
         type: Number,
-        required: true,
         default: 0,
       },
       description: {
         type: String,
+      },
+      image :{
+        type: String
       },
       categories : [
         {

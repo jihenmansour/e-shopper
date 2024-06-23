@@ -1,11 +1,10 @@
 export const sidebarLinks = [
   {
-
     route: "/",
     label: "Dashboard",
     icon: {
-      color: "none",
-      stroke: "#000",
+      color: "w-7 h-7 fill-none stroke-black group-hover:stroke-primary",
+      open:"stroke-white",
       strokeLine: "round",
       strokeWidth: 2,
       d: "M8 17h8M11.018 2.764 4.235 8.039c-.453.353-.68.53-.843.75a2 2 0 0 0-.318.65C3 9.704 3 9.991 3 10.565V17.8c0 1.12 0 1.68.218 2.108a2 2 0 0 0 .874.874C4.52 21 5.08 21 6.2 21h11.6c1.12 0 1.68 0 2.108-.218a2 2 0 0 0 .874-.874C21 19.48 21 18.92 21 17.8v-7.235c0-.574 0-.861-.074-1.126a2.002 2.002 0 0 0-.318-.65c-.163-.22-.39-.397-.843-.75l-6.783-5.275c-.351-.273-.527-.41-.72-.462a1 1 0 0 0-.523 0c-.194.052-.37.189-.721.462Z",
@@ -13,11 +12,11 @@ export const sidebarLinks = [
   },
   {
     icon: {
-      color: "none",
-      stroke:"#000",
-      strokeLine:"round",
-      strokeWidth:2,
-       d:"M9 12h12M9 4v16m-2.8 0h11.6c1.12 0 1.68 0 2.108-.218a2 2 0 0 0 .874-.874C21 18.48 21 17.92 21 16.8V7.2c0-1.12 0-1.68-.218-2.108a2 2 0 0 0-.874-.874C19.48 4 18.92 4 17.8 4H6.2c-1.12 0-1.68 0-2.108.218a2 2 0 0 0-.874.874C3 5.52 3 6.08 3 7.2v9.6c0 1.12 0 1.68.218 2.108a2 2 0 0 0 .874.874C4.52 20 5.08 20 6.2 20Z"
+      color: "w-7 h-7 fill-none stroke-black group-hover:stroke-primary",
+      open:"stroke-white",
+      strokeLine: "round",
+      strokeWidth: 2,
+      d: "M9 12h12M9 4v16m-2.8 0h11.6c1.12 0 1.68 0 2.108-.218a2 2 0 0 0 .874-.874C21 18.48 21 17.92 21 16.8V7.2c0-1.12 0-1.68-.218-2.108a2 2 0 0 0-.874-.874C19.48 4 18.92 4 17.8 4H6.2c-1.12 0-1.68 0-2.108.218a2 2 0 0 0-.874.874C3 5.52 3 6.08 3 7.2v9.6c0 1.12 0 1.68.218 2.108a2 2 0 0 0 .874.874C4.52 20 5.08 20 6.2 20Z",
     },
     label: "Categories",
     subMenuItems: [
@@ -26,9 +25,9 @@ export const sidebarLinks = [
     ],
   },
   {
-
     icon: {
-      color: "#000",
+      color: "w-7 h-7 fill-black group-hover:fill-primary",
+      open: "fill-white",
       viewBox: "0 0 512 512",
       d: "m256 34.347 192 110.85V366.9L256 477.752 64 366.9V145.198L256 34.347Zm-64.001 206.918.001 150.27 42.667 24.636V265.899l-42.668-24.634ZM106.667 192v150.267l42.666 24.635v-150.27L106.667 192Zm233.324-59.894-125.578 72.836L256 228.952l125.867-72.669-41.876-24.177ZM256 83.614l-125.867 72.669 41.662 24.053L297.374 107.5 256 83.614Z",
     },
@@ -38,10 +37,23 @@ export const sidebarLinks = [
       { route: "/products", label: "List Product" },
     ],
   },
-  {
 
+  {
     icon: {
-      color: "none",
+      color: "w-7 h-7 fill-none stroke-black group-hover:stroke-primary",
+      open:"stroke-white",
+      viewBox: "0 0 24 24",
+      strokeLine: "round",
+      strokeWidth: 2,
+      d: "M10 15h4m-2-2v4m1-14H8.2c-1.12 0-1.68 0-2.108.218a2 2 0 0 0-.874.874C5 4.52 5 5.08 5 6.2v11.6c0 1.12 0 1.68.218 2.108a2 2 0 0 0 .874.874C6.52 21 7.08 21 8.2 21h7.6c1.12 0 1.68 0 2.108-.218a2 2 0 0 0 .874-.874C19 19.48 19 18.92 19 17.8V9m-6-6 6 6m-6-6v4.4c0 .56 0 .84.109 1.054a1 1 0 0 0 .437.437C13.76 9 14.04 9 14.6 9H19",
+    },
+    label: "Orders",
+    subMenuItems: [{ route: "/orders", label: "List Order" }],
+  },
+  {
+    icon: {
+      color: "w-7 h-7 fill-none stroke-black group-hover:stroke-primary",
+      open: "stroke-white",
       stroke: "#000",
       strokeLine: "round",
       strokeWidth: 2,
@@ -57,7 +69,8 @@ export const sidebarLinks = [
 
 export const sharedIcons = {
   arrow: {
-    color: "#0F0F0F",
+    color: "w-7 h-7 fill-black group-hover:fill-primary",
+    open: "fill-white",
     viewBox: "0 0 24 24",
     width: 5,
     height: 5,
@@ -92,7 +105,30 @@ export const sharedIcons = {
 
   logout: {
     title: "logout",
-    viewBox:"0 -0.5 25 25",
-    d:"M11.75 9.874a.75.75 0 0 0 1.5 0h-1.5ZM13.25 4a.75.75 0 0 0-1.5 0h1.5ZM9.81 6.662a.75.75 0 0 0-.62-1.366l.62 1.366ZM5.5 12.16l-.75-.004v.013l.75-.009Zm7 6.84.009-.75h-.018l.009.75Zm7-6.84.75.009v-.013l-.75.004Zm-3.69-6.864a.75.75 0 1 0-.62 1.366l.62-1.366Zm-2.56 4.578V4h-1.5v5.874h1.5ZM9.19 5.296a7.581 7.581 0 0 0-4.44 6.86l1.5.008a6.081 6.081 0 0 1 3.56-5.502l-.62-1.366ZM4.75 12.17a7.671 7.671 0 0 0 7.759 7.581l-.018-1.5a6.17 6.17 0 0 1-6.241-6.099l-1.5.018Zm7.741 7.581a7.67 7.67 0 0 0 7.759-7.581l-1.5-.018a6.171 6.171 0 0 1-6.241 6.099l-.018 1.5Zm7.759-7.594a7.581 7.581 0 0 0-4.44-6.86l-.62 1.366a6.081 6.081 0 0 1 3.56 5.502l1.5-.008Z"
-  }
+    viewBox: "0 -0.5 25 25",
+    d: "M11.75 9.874a.75.75 0 0 0 1.5 0h-1.5ZM13.25 4a.75.75 0 0 0-1.5 0h1.5ZM9.81 6.662a.75.75 0 0 0-.62-1.366l.62 1.366ZM5.5 12.16l-.75-.004v.013l.75-.009Zm7 6.84.009-.75h-.018l.009.75Zm7-6.84.75.009v-.013l-.75.004Zm-3.69-6.864a.75.75 0 1 0-.62 1.366l.62-1.366Zm-2.56 4.578V4h-1.5v5.874h1.5ZM9.19 5.296a7.581 7.581 0 0 0-4.44 6.86l1.5.008a6.081 6.081 0 0 1 3.56-5.502l-.62-1.366ZM4.75 12.17a7.671 7.671 0 0 0 7.759 7.581l-.018-1.5a6.17 6.17 0 0 1-6.241-6.099l-1.5.018Zm7.741 7.581a7.67 7.67 0 0 0 7.759-7.581l-1.5-.018a6.171 6.171 0 0 1-6.241 6.099l-.018 1.5Zm7.759-7.594a7.581 7.581 0 0 0-4.44-6.86l-.62 1.366a6.081 6.081 0 0 1 3.56 5.502l1.5-.008Z",
+  },
 };
+
+export const OrdersStatusStyles = {
+  "pending": {
+    borderColor: "border-pink-600",
+    backgroundColor: "bg-pink-500",
+    textColor: "text-pink-700"
+  },
+  "processing" : {
+    borderColor: "border-blue-600",
+    backgroundColor: "bg-blue-300",
+    textColor: "text-blue-700"
+  },
+  "shipped" : {
+    borderColor: "border-green-600",
+    backgroundColor: "bg-green-500",
+    textColor: "text-green-700"
+  },
+  "cancelled" : {
+    borderColor: "border-red-600",
+    backgroundColor: "bg-red-500",
+    textColor: "text-red-700"
+  }
+}

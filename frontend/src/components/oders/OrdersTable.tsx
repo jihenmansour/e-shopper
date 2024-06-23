@@ -18,34 +18,48 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { deleteProduct } from "@/lib/actions/product.actions";
-import { apiURL } from "@/lib/utils";
-import Link from "next/link";
+import { deleteOrder, exportExcel } from "@/lib/actions/order.actions";
+import { apiURL, cn } from "@/lib/utils";
 import { useState } from "react";
-import { sharedIcons } from "../../../constants";
-import avatar from '../../../public/images/avatar-category.png';
+import { OrdersStatusStyles, sharedIcons } from "../../../constants";
+import avatar from "../../../public/images/avatar-profile.png";
 import CustomSvg from "../CustomSvg";
 import CustomPagination from "../Pagination";
 import Toast from "../Toast";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
-const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
+
+const StatusBadge = ({ status }: {status: string}) => {
+  const {
+    borderColor,
+    backgroundColor,
+    textColor
+   } = OrdersStatusStyles[status as keyof typeof OrdersStatusStyles] 
+   
+  return (
+    <div className={cn("flex border-2 rounded-full items-center",backgroundColor, borderColor)}>
+      <div className={cn('size-2 rounded-full', backgroundColor)} />
+      <p className={cn('text-[12px] font-medium', textColor)}>{status}</p>
+    </div>
+  )
+}
+
+const OrdersTable = ({ orders }: { orders: OrdersTableProps }) => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [message, setMessage] = useState<string>();
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const handleDelete = async (id?: string) => {
     try {
-      const response = await deleteProduct(id);
+      const response = await deleteOrder(id);
       setShowAlert(true);
-      setMessage("product deleted successfully");
+      setMessage("order deleted successfully");
       setIsSuccess(true);
     } catch (e) {
       setShowAlert(true);
-      setMessage("Cannot delete this product");
+      setMessage("Cannot delete this order");
     }
   };
-
 
   return (
     <>
@@ -64,50 +78,57 @@ const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
             type="text"
             placeholder="Search here..."
           />
-          <Link href="/products/add-product">
-            <Button className="justify-end md:px-10">+ Add new</Button>
-          </Link>
+            <Button className="justify-end md:px-10" onClick={exportExcel}>Download excel</Button>
         </div>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]">Category</TableHead>
-              <TableHead className="text-center">Description</TableHead>
-              <TableHead >Price</TableHead>
-              <TableHead >Quantity</TableHead>
+              <TableHead className="w-[100px]">Customer</TableHead>
+              <TableHead className="text-center" >Content</TableHead>
+              <TableHead>address</TableHead>
+              <TableHead>Total</TableHead>
+              <TableHead>Status</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {products.data.map((item, index) => (
+            {orders.data.map((order, index) => (
               <TableRow key={index}>
-                <TableCell className="flex gap-1 items-center">
+                <TableCell className="flex gap-1 orders-center">
                   <div className="w-12 h-12 rounded-sm ">
-                    <img src={item.image?`${apiURL}/images/${item.image}`: avatar.src} alt="" className="object-cover h-full w-full rounded-sm"/>
+                    <img
+                      src={
+                        order.user.image
+                          ? `${apiURL}/images/${order.user.image}`
+                          : avatar.src
+                      }
+                      alt=""
+                      className="object-cover h-full w-full rounded-sm"
+                    />
                   </div>
                   <div className="flex items-center">
                     <p className="font-semibold whitespace-nowrap">
-                      {item.name}
+                      {order.user.fullname}
                     </p>
                   </div>
-
                 </TableCell>
-                <TableCell className="text-center">{item.description}</TableCell>
-                <TableCell >{item.price}</TableCell>
-                <TableCell >{item.quantity}</TableCell>
+                <TableCell>
+                  <ul className="list-disc flex flex-col items-center text-base">
+                    {order.OrderItems.map((item, index) => {
+                      return (
+                        <li>
+                          {item.quantity} of {item.product.name}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </TableCell>
+                <TableCell>{order.shippingAddress}</TableCell>
+                <TableCell>{order.total}</TableCell>
+                <TableCell>
+                  <StatusBadge status={order.status}/>
+                </TableCell>
                 <TableCell className="flex justify-end gap-4">
-                  <Link href={`/products/${item._id}`}>
-                    <CustomSvg
-                      title={sharedIcons.pen.title}
-                      style="w-6 h-6 cursor-pointer"
-                      color={sharedIcons.pen.color}
-                      d={sharedIcons.pen.d}
-                      stroke={sharedIcons.pen.stroke}
-                      strokeLine={sharedIcons.pen.strokeLine}
-                      strokeWidth={sharedIcons.pen.strokeWidth}
-                      viewBox={sharedIcons.pen.viewBox}
-                    />
-                  </Link>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <div>
@@ -125,16 +146,16 @@ const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Delet product</AlertDialogTitle>
+                        <AlertDialogTitle>Delete product</AlertDialogTitle>
                         <AlertDialogDescription>
-                          Are you sure you want to delete {item.name} ?
+                          Are you sure you want to delete this order ?
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() => {
-                            handleDelete(item._id);
+                            handleDelete(order._id);
                           }}
                         >
                           Continue
@@ -149,14 +170,14 @@ const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
         </Table>
 
         <CustomPagination
-          page={products.page}
-          totalPages={products.totalPages}
-          nextPage={products.nextPage}
-          previousPage={products.previousPage}
+          page={orders.page}
+          totalPages={orders.totalPages}
+          nextPage={orders.nextPage}
+          previousPage={orders.previousPage}
         />
       </div>
     </>
   );
 };
 
-export default ProductsTable;
+export default OrdersTable;

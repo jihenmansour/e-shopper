@@ -36,15 +36,21 @@ declare interface productProps {
     quantity?: string;
     description?: string;
     image?: any;
+    categories: categoryProps[]
   }
 
+  declare interface ProductsTableProps{
+    data: productProps[];
+    page: number;
+    total:number;
+    totalPages: number;
+    nextPage?: number;
+    previousPage?: number;
+  }
 declare interface CustomCardProps {
     product: productProps;
   }
   
-declare interface ProductSectionProps {
-    products: productProps[];
-  }
 
   declare interface MenuItemProps {
     imgURL?: string;
@@ -60,6 +66,7 @@ declare interface SvgPros {
   width?: number | string;
   height?: number | string;
   color?: string;
+  open?:string;
   d?: string;
   stroke?: string;
   strokeLine?: typeof SVGAttributes<SVGPathElement>;
@@ -105,10 +112,34 @@ declare interface categoryProps {
   name?: string;
   description?: string;
   image?: any;
+  products: productProps[]
   }
 
   declare interface CatgoriesTableProps{
     data: categoryProps[];
+    page: number;
+    total:number;
+    totalPages: number;
+    nextPage?: number;
+    previousPage?: number;
+  }
+
+
+  declare interface orderProps{
+    _id?: string;
+    status: string;
+    OrderItems: Array<{
+      product: productProps,
+      quantity: number
+    }>;
+    total: number;
+    user: userProps
+    shippingAddress: string;
+
+  }
+
+  declare interface OrdersTableProps{
+    data: orderProps[];
     page: number;
     total:number;
     totalPages: number;

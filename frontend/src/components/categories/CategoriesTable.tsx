@@ -27,7 +27,7 @@ import Toast from "../Toast";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import Link from "next/link";
-import avatar from '../../../public/images/avatar-profile.png'
+import avatar from '../../../public/images/avatar-category.png'
 import { apiURL } from "@/lib/utils";
 import { deleteCategory } from "@/lib/actions/category.actions";
 
@@ -80,11 +80,10 @@ const CategoriesTable = ({ categories }: { categories: CatgoriesTableProps }) =>
           <TableBody>
             {categories.data.map((item, index) => (
               <TableRow key={index}>
-                <TableCell className="flex gap-1">
+                <TableCell className="flex gap-1 items-center">
                   <div className="w-12 h-12 rounded-sm ">
                     <img src={item.image?`${apiURL}/images/${item.image}`: avatar.src} alt="" className="object-cover h-full w-full rounded-sm"/>
                   </div>
-
                     <p className="font-semibold">{item.name}</p>
 
                 </TableCell>

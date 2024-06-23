@@ -1,0 +1,62 @@
+"use client";
+
+import { cn } from "@/lib/utils";
+import { Control, FieldValues, Path } from "react-hook-form";
+import { FormField, FormLabel, FormMessage } from "./ui/form";
+import { MultiSelector, MultiSelectorContent, MultiSelectorInput, MultiSelectorItem, MultiSelectorList, MultiSelectorTrigger } from "./ui/multi-selector";
+
+interface MultiSelectProps<T extends FieldValues> {
+  control: Control<T>;
+  name: Path<T>;
+  label: string;
+  placeholder: string,
+  data?: any;
+  isCol?:boolean,
+  products?: any 
+}
+
+const MultiSelect = <T extends FieldValues>({
+  control,
+  name,
+  label,
+  placeholder,
+  data,
+  isCol,
+  products
+}: MultiSelectProps<T>) => {
+
+  return (
+    <FormField
+      control={control}
+      name={name}
+      render={({ field }) => (
+        <div className="form-item">
+          <div className={cn({"md:flex md:gap:4": isCol})}>
+          <FormLabel className="form-label font-bold text-[14px] w-1/2">
+            {label}
+          </FormLabel>
+          <div className="flex w-full flex-col">
+          <MultiSelector values={field.value || data || []} onValuesChange={field.onChange} loop={false}>
+          <MultiSelectorTrigger>
+            <MultiSelectorInput placeholder={placeholder} />
+          </MultiSelectorTrigger>
+          <MultiSelectorContent>
+            <MultiSelectorList>
+              {products?.map((option: any) => (
+                <MultiSelectorItem key={option.name} value={option} >
+                  {option.name!}
+                </MultiSelectorItem>
+              ))}
+            </MultiSelectorList>
+          </MultiSelectorContent>
+        </MultiSelector>
+            <FormMessage className="form-message mt-2" />
+          </div>
+          </div>
+        </div>
+      )}
+    />
+  );
+};
+
+export default MultiSelect;

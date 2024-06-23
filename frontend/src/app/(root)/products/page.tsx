@@ -1,17 +1,17 @@
-import ProductsTable from '@/components/products/ProductsTable'
-import { getAllproducts } from '@/lib/actions/product.actions'
-import React, { Suspense } from 'react'
+import ProductsTable from "@/components/products/ProductsTable";
+import { getProducts } from "@/lib/actions/product.actions";
+import { Suspense } from "react";
 
-const page = async () => {
-    const products = await getAllproducts()
+const page = async ({ searchParams: { page } }: SearchParamProps) => {
+  const currentPage = Number(page as string) || 1;
+  const products = await getProducts(currentPage);
   return (
     <div>
       <Suspense fallback={<p>Fetching data...</p>}>
-        <ProductsTable products={products}/>
+        <ProductsTable products={products} />
       </Suspense>
     </div>
-  )
-}
+  );
+};
 
-export default page
-
+export default page;

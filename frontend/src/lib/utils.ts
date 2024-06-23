@@ -32,25 +32,22 @@ export const formSchema = (type: string)=> z
 })
 
 
-export const productSchema = z
+export const ProductSchema = z
 .object({
   name: z.string(),
-  price: z.string().optional(),
-  quantity: z.string().optional(),
+  price: z.coerce.number({message: 'required, enter number please'}),
+  quantity: z.coerce.number({message: 'required, enter number please'}),
   description: z.string().optional(),
-  image:   z.any()
-  .refine((file) => file?.length !== 0, "File is required")
-  .transform((value) => value instanceof File ? value : value?.item(0)! || {})
-  .refine(file => file instanceof File, {
-    message: "Image is required"
-  })
+  image:   z.any().optional(),
+  categories: z.array(z.any())
 })
 
-export const CategoriesSchema = z
+export const CategorySchema = z
 .object({
   name: z.string(),
   description: z.string().optional(),
-  image:   z.any().optional()
+  image:   z.any().optional(),
+  products: z.array(z.any())
 })
 
 export const parseStringify = (value: any) => JSON.parse(JSON.stringify(value));

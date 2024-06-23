@@ -1,30 +1,77 @@
-import Image from "next/image";
-import React, { FC, useState } from "react";
+import { Chart as ChartJS, elements, registerables } from 'chart.js';
+import { Line } from "react-chartjs-2";
+import { sharedIcons } from "../../constants";
+import CustomSvg from "./CustomSvg";
 
+const data = {
+  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+  datasets: [
+    {
+      label: "Second dataset",
+      data: [33, 25, 35, 51, 54, 76],
+      fill: true,
+      borderColor: "#22C55E",
+      backgroundColor: "#C4EFD4",
+      tension: 0.4
+    }
+  ],
 
-const CustomCard: FC<CustomCardProps> = ({ product }) => {
+};
 
+const options = {
+  plugins: {
+    legend: {
+      display: false, 
+    },
+    tooltip: {
+      intersect: false
+  }
+
+  },
+  scales: {
+    x: {
+      display: false, 
+    },
+    y: {
+      display: false, 
+    },
+  },
+  elements: {
+    point: {
+      radius: 0
+    }
+  },
+  aspectRatio:4,
+ 
+};
+ChartJS.register(...registerables);
+const CustomCard = () => {
   return (
-    <div className="group my-5 flex w-full max-w-xs flex-col overflow-hidden border border-gray-100 bg-white shadow-md">
-    <a className="relative flex h-40 overflow-hidden" href="#">
-      {/* <Image className="absolute top-0 right-0 h-full w-full object-cover" src={`data:image/jpeg;base64,${product.image?.data?.data}`} unoptimized  alt="product image" /> */}
-    </a>
-    <div className="mt-4 px-5 pb-5">
-      <a href="#">
-        <h5 className="text-md tracking-tight text-slate-900">{product.name}</h5>
-      </a>
-      <div className="mt-2 mb-5 flex items-center justify-between">
-        <p>
-          <span className="text-xl font-bold text-slate-900">{product.price} DT</span>
-        </p>
+    <div className=" bg-white rounded-md p-2 flex flex-col">
+      <div className="flex justify-between">
+      <div className="flex gap-[14px]">
+        <div className="bg-green-500 w-14 h-14 flex items-center justify-center rounded-full">
+        <CustomSvg
+          title="arrow"
+          style="w-7 h-7"
+          color={sharedIcons.menu.color}
+          d={sharedIcons.menu.d}
+          viewBox={sharedIcons.arrow?.viewBox}
+        />
+        </div>
+        <div>
+        <p>Total sales</p>
+        <h4 className="font-bold text-[22px]">34,897</h4>
+        </div>
+        
+       
       </div>
-      <button className="group mb-2 flex h-10 w-full items-stretch font-bold overflow-hidden rounded-md text-blue-600">
-          <div className="flex w-full items-center justify-center bg-blue-100 text-xs uppercase transition">Add</div>
-          <div className="flex items-center justify-center bg-blue-50 px-5 transition">+</div>
-        </button>
+      <div className="flex items-center">
+        <p className="text-[14px] font-bold text-gray-600">1.56%</p>
+        </div>
+        </div>
+        <Line data={data} options={options}/>
     </div>
-  </div>
-  
   );
 };
 

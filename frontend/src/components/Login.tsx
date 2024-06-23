@@ -61,6 +61,7 @@ export default function Home() {
             control={form.control}
             name="password"
             label="Password"
+            type="password"
             placeholder="Password"
           />
           <FormMessage className="form-message mt-2">{message}</FormMessage>

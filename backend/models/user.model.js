@@ -51,7 +51,14 @@ const userSchema = new mongoose.Schema({
     },
     image: {
         type: String
-    }
+    },
+    orders: [
+        {
+          type: mongoose.Types.ObjectId,
+          ref:'Order'
+  
+        }
+      ]
 },
     {
         timestamps: true,
