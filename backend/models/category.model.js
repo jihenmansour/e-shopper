@@ -13,6 +13,7 @@ const CategorySchema = new mongoose.Schema(
     },
     image: {
       type: String,
+      default:"1719418313830.png"
     },
     products: [
       {

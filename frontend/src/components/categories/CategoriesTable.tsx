@@ -18,7 +18,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { deleteUser } from "@/lib/actions/user.actions";
+import { deleteCategory } from "@/lib/actions/category.actions";
+import { apiURL } from "@/lib/utils";
+import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { sharedIcons } from "../../../constants";
 import CustomSvg from "../CustomSvg";
@@ -26,12 +29,12 @@ import CustomPagination from "../Pagination";
 import Toast from "../Toast";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import Link from "next/link";
-import avatar from '../../../public/images/avatar-category.png'
-import { apiURL } from "@/lib/utils";
-import { deleteCategory } from "@/lib/actions/category.actions";
 
-const CategoriesTable = ({ categories }: { categories: CatgoriesTableProps }) => {
+const CategoriesTable = ({
+  categories,
+}: {
+  categories: CatgoriesTableProps;
+}) => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [message, setMessage] = useState<string>();
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
@@ -46,7 +49,6 @@ const CategoriesTable = ({ categories }: { categories: CatgoriesTableProps }) =>
       setMessage("Cannot delete this category");
     }
   };
-
 
   return (
     <>
@@ -82,12 +84,22 @@ const CategoriesTable = ({ categories }: { categories: CatgoriesTableProps }) =>
               <TableRow key={index}>
                 <TableCell className="flex gap-1 items-center">
                   <div className="w-12 h-12 rounded-sm ">
-                    <img src={item.image?`${apiURL}/images/${item.image}`: avatar.src} alt="" className="object-cover h-full w-full rounded-sm"/>
+                    <div className="w-12 h-12 rounded-sm ">
+                      <Image
+                        src={`${apiURL}/images/${item.image}`}
+                        alt=""
+                        width={0}
+                        height={0}
+                        sizes="100vw"
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
                   </div>
-                    <p className="font-semibold">{item.name}</p>
-
+                  <p className="font-semibold">{item.name}</p>
                 </TableCell>
-                <TableCell className="text-center">{item.description}</TableCell>
+                <TableCell className="text-center">
+                  {item.description}
+                </TableCell>
                 <TableCell className="flex justify-end gap-4">
                   <Link href={`/categories/${item._id}`}>
                     <CustomSvg

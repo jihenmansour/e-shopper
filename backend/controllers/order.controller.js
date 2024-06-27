@@ -50,22 +50,13 @@ const getOrders = async (req, res) => {
     .limit(limit)
     .skip(limit * (page - 1));
 
-    let totalSales=0, totalIncomes=0;
-    data.map((order)=>{
-      order.OrderItems.map((item)=>{
-        totalSales = totalSales + item.quantity
-        totalIncomes = totalIncomes+item.quantity*item.product.price
-      })
-    })
   res.status(200).json({
     data,
     page,
     total,
     totalPages,
     nextPage,
-    previousPage,
-    totalSales,
-    totalIncomes
+    previousPage
   });
 };
 

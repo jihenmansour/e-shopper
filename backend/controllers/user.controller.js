@@ -20,21 +20,14 @@ const getUsers = async (req, res) => {
     .limit(limit)
     .skip(limit * (page - 1));
  
-let TotalCustomers = 0;
- data.map((user) => {
-  if(user.role==='client'){
-    TotalCustomers =+ 1;
-  }
- })
 
   res.status(200).json({
-    users,
+    data,
     page,
     total,
     totalPages,
     nextPage,
-    previousPage,
-    TotalCustomers
+    previousPage
   });
 };
 

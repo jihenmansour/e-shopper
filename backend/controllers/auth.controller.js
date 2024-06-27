@@ -12,7 +12,7 @@ const register = async (req, res) => {
 
   const hashedPassword = await hashPassword(password);
 
-  const imageUrl = req.file ? req.file.filename : "";
+  const imageUrl = req.file?.filename;
 
   const userData = {
     ...parsedData,

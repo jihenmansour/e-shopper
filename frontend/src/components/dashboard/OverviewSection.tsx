@@ -1,15 +1,19 @@
-"use client"
+"use client";
 
-import CustomCard from "../CustomCard";
+import { formatStats } from "@/lib/utils";
+import LineChartCard from "../LineChartCard";
 
-
-const OverviewSection = () => {
-
+const OverviewSection = ({ stats }: { stats: OverviewSectionProps }) => {
+  const cardsData = formatStats(stats);
   return (
     <div className="grid grid-flow-row lg:grid-cols-3 gap-4">
-      <CustomCard />
-      <CustomCard />
-      <CustomCard />
+      {cardsData.map((item, index) => {
+        return <LineChartCard 
+        key={index} 
+        stats={item.stats} 
+        type={item.type} 
+        total={item.total}/>;
+      })}
     </div>
   );
 };

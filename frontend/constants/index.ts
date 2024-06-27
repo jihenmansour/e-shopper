@@ -4,7 +4,7 @@ export const sidebarLinks = [
     label: "Dashboard",
     icon: {
       color: "w-7 h-7 fill-none stroke-black group-hover:stroke-primary",
-      open:"stroke-white",
+      open: "stroke-white",
       strokeLine: "round",
       strokeWidth: 2,
       d: "M8 17h8M11.018 2.764 4.235 8.039c-.453.353-.68.53-.843.75a2 2 0 0 0-.318.65C3 9.704 3 9.991 3 10.565V17.8c0 1.12 0 1.68.218 2.108a2 2 0 0 0 .874.874C4.52 21 5.08 21 6.2 21h11.6c1.12 0 1.68 0 2.108-.218a2 2 0 0 0 .874-.874C21 19.48 21 18.92 21 17.8v-7.235c0-.574 0-.861-.074-1.126a2.002 2.002 0 0 0-.318-.65c-.163-.22-.39-.397-.843-.75l-6.783-5.275c-.351-.273-.527-.41-.72-.462a1 1 0 0 0-.523 0c-.194.052-.37.189-.721.462Z",
@@ -13,7 +13,7 @@ export const sidebarLinks = [
   {
     icon: {
       color: "w-7 h-7 fill-none stroke-black group-hover:stroke-primary",
-      open:"stroke-white",
+      open: "stroke-white",
       strokeLine: "round",
       strokeWidth: 2,
       d: "M9 12h12M9 4v16m-2.8 0h11.6c1.12 0 1.68 0 2.108-.218a2 2 0 0 0 .874-.874C21 18.48 21 17.92 21 16.8V7.2c0-1.12 0-1.68-.218-2.108a2 2 0 0 0-.874-.874C19.48 4 18.92 4 17.8 4H6.2c-1.12 0-1.68 0-2.108.218a2 2 0 0 0-.874.874C3 5.52 3 6.08 3 7.2v9.6c0 1.12 0 1.68.218 2.108a2 2 0 0 0 .874.874C4.52 20 5.08 20 6.2 20Z",
@@ -41,7 +41,7 @@ export const sidebarLinks = [
   {
     icon: {
       color: "w-7 h-7 fill-none stroke-black group-hover:stroke-primary",
-      open:"stroke-white",
+      open: "stroke-white",
       viewBox: "0 0 24 24",
       strokeLine: "round",
       strokeWidth: 2,
@@ -111,24 +111,70 @@ export const sharedIcons = {
 };
 
 export const OrdersStatusStyles = {
-  "pending": {
-    borderColor: "border-pink-600",
-    backgroundColor: "bg-pink-500",
-    textColor: "text-pink-700"
+  pending: {
+    borderColor: "border-pink-400",
+    backgroundColor: "bg-pink-25",
+    textColor: "text-pink-500",
+    circleBg:"bg-pink-400"
   },
-  "processing" : {
-    borderColor: "border-blue-600",
-    backgroundColor: "bg-blue-300",
-    textColor: "text-blue-700"
+  processing: {
+    borderColor: "border-blue-400",
+    backgroundColor: "bg-blue-25",
+    textColor: "text-blue-500",
+    circleBg:"bg-blue-400"
   },
-  "shipped" : {
+  shipped: {
     borderColor: "border-green-600",
     backgroundColor: "bg-green-500",
-    textColor: "text-green-700"
+    textColor: "text-green-700",
+    circleBg:"bg-green-400"
   },
-  "cancelled" : {
+  cancelled: {
     borderColor: "border-red-600",
     backgroundColor: "bg-red-500",
-    textColor: "text-red-700"
-  }
-}
+    textColor: "text-red-700",
+    circleBg:"bg-red-400"
+  },
+};
+
+export const StatsCardStyle = {
+  "Total sales": {
+    Icon: {
+      style: "w-8 h-8",
+      fill:"none",
+      stroke:"#ffff",
+      strokeWidth:2,
+      viewBox: "0 0 24 24",
+      d: "M9 8a3 3 0 1 0 6 0M3 16.8V7.2c0-1.12 0-1.68.218-2.108.192-.377.497-.682.874-.874C4.52 4 5.08 4 6.2 4h11.6c1.12 0 1.68 0 2.107.218.377.192.683.497.875.874.218.427.218.987.218 2.105v9.607c0 1.118 0 1.677-.218 2.104a2.002 2.002 0 0 1-.875.874c-.427.218-.986.218-2.104.218H6.197c-1.118 0-1.678 0-2.105-.218a2 2 0 0 1-.874-.874C3 18.48 3 17.92 3 16.8Z",
+    },
+    IconBackground: "bg-green-500",
+    ChartBorderColor: "#22C55E",
+    ChartBackgroundColor: "#C2EFD2",
+  },
+  "Total incomes": {
+    Icon: {
+      style: "w-8 h-8",
+      fill:"none",
+      stroke:"#ffff",
+      strokeWidth:2,
+      viewBox: "0 0 24 24",
+      d: "M18 8.5v-.146A3.354 3.354 0 0 0 14.646 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H9.427A3.427 3.427 0 0 1 6 15.573V15.5M12 3v18",
+    },
+    IconBackground: "bg-red-500",
+    ChartBorderColor: "#FF5301",
+    ChartBackgroundColor: "#FFD1BB",
+  },
+  "Total customers": {
+    Icon: {
+      style: "w-8 h-8",
+      fill:"none",
+      stroke:"#ffff",
+      strokeWidth:2,
+      viewBox: "0 0 24 24",
+      d: "M13 20v-2a5 5 0 0 0-10 0v2h10Zm0 0h8v-1c0-2.945-2.239-5-5-5-1.413 0-2.69.626-3.6 1.631M11 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm7 2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z",
+    },
+    IconBackground: "bg-blue-500",
+    ChartBorderColor: "#2377FC",
+    ChartBackgroundColor: "#CEE1FE",
+  },
+};

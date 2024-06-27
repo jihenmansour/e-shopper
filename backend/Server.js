@@ -8,6 +8,7 @@ const userRoutes = require('./routes/user.router')
 const categoryRoutes = require('./routes/category.router')
 const productRoutes = require('./routes/product.router')
 const orderRoutes = require('./routes/order.router')
+const statsRoutes = require('./routes/stats.router')
 const errorHandler = require('./middleware/error.handler')
 const requestMethod = require ('./middleware/request.method')
 
@@ -34,6 +35,7 @@ app.use('/', userRoutes)
 app.use('/', categoryRoutes)
 app.use('/', productRoutes)
 app.use('/', orderRoutes)
+app.use('/', statsRoutes)
 
 
 app.use('*', requestMethod)

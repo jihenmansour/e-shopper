@@ -14,7 +14,7 @@ export function Toaster() {
   const { toasts } = useToast()
 
   return (
-  <
+  
           <Toast >
             <div className="grid gap-1">
               <ToastTitle>message</ToastTitle>

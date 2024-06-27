@@ -1,25 +1,28 @@
 'use client'
 
 import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-  } from "@/components/ui/pagination"
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { createQueryString } from "@/lib/utils";
 
-  import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { useState } from "react";
+  import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback } from "react";
 
   
  const CustomPagination = ({page, totalPages, nextPage, previousPage}: PaginationProps) => {
   const router = useRouter()
   const path = usePathname()
+  const searchParams = useSearchParams();
+
 
   const handleNavigation = (pageIndex: number) => {
-
-  router.push(`${path}?page=${pageIndex}`);
+    
+    router.push(path + '?' + createQueryString('page', pageIndex.toString(), searchParams));
   };
     return (
       <Pagination>

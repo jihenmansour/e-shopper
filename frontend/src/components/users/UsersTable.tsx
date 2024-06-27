@@ -19,6 +19,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { deleteUser } from "@/lib/actions/user.actions";
+import { apiURL } from "@/lib/utils";
+import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { sharedIcons } from "../../../constants";
 import CustomSvg from "../CustomSvg";
@@ -26,9 +29,6 @@ import CustomPagination from "../Pagination";
 import Toast from "../Toast";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import Link from "next/link";
-import avatar from '../../../public/images/avatar-profile.png'
-import { apiURL } from "@/lib/utils";
 
 const UsersTable = ({ users }: { users: UsersTableProps }) => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
@@ -45,7 +45,6 @@ const UsersTable = ({ users }: { users: UsersTableProps }) => {
       setMessage("Cannot delete this user");
     }
   };
-
 
   return (
     <>
@@ -82,7 +81,14 @@ const UsersTable = ({ users }: { users: UsersTableProps }) => {
               <TableRow key={index}>
                 <TableCell className="flex gap-1">
                   <div className="w-12 h-12 rounded-sm ">
-                    <img src={item.image?`${apiURL}/images/${item.image}`: avatar.src} alt="" className="object-cover h-full w-full rounded-sm"/>
+                    <Image
+                      src={`${apiURL}/images/${item.image}`}
+                      alt=""
+                      width={0}
+                      height={0}
+                      sizes="100vw"
+                      className="h-full w-full object-cover"
+                    />
                   </div>
                   <div className="flex flex-col">
                     <p className="font-semibold">{item.fullname}</p>

@@ -18,22 +18,30 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
+
 import { deleteProduct } from "@/lib/actions/product.actions";
-import { apiURL } from "@/lib/utils";
+import { apiURL, createQueryString } from "@/lib/utils";
+import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { sharedIcons } from "../../../constants";
-import avatar from '../../../public/images/avatar-category.png';
 import CustomSvg from "../CustomSvg";
 import CustomPagination from "../Pagination";
 import Toast from "../Toast";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [message, setMessage] = useState<string>();
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const router = useRouter();
+  const path = usePathname();
+  const searchParams = useSearchParams();
+  const sortFilterValue = searchParams.get("sort");
+
   const handleDelete = async (id?: string) => {
     try {
       const response = await deleteProduct(id);
@@ -47,6 +55,10 @@ const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
   };
 
 
+ const handleSelect = (e: any) => {
+  router.push(path + '?' + createQueryString('sort', e.target.value, searchParams));
+ }
+
   return (
     <>
       <Toast
@@ -59,11 +71,19 @@ const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
       />
       <div className=" w-full overflow-auto bg-white rounded-sm py-6 px-4">
         <div className="flex justify-between mb-2">
-          <Input
-            className="w-1/3 max-lg:w-1/2"
-            type="text"
-            placeholder="Search here..."
-          />
+          <div className="flex gap-2  items-center">
+            <p className="text-gray-500 text-sm whitespace-nowrap">sort by</p>
+            <select 
+            className="border border-gray-300 rounded-md p-1 cursor-pointer"
+             onChange={handleSelect}
+             value={sortFilterValue!}>
+              <option value="createdAt">created at</option>
+              <option value="totalOrderedItems">total ordered items</option>
+              <option value="price">price</option>
+            </select>
+            <p className="text-gray-500 text-sm whitespace-nowrap">entries</p>
+            <Input type="text" placeholder="Search here..." />
+          </div>
           <Link href="/products/add-product">
             <Button className="justify-end md:px-10">+ Add new</Button>
           </Link>
@@ -71,10 +91,11 @@ const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]">Category</TableHead>
+              <TableHead className="w-[100px]">Product</TableHead>
               <TableHead className="text-center">Description</TableHead>
-              <TableHead >Price</TableHead>
-              <TableHead >Quantity</TableHead>
+              <TableHead>Price</TableHead>
+              <TableHead>Quantity</TableHead>
+              <TableHead>Total ordered items</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -83,18 +104,27 @@ const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
               <TableRow key={index}>
                 <TableCell className="flex gap-1 items-center">
                   <div className="w-12 h-12 rounded-sm ">
-                    <img src={item.image?`${apiURL}/images/${item.image}`: avatar.src} alt="" className="object-cover h-full w-full rounded-sm"/>
+                    <Image
+                      src={`${apiURL}/images/${item.image}`}
+                      alt=""
+                      width={0}
+                      height={0}
+                      sizes="100vw"
+                      className="h-full w-full object-cover"
+                    />
                   </div>
                   <div className="flex items-center">
                     <p className="font-semibold whitespace-nowrap">
                       {item.name}
                     </p>
                   </div>
-
                 </TableCell>
-                <TableCell className="text-center">{item.description}</TableCell>
-                <TableCell >{item.price}</TableCell>
-                <TableCell >{item.quantity}</TableCell>
+                <TableCell className="text-center">
+                  {item.description}
+                </TableCell>
+                <TableCell>{item.price}</TableCell>
+                <TableCell>{item.quantity}</TableCell>
+                <TableCell>{item.totalOrderedItems}</TableCell>
                 <TableCell className="flex justify-end gap-4">
                   <Link href={`/products/${item._id}`}>
                     <CustomSvg

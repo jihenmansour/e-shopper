@@ -30,9 +30,17 @@ export const getAllproducts = async () => {
 
 
 export const getProducts = async (
-  page: number
+  page: number,
+  limit?: number ,
+  sort?: string
 ): Promise<ProductsTableProps> => {
-  const response = await axios.get(`${apiURL}/products?page=${page}`);
+  const response = await axios.get(`${apiURL}/products`,{
+    params: {
+      page,
+      limit,
+      sort
+    }
+  });
   return response.data;
 };
 

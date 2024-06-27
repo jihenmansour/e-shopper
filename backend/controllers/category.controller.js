@@ -5,8 +5,8 @@ const Product = require("../models/product.model");
 // Create Category
 const createCategory = async (req, res) => {
   const parsedData = JSON.parse(req.body.data);
-  const imageUrl = req.file ? req.file.filename : "";
-
+  const imageUrl = req.file?.filename;
+ console.log(imageUrl)
   const categoryData = {
     ...parsedData,
     image: imageUrl,

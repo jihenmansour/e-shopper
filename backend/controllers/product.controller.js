@@ -5,7 +5,7 @@ const Category = require("../models/category.model");
 // Create Prodcut
 const createProduct = async (req, res) => {
   const parsedData = JSON.parse(req.body.data);
-  const imageUrl = req.file ? req.file.filename : "";
+  const imageUrl = req.file?.filename;
 
   const productData = {
     ...parsedData,
@@ -43,18 +43,62 @@ const getAllProducts = async (req, res) => {
 
 // Get Products
 const getProducts = async (req, res) => {
-  const page = req.query.page ? parseInt(req.query.page) : 1;
   const limit = req.query.limit ? parseInt(req.query.limit) : 10;
-
+  const page = req.query.page ? parseInt(req.query.page) : 1;
+  const sortField = req.query.sort || 'createdAt';
+  const skip = limit * (page - 1);
   const total = await Product.find().count();
 
   const totalPages = Math.ceil(total / limit);
   const nextPage = page < totalPages ? page + 1 : null;
   const previousPage = page > 1 ? page - 1 : null;
-  const data = await Product.find({})
-    .sort({ createdAt: -1 })
-    .limit(limit)
-    .skip(limit * (page - 1));
+  const data = await await Product.aggregate([
+    {
+      $lookup: {
+        from: "orders",
+        let: { productId: "$_id" },
+        pipeline: [
+          { $unwind: "$OrderItems" },
+          {
+            $match: {
+              $expr: { $eq: ["$OrderItems.product", "$$productId"] },
+            },
+          },
+        ],
+        as: "orders",
+      },
+    },
+    {
+      $addFields: {
+        totalOrderedItems: {
+          $sum: {
+            $map: {
+              input: "$orders",
+              as: "order",
+              in: "$$order.OrderItems.quantity",
+            },
+          },
+        },
+      },
+    },
+
+    {
+      $project: {
+        orders: 0,
+      },
+    },
+    {
+      $sort: {
+        [sortField]: -1
+      },
+    },
+
+
+    { $skip: skip },
+    { $limit: limit }
+    
+    
+  ]);
 
   res.status(200).json({
     data,
@@ -65,6 +109,7 @@ const getProducts = async (req, res) => {
     previousPage,
   });
 };
+
 
 //Get Product
 const getProduct = async (req, res) => {
@@ -127,6 +172,7 @@ const updateProduct = await Product.findOneAndUpdate(
     updateProduct,
   });
 };
+
 
 // Delete Product
 const deleteProduct = async (req, res) => {

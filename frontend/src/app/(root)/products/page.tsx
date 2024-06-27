@@ -2,9 +2,10 @@ import ProductsTable from "@/components/products/ProductsTable";
 import { getProducts } from "@/lib/actions/product.actions";
 import { Suspense } from "react";
 
-const page = async ({ searchParams: { page } }: SearchParamProps) => {
+const page = async ({ searchParams: { page, sort  } }: SearchParamProps) => {
   const currentPage = Number(page as string) || 1;
-  const products = await getProducts(currentPage);
+  const sortFilter = sort as string;
+  const products = await getProducts(currentPage,10,sortFilter);
   return (
     <div>
       <Suspense fallback={<p>Fetching data...</p>}>

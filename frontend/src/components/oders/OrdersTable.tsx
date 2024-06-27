@@ -20,30 +20,32 @@ import {
 } from "@/components/ui/table";
 import { deleteOrder, exportExcel } from "@/lib/actions/order.actions";
 import { apiURL, cn } from "@/lib/utils";
+import Image from "next/image";
 import { useState } from "react";
 import { OrdersStatusStyles, sharedIcons } from "../../../constants";
-import avatar from "../../../public/images/avatar-profile.png";
 import CustomSvg from "../CustomSvg";
 import CustomPagination from "../Pagination";
 import Toast from "../Toast";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
+const StatusBadge = ({ status }: { status: string }) => {
+  const { borderColor, backgroundColor, textColor, circleBg } =
+    OrdersStatusStyles[status as keyof typeof OrdersStatusStyles];
 
-const StatusBadge = ({ status }: {status: string}) => {
-  const {
-    borderColor,
-    backgroundColor,
-    textColor
-   } = OrdersStatusStyles[status as keyof typeof OrdersStatusStyles] 
-   
   return (
-    <div className={cn("flex border-2 rounded-full items-center",backgroundColor, borderColor)}>
-      <div className={cn('size-2 rounded-full', backgroundColor)} />
-      <p className={cn('text-[12px] font-medium', textColor)}>{status}</p>
+    <div
+      className={cn(
+        "flex border-2 rounded-full items-center justify-center gap-2 ",
+        backgroundColor,
+        borderColor
+      )}
+    >
+      <div className={cn("size-2 rounded-full", circleBg)} />
+      <p className={cn("text-[12px] font-medium", textColor)}>{status}</p>
     </div>
-  )
-}
+  );
+};
 
 const OrdersTable = ({ orders }: { orders: OrdersTableProps }) => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
@@ -78,13 +80,15 @@ const OrdersTable = ({ orders }: { orders: OrdersTableProps }) => {
             type="text"
             placeholder="Search here..."
           />
-            <Button className="justify-end md:px-10" onClick={exportExcel}>Download excel</Button>
+          <Button className="justify-end md:px-10" onClick={exportExcel}>
+            Download excel
+          </Button>
         </div>
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">Customer</TableHead>
-              <TableHead className="text-center" >Content</TableHead>
+              <TableHead className="text-center">Content</TableHead>
               <TableHead>address</TableHead>
               <TableHead>Total</TableHead>
               <TableHead>Status</TableHead>
@@ -96,14 +100,13 @@ const OrdersTable = ({ orders }: { orders: OrdersTableProps }) => {
               <TableRow key={index}>
                 <TableCell className="flex gap-1 orders-center">
                   <div className="w-12 h-12 rounded-sm ">
-                    <img
-                      src={
-                        order.user.image
-                          ? `${apiURL}/images/${order.user.image}`
-                          : avatar.src
-                      }
+                    <Image
+                     src={`${apiURL}/images/${order.user.image}`}
                       alt=""
-                      className="object-cover h-full w-full rounded-sm"
+                      width={0}
+                      height={0}
+                      sizes="100vw"
+                      className="h-full w-full object-cover"
                     />
                   </div>
                   <div className="flex items-center">
@@ -116,8 +119,8 @@ const OrdersTable = ({ orders }: { orders: OrdersTableProps }) => {
                   <ul className="list-disc flex flex-col items-center text-base">
                     {order.OrderItems.map((item, index) => {
                       return (
-                        <li>
-                          {item.quantity} of {item.product.name}
+                        <li key={index}>
+                          {item.quantity} + {item.product.name}
                         </li>
                       );
                     })}
@@ -126,7 +129,7 @@ const OrdersTable = ({ orders }: { orders: OrdersTableProps }) => {
                 <TableCell>{order.shippingAddress}</TableCell>
                 <TableCell>{order.total}</TableCell>
                 <TableCell>
-                  <StatusBadge status={order.status}/>
+                  <StatusBadge status={order.status} />
                 </TableCell>
                 <TableCell className="flex justify-end gap-4">
                   <AlertDialog>
