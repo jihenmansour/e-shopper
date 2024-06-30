@@ -51,7 +51,7 @@ https://github.com/jihenmansour/e-shopper/assets/48207144/641489f3-8e05-4c63-aa1
 
    ```bash
     mv backend/.env.example backend/.env
-    ```
+   ```
 
 4.  Run the app:
 
