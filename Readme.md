@@ -22,7 +22,7 @@ https://github.com/jihenmansour/e-shopper/assets/48207144/641489f3-8e05-4c63-aa1
 
 ## Tech Stack
 
-![MongoDB](https://img.shields.io/badge/-MongoDB-green) ![Express](https://img.shields.io/badge/-Express-blue) ![Next](https://img.shields.io/badge/-Next-blue) ![Node.js](https://img.shields.io/badge/-Node.js-green) ![Shadcn](https://img.shields.io/badge/-Shadcn-blue) ![Tailwind](https://img.shields.io/badge/-Tailwind-red) ![Mongoose](https://img.shields.io/badge/-Mongoose-green)
+![MongoDB](https://img.shields.io/badge/-MongoDB-green) ![Express](https://img.shields.io/badge/-Express-blue) ![Next.js](https://img.shields.io/badge/-Next.js-black) ![Node.js](https://img.shields.io/badge/-Node.js-green) ![Shadcn](https://img.shields.io/badge/-Shadcn-blue) ![Tailwind](https://img.shields.io/badge/-Tailwind-red) ![Mongoose](https://img.shields.io/badge/-Mongoose-green)
 
 ## Installation
 
@@ -45,25 +45,25 @@ https://github.com/jihenmansour/e-shopper/assets/48207144/641489f3-8e05-4c63-aa1
 
 3.  Rename Environment Files:
 
-```bash
-  mv frontend/.env.example frontend/.env
-  ```
+   ```bash
+    mv frontend/.env.example frontend/.env
+   ```
 
-```bash
-  mv backend/.env.example backend/.env
-  ```
+   ```bash
+    mv backend/.env.example backend/.env
+    ```
 
 4.  Run the app:
 
-  ```bash
-  cd frontend &&
-  npm run dev
-  ```
+    ```bash
+    cd frontend &&
+    npm run dev
+    ```
 
-   ```bash
-  cd backend &&
-  npm run dev
-  ```
+    ```bash
+    cd backend &&
+    npm run dev
+    ```
 
   ## Features
 
@@ -83,30 +83,21 @@ https://github.com/jihenmansour/e-shopper/assets/48207144/641489f3-8e05-4c63-aa1
 
 ### Backend
 
-| Dependency                              | Description                                           |
-| --------------------------------------- | ----------------------------------------------------- |
-| @babel/plugin-proposal-class-properties | Babel plugin for class properties                     |
-| @strapi/provider-upload-cloudinary      | Cloudinary provider for Strapi uploads                |
-| bcryptjs                                | Hash passwords before storing                         |
-| body-parser                             | Parse incoming request bodies                         |
-| cloudinary                              | Cloud storage for images and videos                   |
-| cookie-parser                           | Parse Cookie header and populate req.cookies          |
-| cors                                    | Enable Cross-Origin Resource Sharing                  |
-| crypto                                  | Cryptographic functions for Node.js                   |
-| crypto-js                               | JavaScript library for cryptographic operations       |
-| dotenv                                  | Load environment variables from a .env file           |
-| express                                 | Web application framework for Node.js                 |
-| express-fileupload                      | Middleware to handle file uploads in Express          |
-| helmet                                  | Secure HTTP headers middleware                        |
-| http-proxy-middleware                   | Proxy requests in development                         |
-| jsonwebtoken                            | Generate and verify JSON Web Tokens                   |
-| jwt-simple                              | Simple JWT encoding and decoding                      |
-| mongoose                                | MongoDB object modeling tool                          |
-| nodemailer                              | Send email using Node.js                              |
-| nodemon                                 | Monitor for changes in source code and restart server |
-| react-chartjs-2                         | React wrapper for Chart.js 2                          |
-| stripe                                  | Payment processing library                            |
-| validator                               | Validate and sanitize user input                      |
+| Dependency              | Description                                           |
+| ----------------------- | ----------------------------------------------------- |
+| bcrypt                  | Hash passwords before storing                         |
+| body-parser             | Parse incoming request bodies                         |
+| cookie-parser           | Parse Cookie header and populate req.cookies          |
+| cors                    | Enable Cross-Origin Resource Sharing                  |
+| dotenv                  | Load environment variables from a .env file           |
+| exceljs                 | Excel file creation and manipulation                  |
+| express                 | Web application framework for Node.js                 |
+| express-async-errors    | Error handling for async functions in Express         |
+| http-status-codes       | Constants for HTTP status codes                       |
+| jsonwebtoken            | Generate and verify JSON Web Tokens                   |
+| mongoose                | MongoDB object modeling tool                          |
+| multer                  | Middleware for handling multipart/form-data (file uploads) |
+| validator               | Validate and sanitize user input                      |
 
 ### Frontend
 
@@ -145,92 +136,3 @@ https://github.com/jihenmansour/e-shopper/assets/48207144/641489f3-8e05-4c63-aa1
 | swiper                      | Mobile touch slider library                                  |
 | web-vitals                  | Library for measuring web performance metrics                |
 
-## Hosting Your Complete App on Vercel
-
-This guide will walk you through the process of hosting your complete MERN stack app on Vercel using the `vercel.json` configuration.
-
-### Step 1: Prepare Your Project
-
-- Organize your project with a root directory that contains both frontend and backend folders.
-- Ensure both backend and frontend directories have all necessary code and dependencies.
-- Create a `vercel.json` file in the root directory.
-- Add the following code to `vercel.json`:
-
-```json
-{
-  "version": 2,
-  "builds": [
-    {
-      "src": "./backend/server.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "./frotend/build",
-      "use": "@vercel/static"
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/backend/server.js"
-    }
-  ]
-}
-````
-
-- Note :
-  - Using this configuration will require you to run npm run build in the frontend directory before deploying to Vercel.
-  - Ensure your folder structure looks like this:
-    ```json
-      root
-      ├── backend
-      ├── frontend
-      │   ├── node_modules
-      │   ├── package.json
-      │   ├── build
-      │   └── ...
-      ├── node_modules
-      ├── package.json
-      ├── vercel.json
-      └── ...
-    ```
-
-### Step 2: Push Code to GitHub
-
-- Push all your code to GitHub, ignoring the `node_modules` folder and `.env` file.
-
-### Step 3: Create a Vercel Account
-
-- Create an account on Vercel if you haven't already.
-- Connect your GitHub account to Vercel.
-
-### Step 4: Create a Vercel Project
-
-- Create a new project in Vercel.
-- Select your GitHub repository (e.g., CricketWeapon-store).
-
-### Step 5: Configure Project Settings
-
-- Configure the project settings:
-  - Keep the settings as they are.
-  - Add all your `.env` variables in the Environment Variables section.
-
-### Step 6: Deploy Your App
-
-- Click on "Deploy" and wait for a few minutes for the deployment process to complete.
-
-### Step 7: Visit Your App
-
-- Once the deployment is successful, click on "Visit" to access your live app.
-
-### Step 8: Enjoy Your App
-
-- Congratulations! Your app is now live and accessible.
-
-## Contributions
-
-| Contributor                                           |
-| ----------------------------------------------------- |
-| [ImgBotApp](https://github.com/ImgBotApp)             |
-| [MehraDevesh2022](https://github.com/MehraDevesh2022) |
-| [0dayhunter](https://github.com/MehraDevesh2022)      |
