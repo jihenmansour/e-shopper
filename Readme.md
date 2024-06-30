@@ -1,132 +1,105 @@
 # E-shopper Shopping App
 
-
 ---
 
 ## Introduction
+
 ---
+
 Welcome to E-shopper, an e-commerce shopping app built using the MERN (MongoDB, Express, React, Node.js) stack and Material-UI (MUI) for the user interface. This project provides both normal user and admin modes, offering a wide range of features to enhance the shopping experience.
 
 ## Demo
 
-
 ### Admin Area
+
 https://github.com/jihenmansour/e-shopper/assets/48207144/641489f3-8e05-4c63-aa16-e8f550c7f44c
 
 ## Dummy User Accounts
 
 | Email (Admin)     | Password  |
 | ----------------- | --------- |
-| admin@contact.com   | admin@123 |
-
+| admin@contact.com | admin@123 |
 
 ## Tech Stack
 
-
-![MongoDB](https://img.shields.io/badge/-MongoDB-green) ![Express](https://img.shields.io/badge/-Express-blue) ![Next](https://img.shields.io/badge/-Next-blue) ![Node.js](https://img.shields.io/badge/-Node.js-green) ![Shadcn](https://img.shields.io/badge/-Shadcn-blue) ![Tailwind](https://img.shields.io/badge/-Tailwind-red) ![Mongoose](https://img.shields.io/badge/-Mongoose-green) 
+![MongoDB](https://img.shields.io/badge/-MongoDB-green) ![Express](https://img.shields.io/badge/-Express-blue) ![Next](https://img.shields.io/badge/-Next-blue) ![Node.js](https://img.shields.io/badge/-Node.js-green) ![Shadcn](https://img.shields.io/badge/-Shadcn-blue) ![Tailwind](https://img.shields.io/badge/-Tailwind-red) ![Mongoose](https://img.shields.io/badge/-Mongoose-green)
 
 ## Installation
 
-### Backend
-
 1.  Clone the repository:
     ```bash
-    git clone https://github.com/MehraDevesh2022/CricketWeapon-Store.git
-    cd CricketWeapon-Store
+    git clone https://github.com/jihenmansour/e-shopper.git
+    cd e-shopper
     ```
 2.  Install dependencies:
+
     ```bash
+    cd frontend
     npm install
-    cd frorntend
-    npm install
-    cd ..
     ```
-3.  Create a `config` folder inside the backend directory of the project and then create a `.env` file inside the `config` folder and add the following:
 
-    ````bash
-    PORT = 5000
-    DB_LINK ="mongodb+srv://<username>:<password>@<cluster-url>/<database-name>?retryWrites=true&w=majority"
-    NODE_ENV = production
-    JWT_SECRET = <jwt-secret-key>
-    JWT_EXPIRE = 5d
-    COOKIE_EXPIRE = 5
-    SMTP_HOST=smtp.gmail.com
-    SMTP_PORT=465
-    SMTP_SERVICE = gmail
-    SMTP_MAIL = <smtp-email>
-    SMTP_PASSWORD = <smtp-password>
-    SMTP_PASS = <smtp-password>
-    CLOUDINARY_NAME = <cloudinary-name>
-    API_KEY = <api-key>
-    API_SECRET = <api-secret>
-    CLOUDINARY_URL=cloudinary://<api-key>:<api-secret>@<cloudinary-name>
-    FRONTEND_URL = http://localhost:3000
-    STRIPE_API_KEY = <stripe-api-key>
-    STRIPE_SECRET_KEY = <stripe-secret-key>
+    ```bash
+    cd backend
+    npm install
+    ```
 
+3.  Rename Environment Files:
 
-    ````
+````bash
+  mv frontend/.env.example frontend/.env
+  ```
+
+```bash
+  mv backend/.env.example backend/.env
+  ```
 
 4.  Run the app:
 
-    ```bash
-    cd backend &&
-    npm start
-    ```
+  ```bash
+  cd frontend &&
+  npm run dev
+  ```
 
-    ## Features
+   ```bash
+  cd backend &&
+  npm run dev
+  ```
 
-### Normal User Mode
+  ## Features
 
-| Feature             | Description                                                  |
-| ------------------- | ------------------------------------------------------------ |
-| User Authentication | OAuth with JWT for secure user login and registration        |
-| Password Reset      | Reset password via email with reset link                     |
-| Profile Management  | Update user profile details (email, name, password, picture) |
-| Shopping Cart       | Add items to the cart and apply coupon codes                 |
-| Product Review      | Logged-in users can review products                          |
-| Shipping Options    | Specify shipping area for product delivery                   |
-| Order Tracking      | Track the status of orders                                   |
-| Payment Gateway     | Secure payment processing via Stripe                         |
-| Contact Form        | Contact form for user assistance                             |
-| Saved Addresses     | Save multiple shipping addresses                             |
-| Advanced Search     | Filter products by price range, category, and rating         |
-| State Management    | Global state management with Redux                           |
 ### Admin Mode
 
 | Feature                 | Description                                        |
 | ----------------------- | -------------------------------------------------- |
 | Admin Dashboard         | Access to an admin-only dashboard                  |
-| User Management         | View and manage users (delete, promote to admin)   |
-| Product Management      | Edit and create products, manage stock levels      |
-| Review Management       | View and delete product reviews                    |
-| Order Management        | View all orders, and can manage them               |
-| Role-Based Permissions  | Restrict admin features based on roles             |
-| Order Approval Workflow | Set up approval process for Update status of order |
+| User Management         | View and manage users (add, update, delete)        |
+| Product Management      | View and manage products (add, update, delete)     |
+| Category Management     | View and manage categories (add, update, delete)   |
+| Order Management        | View and manage categories (delete)                |
 
 ## Upcoming Features
 
-### Normal User Mode
+# ### Normal User Mode
 
-| Feature                 | Description                                 |
-| ----------------------- | ------------------------------------------- |
-| Wishlist                | Create and manage wishlists for products    |
-| Product Recommendations | Receive suggestions for related products    |
-| Product Comparisons     | Compare product specifications side by side |
-| Social Sharing          | Share favorite products on social media     |
+# | Feature                 | Description                                 |
+# | ----------------------- | ------------------------------------------- |
+# | Wishlist                | Create and manage wishlists for products    |
+# | Product Recommendations | Receive suggestions for related products    |
+# | Product Comparisons     | Compare product specifications side by side |
+# | Social Sharing          | Share favorite products on social media     |
 
-### Admin Mode
+# ### Admin Mode
 
-| Feature             | Description                                               |
-| ------------------- | --------------------------------------------------------- |
-| Sales Analytics     | Gain insights into sales trends and popular products      |
-| Dynamic Coupons     | Create and manage targeted coupons                        |
-| User Analytics      | Track user engagement and activity                        |
-| Bulk Product Upload | Upload and update multiple products using CSV             |
-| Automated Emails    | Send automated emails for order confirmation and updates  |
-| Notification Center | Receive alerts for new orders, low stock, and more        |
-| Data Export         | Export data sets (e.g., orders, products) to CSV or Excel |
-| Product Bundles     | Create and manage product bundles                         |
+# | Feature             | Description                                               |
+# | ------------------- | --------------------------------------------------------- |
+# | Sales Analytics     | Gain insights into sales trends and popular products      |
+# | Dynamic Coupons     | Create and manage targeted coupons                        |
+# | User Analytics      | Track user engagement and activity                        |
+# | Bulk Product Upload | Upload and update multiple products using CSV             |
+# | Automated Emails    | Send automated emails for order confirmation and updates  |
+# | Notification Center | Receive alerts for new orders, low stock, and more        |
+# | Data Export         | Export data sets (e.g., orders, products) to CSV or Excel |
+# | Product Bundles     | Create and manage product bundles                         |
 
 ## Dependencies and Libraries
 
@@ -205,44 +178,44 @@ This guide will walk you through the process of hosting your complete MERN stack
 - Create a `vercel.json` file in the root directory.
 - Add the following code to `vercel.json`:
 
-  ```json
-  {
-    "version": 2,
-    "builds": [
-      {
-        "src": "./backend/server.js",
-        "use": "@vercel/node"
-      },
-      {
-        "src": "./frotend/build",
-        "use": "@vercel/static"
-      }
-    ],
-    "rewrites": [
-      {
-        "source": "/(.*)",
-        "destination": "/backend/server.js"
-      }
-    ]
-  }
-  ```
+```json
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "./backend/server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "./frotend/build",
+      "use": "@vercel/static"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/backend/server.js"
+    }
+  ]
+}
+````
 
-  - Note :
-    - Using this configuration will require you to run npm run build in the frontend directory before deploying to Vercel.
-    - Ensure your folder structure looks like this:
-      ```json
-        root
-        ├── backend
-        ├── frontend
-        │   ├── node_modules
-        │   ├── package.json
-        │   ├── build
-        │   └── ...
-        ├── node_modules
-        ├── package.json
-        ├── vercel.json
-        └── ...
-      ```
+- Note :
+  - Using this configuration will require you to run npm run build in the frontend directory before deploying to Vercel.
+  - Ensure your folder structure looks like this:
+    ```json
+      root
+      ├── backend
+      ├── frontend
+      │   ├── node_modules
+      │   ├── package.json
+      │   ├── build
+      │   └── ...
+      ├── node_modules
+      ├── package.json
+      ├── vercel.json
+      └── ...
+    ```
 
 ### Step 2: Push Code to GitHub
 
@@ -282,5 +255,4 @@ This guide will walk you through the process of hosting your complete MERN stack
 | ----------------------------------------------------- |
 | [ImgBotApp](https://github.com/ImgBotApp)             |
 | [MehraDevesh2022](https://github.com/MehraDevesh2022) |
-| [0dayhunter](https://github.com/MehraDevesh2022) |
-
+| [0dayhunter](https://github.com/MehraDevesh2022)      |
