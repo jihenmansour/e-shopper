@@ -45,13 +45,13 @@ https://github.com/jihenmansour/e-shopper/assets/48207144/641489f3-8e05-4c63-aa1
 
 3.  Rename Environment Files:
 
-   ```bash
+    ```bash
     mv frontend/.env.example frontend/.env
-   ```
+    ```
 
-   ```bash
+    ```bash
     mv backend/.env.example backend/.env
-   ```
+    ```
 
 4.  Run the app:
 
@@ -101,38 +101,35 @@ https://github.com/jihenmansour/e-shopper/assets/48207144/641489f3-8e05-4c63-aa1
 
 ### Frontend
 
-| Dependency                  | Description                                                  |
-| --------------------------- | ------------------------------------------------------------ |
-| @emotion/react              | Emotion library for writing CSS with JavaScript              |
-| @emotion/styled             | Styled components using Emotion                              |
-| @material-ui/core           | UI components library for Material Design                    |
-| @material-ui/data-grid      | Data grid component for Material-UI                          |
-| @material-ui/icons          | Material Design icons for React components                   |
-| @material-ui/lab            | Additional components and utilities for Material-UI          |
-| @mui/icons-material         | Material-UI icons for MUI components                         |
-| @mui/material               | Material-UI components library                               |
-| @mui/styles                 | Styling solution for Material-UI components                  |
-| @stripe/react-stripe-js     | React components for Stripe's client-side JavaScript library |
-| @stripe/stripe-js           | Stripe's client-side JavaScript library                      |
-| @testing-library/user-event | Utilities for simulating events with Testing Library         |
-| axios                       | Promise-based HTTP client for the browser and Node.js        |
-| highcharts                  | Interactive JavaScript charting library                      |
-| highcharts-react-official   | React wrapper for Highcharts library                         |
-| node-sass                   | Sass compiler for Node.js                                    |
-| react                       | JavaScript library for building user interfaces              |
-| react-alert                 | React component for customizable alerts                      |
-| react-alert-template-basic  | Basic template for react-alert                               |
-| react-dom                   | Entry point to the React DOM library                         |
-| react-helmet                | Manage document head in React                                |
-| react-js-pagination         | Pagination component for React                               |
-| react-material-ui-carousel  | Carousel component for Material-UI                           |
-| react-redux                 | State management library for React                           |
-| react-router-dom            | Routing library for React applications                       |
-| react-scripts               | Create React apps with no build configuration                |
-| redux                       | Predictable state container for JavaScript apps              |
-| redux-devtools-extension    | Redux DevTools integration                                   |
-| redux-thunk                 | Thunk middleware for Redux                                   |
-| styled-components           | CSS-in-JS library for styling React components               |
-| swiper                      | Mobile touch slider library                                  |
-| web-vitals                  | Library for measuring web performance metrics                |
+| Dependency                      | Description                                           |
+| ------------------------------- | ----------------------------------------------------- |
+| @hookform/resolvers             | Resolvers for `react-hook-form` validation            |
+| @radix-ui/react-alert-dialog    | Radix UI component for alert dialogs                  |
+| @radix-ui/react-checkbox        | Radix UI component for checkboxes                     |
+| @radix-ui/react-dialog          | Radix UI component for dialogs                        |
+| @radix-ui/react-dropdown-menu   | Radix UI component for dropdown menus                 |
+| @radix-ui/react-icons           | Radix UI icons library                                |
+| @radix-ui/react-label           | Radix UI component for labels                         |
+| @radix-ui/react-select          | Radix UI component for select menus                   |
+| @radix-ui/react-slot            | Radix UI component for slots                          |
+| @radix-ui/react-toast           | Radix UI component for toast notifications            |
+| @radix-ui/react-tooltip         | Radix UI component for tooltips                       |
+| @tanstack/react-table           | Powerful table library for React                      |
+| axios                           | Promise-based HTTP client for the browser and Node.js |
+| chart.js                        | JavaScript charting library                           |
+| class-variance-authority        | Utility for conditional class name management         |
+| clsx                            | Utility for constructing `className` strings          |
+| cmdk                            | Command menu component for React                      |
+| js-cookie                       | JavaScript API for handling cookies                   |
+| lucide-react                    | React component for Lucide icons                      |
+| next                            | React framework for server-side rendering and static site generation |
+| react                           | JavaScript library for building user interfaces       |
+| react-chartjs-2                 | React wrapper for Chart.js                            |
+| react-dom                       | React package for working with the DOM                |
+| react-hook-form                 | Performant, flexible, and extensible forms with easy-to-use validation |
+| tailwind-merge                  | Utility for merging Tailwind CSS classes              |
+| tailwindcss-animate             | Tailwind CSS plugin for animations                    |
+| zod                             | TypeScript-first schema declaration and validation library |
+| zod-form-data                   | Transform `FormData` into Zod schemas                 |
+
 
