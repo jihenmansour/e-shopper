@@ -6,7 +6,7 @@
 
 ---
 
-Welcome to E-shopper, an e-commerce shopping admin dashboard built using the MERN (MongoDB, Express, React, Node.js) stack and Shadcn for the user interface. 
+Welcome to E-shopper, an e-commerce shopping admin dashboard built using the MERN (MongoDB, Express, Next, Node.js) stack and Shadcn for the user interface. 
 
 ## Demo
 
