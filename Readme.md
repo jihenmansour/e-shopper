@@ -9,12 +9,9 @@ Welcome to E-shopper, an e-commerce shopping app built using the MERN (MongoDB, 
 
 ## Demo
 
-### Normal User Area
-
-https://github.com/MehraDevesh2022/CricketWeapon-Store/assets/96515074/d8eb6147-aed7-42c5-8d1f-0afcf6d05689
 
 ### Admin Area
-https://github.com/MehraDevesh2022/CricketWeapon-Store/assets/96515074/bfc07258-0a0a-4840-b277-25dceafb4795
+https://github.com/jihenmansour/e-shopper/assets/48207144/641489f3-8e05-4c63-aa16-e8f550c7f44c
 
 ## Dummy User Accounts
 
@@ -26,43 +23,11 @@ https://github.com/MehraDevesh2022/CricketWeapon-Store/assets/96515074/bfc07258-
 ## Tech Stack
 
 
-![MongoDB](https://img.shields.io/badge/-MongoDB-green) ![Express](https://img.shields.io/badge/-Express-blue) ![React](https://img.shields.io/badge/-React-blue) ![Node.js](https://img.shields.io/badge/-Node.js-green) ![Material-UI](https://img.shields.io/badge/-Material--UI-blue) ![Stripe](https://img.shields.io/badge/-Stripe-blue) ![Mongoose](https://img.shields.io/badge/-Mongoose-green) ![Redux](https://img.shields.io/badge/-Redux-purple) ![Redux-thunk](https://img.shields.io/badge/-Redux--thunk-purple) ![CSS3](https://img.shields.io/badge/-CSS3-blue)
-
-## Project Configuration Guide
-
-### Cloudinary Configuration
-
-- Cloudinary is used for image management and hosting. Follow these steps to configure Cloudinary for your project.
-
-  - Create a Cloudinary account [here](https://cloudinary.com/).
-  - Create a new Cloudinary project.
-  - Go to the dashboard and copy the cloud name, API key, and API secret.
-
-  ### Stripe Configuration
-
-  - Stripe is used for payment processing. Follow these steps to configure Stripe for your project.
-  - Create a Stripe account [here](https://stripe.com/).
-  - Go to the dashboard and copy the publishable key and secret key.
-
-  ### Nodemailer Configuration
-
-  - Nodemailer is used for sending emails. Follow these steps to configure Nodemailer for your project.
-  - Create a Gmail account [here](https://mail.google.com/).
-  - Go to the account settings and enable the Less Secure App Access.
-  - Go to the dashboard and copy the email and password.
-  - Go to .env file and save SMTP_MAIL and SMTP_PASS.
-  - If you are using Gmail, you can directly copy the email and password. If you are using any other email service, you need to copy the SMTP host, port, and service.
-  - Repl
-
-  ### MongoDB Configuration
-
-  - MongoDB is used for storing data. Follow these steps to configure MongoDB for your project.
-  - Create a MongoDB account [here](https://www.mongodb.com/).
-  - Create a new project and cluster.
-  - Go to the dashboard and copy the connection string.
-  - Go to .env file and save DB_LINK.
+![MongoDB](https://img.shields.io/badge/-MongoDB-green) ![Express](https://img.shields.io/badge/-Express-blue) ![Next](https://img.shields.io/badge/-Next-blue) ![Node.js](https://img.shields.io/badge/-Node.js-green) ![Shadcn](https://img.shields.io/badge/-Shadcn-blue) ![Tailwind](https://img.shields.io/badge/-Tailwind-red) ![Mongoose](https://img.shields.io/badge/-Mongoose-green) 
 
 ## Installation
+
+### Backend
 
 1.  Clone the repository:
     ```bash
