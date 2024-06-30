@@ -3,7 +3,7 @@ export const sidebarLinks = [
     route: "/",
     label: "Dashboard",
     icon: {
-      color: "w-7 h-7 fill-none stroke-black group-hover:stroke-primary",
+      style: "w-7 h-7 fill-none stroke-black group-hover:stroke-primary",
       open: "stroke-white",
       strokeLine: "round",
       strokeWidth: 2,
@@ -12,7 +12,7 @@ export const sidebarLinks = [
   },
   {
     icon: {
-      color: "w-7 h-7 fill-none stroke-black group-hover:stroke-primary",
+      style: "w-7 h-7 fill-none stroke-black group-hover:stroke-primary",
       open: "stroke-white",
       strokeLine: "round",
       strokeWidth: 2,
@@ -26,7 +26,7 @@ export const sidebarLinks = [
   },
   {
     icon: {
-      color: "w-7 h-7 fill-black group-hover:fill-primary",
+      style: "w-7 h-7 fill-black group-hover:fill-primary",
       open: "fill-white",
       viewBox: "0 0 512 512",
       d: "m256 34.347 192 110.85V366.9L256 477.752 64 366.9V145.198L256 34.347Zm-64.001 206.918.001 150.27 42.667 24.636V265.899l-42.668-24.634ZM106.667 192v150.267l42.666 24.635v-150.27L106.667 192Zm233.324-59.894-125.578 72.836L256 228.952l125.867-72.669-41.876-24.177ZM256 83.614l-125.867 72.669 41.662 24.053L297.374 107.5 256 83.614Z",
@@ -40,7 +40,7 @@ export const sidebarLinks = [
 
   {
     icon: {
-      color: "w-7 h-7 fill-none stroke-black group-hover:stroke-primary",
+      style: "w-7 h-7 fill-none stroke-black group-hover:stroke-primary",
       open: "stroke-white",
       viewBox: "0 0 24 24",
       strokeLine: "round",
@@ -52,7 +52,7 @@ export const sidebarLinks = [
   },
   {
     icon: {
-      color: "w-7 h-7 fill-none stroke-black group-hover:stroke-primary",
+      style: "w-7 h-7 fill-none stroke-black group-hover:stroke-primary",
       open: "stroke-white",
       stroke: "#000",
       strokeLine: "round",

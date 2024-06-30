@@ -101,7 +101,7 @@ const OrdersTable = ({ orders }: { orders: OrdersTableProps }) => {
                 <TableCell className="flex gap-1 orders-center">
                   <div className="w-12 h-12 rounded-sm ">
                     <Image
-                     src={`${apiURL}/images/${order.user.image}`}
+                     src={`${apiURL}/images/${order.user?.image}`}
                       alt=""
                       width={0}
                       height={0}

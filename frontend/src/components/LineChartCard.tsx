@@ -14,7 +14,7 @@ const LineChartCard = ({type, stats, total}: LineChartCardProps) => {
   const currentMonth = new Date().getMonth()+1;
   const ThisMonthIndex =  stats?.findIndex(a => a.month === currentMonth)!;
   const ThisMonthTotal = stats[ThisMonthIndex].total;
-  const LastMonthTotal = stats[ThisMonthIndex-1].total;
+  const LastMonthTotal = stats[ThisMonthIndex-1]?.total;
   const growthRate = (
     ((ThisMonthTotal! - LastMonthTotal!) / LastMonthTotal!) *
     100

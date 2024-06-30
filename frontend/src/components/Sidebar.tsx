@@ -8,9 +8,11 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { sharedIcons, sidebarLinks } from "../../constants";
 import CustomSvg from "./CustomSvg";
+import { boolean } from "zod";
 
 const Sidebar = () => {
   const router = useRouter()
+  const [menu, setMenu] = useState<string|null>(null)
   const handleLogout = async () => {
     try {
       await logout();
@@ -20,9 +22,11 @@ const Sidebar = () => {
       console.log(error)
     }
   }
-
+ const handleToggle = (menu: string) => {
+  setMenu(prev => (prev === menu ? null : menu))
+ }
   return (
-    <section className="sticky left-0 top-0 flex h-screen w-fit flex-col  justify-between border-r border-gray-200 bg-white pt-8 text-white max-md:hidden sm:p-4 xl:p-6 2xl:w-[355px]">
+    <section className="sticky left-0 top-0 flex h-screen w-fit flex-col  justify-between border-r border-gray-200 bg-white pt-8 text-white max-lg:hidden sm:p-4 xl:p-6 2xl:w-[355px]">
       <nav className="flex flex-col gap-4">
         <Link href="/" className="flex mb-12 cursor-pointer items-center gap-2">
           <Image
@@ -37,7 +41,15 @@ const Sidebar = () => {
           </h1>
         </Link>
         {sidebarLinks.map((item, index) => {
-          return <MenuItem key={index} item={item} />;
+          return <Link 
+          aria-disabled={item.route?true:false}
+          href={item.route?item.route:''}>
+          <MenuItem 
+          key={index} 
+          item={item} 
+          subMenuOpen={menu===item.label}
+          handleToggle={()=>{handleToggle(item.label)}}/>
+          </Link>;
         })}
       </nav>
       <footer 
@@ -57,39 +69,37 @@ const Sidebar = () => {
 
 const MenuItem = ({
   item,
-  setOpen,
+  subMenuOpen,
+  handleToggle,
+  setOpen
 }: {
   item: MenuItemProps;
-  setOpen?: any;
+  subMenuOpen?: boolean;
+  handleToggle?: () => void;
+  setOpen?: any
 }) => {
   const pathname = usePathname();
-  const isActive =
-    pathname === item.route || pathname.startsWith(`${item.route}/`);
-  const [subMenuOpen, setSubMenuOpen] = useState(false);
-  const toggleSubMenu = () => {
-    setSubMenuOpen(!subMenuOpen);
-  };
   return (
     <div>
-      {item.subMenuItems ? (
+    
         <div>
           <div
             className={cn(
-              "flex items-center justify-between py-1 2xl:p-4 max-sm:pr-4 rounded-lg cursor-pointer font-medium text-gray-800",
+              "flex items-center justify-between py-1 2xl:p-4 max-lg:pr-4 rounded-lg cursor-pointer font-medium text-gray-800",
               { "transition-all duration-300 ease-in-out bg-primary text-white ": subMenuOpen }, {"group": !subMenuOpen}
             )}
-            onClick={toggleSubMenu}
+            onClick={()=>{handleToggle!()}}
             key={item.label}
           >
             <div
               className={cn(
-                "flex gap-3 py-1 max-md:p-4 rounded-lg justify-start"
+                "flex gap-3 py-1 max-lg:p-4 rounded-lg justify-start"
               )}
             >
               <div className="relative size-6">
                 <CustomSvg
                   title={item.label}
-                  style={cn(item.icon?.color,{[item.icon?.open!]: subMenuOpen}) }
+                  style={cn(item.icon?.style,{[item.icon?.open!]: subMenuOpen})}
                   d={item.icon?.d}
                   strokeLine={item.icon?.strokeLine}
                   strokeWidth={item.icon?.strokeWidth}
@@ -98,11 +108,11 @@ const MenuItem = ({
               </div>
               <p className="group-hover:text-primary">{item.label}</p>
             </div>
-            <div
+           { item.subMenuItems  && <div
               className={`${
                 subMenuOpen
                   ? "transition-all transform duration-500 rotate-180"
-                  : ""
+                  :  "transition-all transform duration-500"
               } flex`}
             >
               <CustomSvg
@@ -118,19 +128,17 @@ const MenuItem = ({
                 d={sharedIcons.arrow.d}
                 viewBox={sharedIcons.arrow?.viewBox}
               />
-            </div>
+            </div>}
           </div>
 
-          {subMenuOpen && (
+          {item.subMenuItems && subMenuOpen &&  (
             <div className="flex flex-col">
               {item.subMenuItems.map((subItem, index) => {
                 return (
                   <Link
                     href={subItem.route!}
                     key={index}
-                    onClick={(e) => {
-                      if (setOpen) setOpen(false);
-                    }}
+                    
                     className={cn(
                       "flex gap-3 p-4 rounded-lg justify-center text-black font-semibold",
                       { "text-primary": pathname === subItem.route }
@@ -143,37 +151,8 @@ const MenuItem = ({
             </div>
           )}
         </div>
-      ) : (
-        <Link
-          href={item.route!}
-          key={item.label}
-          onClick={(e) => {
-            if (setOpen) setOpen(false);
-          }}
-          className={cn(
-            "flex gap-3 items-center py-1 p-4 rounded-lg justify-start",
-            { "bg-primary text-white": pathname === item.route },{"group":pathname !== item.route}
-          )}
-        >
-          <div className="relative size-6">
-            <CustomSvg
-              title={item.label}
-              style={cn(item.icon?.color,{[item.icon?.open!]: pathname === item.route }) }
-              d={item.icon?.d}
-              strokeLine={item.icon?.strokeLine}
-              strokeWidth={item.icon?.strokeWidth}
-              viewBox={item.icon?.viewBox}
-            />
-          </div>
-          <p
-            className={cn("text-16 font-medium text-gray-800 group-hover:text-primary", {
-              "text-white": pathname === item.route,
-            })}
-          >
-            {item.label}
-          </p>
-        </Link>
-      )}
+      
+     
     </div>
   );
 };

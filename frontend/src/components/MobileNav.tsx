@@ -14,15 +14,20 @@ import { logout } from "@/lib/actions/user.actions";
 const MobileNav = () => {
   const [sheetOpen, setSheetOpen] = useState(false);
 
-  const router = useRouter();
+  const router = useRouter()
+  const [menu, setMenu] = useState<string|null>(null)
   const handleLogout = async () => {
     try {
       await logout();
       router.push("/login");
+      
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
+ const handleToggle = (menu: string) => {
+  setMenu(prev => (prev === menu ? null : menu))
+ }
 
   return (
     <section className="w-full max-w-[264px]">
@@ -59,7 +64,12 @@ const MobileNav = () => {
             >
               {sidebarLinks.map((item, index) => {
                 return (
-                  <MenuItem key={index} item={item} setOpen={setSheetOpen} />
+                  <MenuItem 
+                  key={index} 
+                  item={item} 
+                  subMenuOpen={menu===item.label}
+                  handleToggle={()=>{handleToggle(item.label)}}
+                  setOpen={setSheetOpen} />
                 );
               })}
               USER
