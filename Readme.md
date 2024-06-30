@@ -45,7 +45,7 @@ https://github.com/jihenmansour/e-shopper/assets/48207144/641489f3-8e05-4c63-aa1
 
 3.  Rename Environment Files:
 
-````bash
+```bash
   mv frontend/.env.example frontend/.env
   ```
 
