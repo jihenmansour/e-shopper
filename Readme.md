@@ -77,29 +77,7 @@ https://github.com/jihenmansour/e-shopper/assets/48207144/641489f3-8e05-4c63-aa1
 | Category Management     | View and manage categories (add, update, delete)   |
 | Order Management        | View and manage categories (delete)                |
 
-## Upcoming Features
 
-# ### Normal User Mode
-
-# | Feature                 | Description                                 |
-# | ----------------------- | ------------------------------------------- |
-# | Wishlist                | Create and manage wishlists for products    |
-# | Product Recommendations | Receive suggestions for related products    |
-# | Product Comparisons     | Compare product specifications side by side |
-# | Social Sharing          | Share favorite products on social media     |
-
-# ### Admin Mode
-
-# | Feature             | Description                                               |
-# | ------------------- | --------------------------------------------------------- |
-# | Sales Analytics     | Gain insights into sales trends and popular products      |
-# | Dynamic Coupons     | Create and manage targeted coupons                        |
-# | User Analytics      | Track user engagement and activity                        |
-# | Bulk Product Upload | Upload and update multiple products using CSV             |
-# | Automated Emails    | Send automated emails for order confirmation and updates  |
-# | Notification Center | Receive alerts for new orders, low stock, and more        |
-# | Data Export         | Export data sets (e.g., orders, products) to CSV or Excel |
-# | Product Bundles     | Create and manage product bundles                         |
 
 ## Dependencies and Libraries
 
