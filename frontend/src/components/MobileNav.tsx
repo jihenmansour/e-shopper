@@ -4,12 +4,12 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Image from "next/image";
 import Link from "next/link";
 
-import { useState } from "react";
-import { sharedIcons, sidebarLinks } from "../../constants";
-import { MenuItem } from "./Sidebar";
-import CustomSvg from "./CustomSvg";
-import { useRouter } from "next/navigation";
 import { logout } from "@/lib/actions/user.actions";
+import { LogOut, Menu } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { sidebarLinks } from "../../constants";
+import { MenuItem } from "./Sidebar";
 
 const MobileNav = () => {
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -29,39 +29,43 @@ const MobileNav = () => {
   setMenu(prev => (prev === menu ? null : menu))
  }
 
+ const pathname = usePathname();
+
+ useEffect(() => {
+  const matchedItem = sidebarLinks.find((item) =>
+    item.subMenuItems?.some((subItem) => subItem.route === pathname)||
+    item.route===pathname
+  );
+  if (matchedItem) {
+    setMenu(matchedItem.label);
+  } else {
+    setMenu(null);
+  }
+}, [pathname]);
+
   return (
     <section className="w-full max-w-[264px]">
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-        <SheetTrigger>
-          <CustomSvg
-            title="arrow"
-            style="w-7 h-7"
-            color={sharedIcons.menu.color}
-            d={sharedIcons.menu.d}
-            viewBox={sharedIcons.arrow?.viewBox}
-          />
+        <SheetTrigger className="text-gray-800">
+          <Menu/>
         </SheetTrigger>
         <SheetContent side="left" className="border-none bg-white">
           <Link
             href="/"
             className="flex cursor-pointer items-center gap-1 px-4"
           >
-            <Image
-              src="/icons/shopping-card.svg"
-              width={34}
-              height={34}
-              alt="E-shopper logo"
-            />
-            <h1 className="text-26 font-ibm-plex-serif font-bold text-blue-600 ">
-              Eshopper
-            </h1>
+             <Image
+            src="/images/e-shopper logo(4).png"
+            alt="E-shopper logo"
+            width={0}
+            height={0}
+            sizes="100vw"
+            style={{ width: "60%", height: "auto" }}
+          />
           </Link>
 
           <div className="flex h-[calc(100vh-72px)] flex-col justify-between overflow-y-auto;">
-            <nav
-              className="flex h-full flex-col
-                     gap-6 pt-16 text-white"
-            >
+            <nav className="flex h-full flex-col gap-6 pt-8 text-white">
               {sidebarLinks.map((item, index) => {
                 return (
                   <MenuItem 
@@ -75,22 +79,12 @@ const MobileNav = () => {
               USER
             </nav>
 
-            <footer
-              className="group flex gap-3 cursor-pointer"
-              onClick={() => {
-                handleLogout();
-              }}
-            >
-              <CustomSvg
-                title={sharedIcons.logout.title}
-                style="w-7 h-7 group-hover:fill-primary"
-                d={sharedIcons.logout.d}
-                viewBox={sharedIcons.logout.viewBox}
-              />
-              <p className="text-16 font-medium text-gray-800 group-hover:text-primary">
-                Logout
-              </p>
-            </footer>
+            <footer 
+      className="flex gap-3 cursor-pointer text-gray-800 hover:text-primary" 
+      onClick={()=>{handleLogout()}}>
+        <LogOut />
+        <p className="text-16 font-medium">Logout</p>
+      </footer>
           </div>
         </SheetContent>
       </Sheet>

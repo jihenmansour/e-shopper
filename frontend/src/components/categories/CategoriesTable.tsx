@@ -20,46 +20,39 @@ import {
 } from "@/components/ui/table";
 import { deleteCategory } from "@/lib/actions/category.actions";
 import { apiURL } from "@/lib/utils";
+import { Pencil, Trash } from 'lucide-react';
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { sharedIcons } from "../../../constants";
-import CustomSvg from "../CustomSvg";
 import CustomPagination from "../Pagination";
-import Toast from "../Toast";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { useToast } from "../ui/use-toast";
 
 const CategoriesTable = ({
   categories,
 }: {
   categories: CatgoriesTableProps;
 }) => {
-  const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>();
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const { toast } = useToast();
+  let message: string;
+  let isSuccess: "Success" | "Error";
   const handleDelete = async (id?: string) => {
     try {
       const response = await deleteCategory(id);
-      setShowAlert(true);
-      setMessage("Category deleted successfully");
-      setIsSuccess(true);
+      message = "category deleted successfully";
+      isSuccess = "Success";
     } catch (e) {
-      setShowAlert(true);
-      setMessage("Cannot delete this category");
+      message = "Cannot delete this category";
+      isSuccess = "Error";
     }
+    toast({
+      title: isSuccess,
+      description: message,
+    });
   };
 
   return (
     <>
-      <Toast
-        open={showAlert}
-        close={() => {
-          setShowAlert(false);
-        }}
-        message={message}
-        success={isSuccess}
-      />
       <div className=" w-full overflow-auto bg-white rounded-sm py-6 px-4">
         <div className="flex justify-between mb-2">
           <Input
@@ -102,30 +95,12 @@ const CategoriesTable = ({
                 </TableCell>
                 <TableCell className="flex justify-end gap-4">
                   <Link href={`/categories/${item._id}`}>
-                    <CustomSvg
-                      title={sharedIcons.pen.title}
-                      style="w-6 h-6 cursor-pointer"
-                      color={sharedIcons.pen.color}
-                      d={sharedIcons.pen.d}
-                      stroke={sharedIcons.pen.stroke}
-                      strokeLine={sharedIcons.pen.strokeLine}
-                      strokeWidth={sharedIcons.pen.strokeWidth}
-                      viewBox={sharedIcons.pen.viewBox}
-                    />
+                    <Pencil color="#22c55e"/>
                   </Link>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <div>
-                        <CustomSvg
-                          title={sharedIcons.trash.title}
-                          style="w-6 h-6 cursor-pointer"
-                          color={sharedIcons.trash.color}
-                          d={sharedIcons.trash.d}
-                          stroke={sharedIcons.trash.stroke}
-                          strokeLine={sharedIcons.trash.strokeLine}
-                          strokeWidth={sharedIcons.trash.strokeWidth}
-                          viewBox={sharedIcons.trash.viewBox}
-                        />
+                        <Trash color="#ff5200"/>
                       </div>
                     </AlertDialogTrigger>
                     <AlertDialogContent>

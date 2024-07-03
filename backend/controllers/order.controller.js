@@ -1,18 +1,40 @@
 const Order = require("../models/order.model");
 const User = require("../models/user.model");
-const ExcelJS = require('exceljs');
+const ExcelJS = require("exceljs");
 const CustomError = require("../error/custom.error");
+const Product = require("../models/product.model");
 
 // Create Order
 const createOrder = async (req, res) => {
   try {
+    const { OrderItems, user } = req.body;
+    const findUser = await User.findById({ _id: user });
+
+    if (!findUser) {
+      throw new CustomError("user doesnt exist");
+    }
+    const findProducts = OrderItems.map(async (item) => {
+      const product = await Product.findById({ _id: item.product });
+      if (!product) {
+        throw new CustomError("product or products doesnt exist");
+      }
+      if(product.quantity===0 | product.quantity < item.quantity){
+        throw new CustomError(`${product.name} quantity is not enough`);
+      }
+      await Product.findOneAndUpdate(
+        { _id: item.product },
+        { $inc:{quantity: -item.quantity} })
+    });
+
+    await Promise.all(findProducts);
+
     const order = await Order.create(req.body);
 
     await User.updateMany(
       { _id: order.user },
       { $push: { orders: order._id } }
     );
-    res.status(200).json(order);
+    res.status(200).json({message: "Order created successfully"});
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -26,7 +48,7 @@ const getAllOrders = async (req, res) => {
       model: "Product",
     })
     .populate("user");
- 
+
   res.status(200).json(orders);
 };
 
@@ -56,7 +78,7 @@ const getOrders = async (req, res) => {
     total,
     totalPages,
     nextPage,
-    previousPage
+    previousPage,
   });
 };
 
@@ -89,15 +111,9 @@ const updateOrder = async (req, res) => {
   const oldUser = order.user.toString();
   const newUser = req.body.user;
 
-  if(oldUser!==newUser){
-    await User.updateMany(
-      { _id: newUser },
-      { $push: { orders: id } }
-    );
-    await User.updateMany(
-      { _id: oldUser },
-      { $pull: { orders: id } }
-    );
+  if (oldUser !== newUser) {
+    await User.updateMany({ _id: newUser }, { $push: { orders: id } });
+    await User.updateMany({ _id: oldUser }, { $pull: { orders: id } });
   }
   await Order.updateOne({ _id: id }, req.body);
   res.status(200).json({
@@ -105,52 +121,52 @@ const updateOrder = async (req, res) => {
   });
 };
 
-
 // Export Excel
-const exportExcel = async(req, res) => {
+const exportExcel = async (req, res) => {
   const orders = await Order.find({})
-  .populate({
-    path: "OrderItems.product",
-    model: "Product",
-  })
-  .populate("user");
+    .populate({
+      path: "OrderItems.product",
+      model: "Product",
+    })
+    .populate("user");
 
   const workbook = new ExcelJS.Workbook();
-  const worksheet = workbook.addWorksheet('orders list');
+  const worksheet = workbook.addWorksheet("orders list");
 
   worksheet.columns = [
-    { header: 'Customer', key: 'customer', width: 30 },
-    { header: 'Content', key: 'content', width: 30 },
-    { header: 'Address', key: 'address', width: 30 },
-    { header: 'Total', key: 'total', width: 30 },
-    { header: 'Status', key: 'status', width: 30 }
+    { header: "Customer", key: "customer", width: 30 },
+    { header: "Content", key: "content", width: 30 },
+    { header: "Address", key: "address", width: 30 },
+    { header: "Total", key: "total", width: 30 },
+    { header: "Status", key: "status", width: 30 },
   ];
 
-  worksheet.getRow(1).eachCell(cell => {
+  worksheet.getRow(1).eachCell((cell) => {
     cell.font = { bold: true };
   });
 
-  orders.map((order)=> {
-    const products = order.OrderItems.map((item) =>
-       `${item.quantity} of ${item.product.name}`
-      ).join(', ');
+  orders.map((order) => {
+    const products = order.OrderItems.map(
+      (item) => `${item.quantity} of ${item.product.name}`
+    ).join(", ");
     worksheet.addRow({
       customer: order.user.fullname,
       content: products,
       address: order.shippingAddress,
       total: order.total,
-      status: order.status
+      status: order.status,
     });
-  })
+  });
 
-  res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-  res.setHeader('Content-Disposition', 'attachment; filename=orders list.xlsx');
+  res.setHeader(
+    "Content-Type",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  );
+  res.setHeader("Content-Disposition", "attachment; filename=orders list.xlsx");
 
   await workbook.xlsx.write(res);
-  res.end()
-}
-
-
+  res.end();
+};
 
 //Delete Order
 const deleteOrder = async (req, res) => {
@@ -160,13 +176,10 @@ const deleteOrder = async (req, res) => {
   if (!order) {
     throw new CustomError("Order not found");
   }
- 
+
   await order.deleteOne();
 
-  await User.updateMany(
-    { _id: order.user },
-    { $pull: { orders: order._id } }
-  );
+  await User.updateMany({ _id: order.user }, { $pull: { orders: order._id } });
 
   res.status(200).json({ message: "Order deleted successfully" });
 };
@@ -177,5 +190,5 @@ module.exports = {
   getOrder,
   updateOrder,
   exportExcel,
-  deleteOrder
+  deleteOrder,
 };

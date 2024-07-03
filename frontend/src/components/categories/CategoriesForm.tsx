@@ -17,28 +17,29 @@ import { CategorySchema } from "@/lib/utils";
 import { useState } from "react";
 import CustomInput from "../CustomInput";
 import MultiSelect from "../CustomMultiSelector";
-import Toast from "../Toast";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { useToast } from "../ui/use-toast";
+import { useRouter } from "next/navigation";
 
 const CategoriesForm = ({ category, products }: { category?: categoryProps, products: productProps[] }) => {
-  const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>();
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
-
+  const {toast} = useToast()
+  const router = useRouter();
+  let message: string;
+  let response: { error: string | undefined; message: string | undefined; };
 
   const form = useForm<z.infer<typeof CategorySchema>>({
     resolver: zodResolver(CategorySchema),
   });
 
-  let response: { error: string | undefined; message: string | undefined; };
+
   const onSubmit = async (data: z.infer<typeof CategorySchema>) => {
+    console.log(data.products)
     const form = new FormData();
     form.append("image", data.image);
-    form.append("data", JSON.stringify({...data, products:data.products.map((item: productProps)=>item._id)}));
+    form.append("data", JSON.stringify(data));
 
     try {
-      setShowAlert(true);
       if (category) {
         response = await updateCategory({ id: category?._id, category: form });
       } else {
@@ -46,11 +47,18 @@ const CategoriesForm = ({ category, products }: { category?: categoryProps, prod
       }
 
       if (response.error) {
-        setIsSuccess(false);
-        setMessage(response.error);
+        message = response.error;
+        toast({
+          title: "Error",
+          description: message,
+        });
       } else {
-        setIsSuccess(true);
-        setMessage(response.message);
+        message = response.message!;
+        router.push("/categories");
+        toast({
+          title: "Success",
+          description: message,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -59,14 +67,7 @@ const CategoriesForm = ({ category, products }: { category?: categoryProps, prod
 
   return (
     <>
-      <Toast
-        open={showAlert}
-        close={() => {
-          setShowAlert(false);
-        }}
-        message={message}
-        success={isSuccess}
-      />
+      
 
       <>
         <Form {...form}>

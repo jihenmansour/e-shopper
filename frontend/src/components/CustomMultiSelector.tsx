@@ -24,11 +24,11 @@ const MultiSelect = <T extends FieldValues>({
   isCol,
   products
 }: MultiSelectProps<T>) => {
-
   return (
     <FormField
       control={control}
       name={name}
+      defaultValue={data}
       render={({ field }) => (
         <div className="form-item">
           <div className={cn({"md:flex md:gap:4": isCol})}>
@@ -36,7 +36,7 @@ const MultiSelect = <T extends FieldValues>({
             {label}
           </FormLabel>
           <div className="flex w-full flex-col">
-          <MultiSelector values={field.value || data || []} onValuesChange={field.onChange} loop={false}>
+          <MultiSelector values={field.value  || []} onValuesChange={field.onChange} loop={false}>
           <MultiSelectorTrigger>
             <MultiSelectorInput placeholder={placeholder} />
           </MultiSelectorTrigger>

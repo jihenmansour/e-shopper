@@ -6,39 +6,48 @@ import {
   FormControl,
   FormField,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { createCategory, updateCategory } from "@/lib/actions/category.actions";
-import { CategorySchema, ProductSchema } from "@/lib/utils";
+import { createProduct, updateProduct } from "@/lib/actions/product.actions";
+import { ProductSchema } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import CustomInput from "../CustomInput";
 import MultiSelect from "../CustomMultiSelector";
-import Toast from "../Toast";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import { createProduct, updateProduct } from "@/lib/actions/product.actions";
+import { useToast } from "../ui/use-toast";
 
-const ProductsForm = ({ product, categories }: { product?: productProps, categories: categoryProps[] }) => {
-  const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>();
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
-
+const ProductsForm = ({
+  product,
+  categories,
+}: {
+  product?: productProps;
+  categories: categoryProps[];
+}) => {
+  const { toast } = useToast();
+  const router = useRouter();
+  let response: { error: string | undefined; message: string | undefined };
+  let message: string;
 
   const form = useForm<z.infer<typeof ProductSchema>>({
     resolver: zodResolver(ProductSchema),
   });
-
-  let response: { error: string | undefined; message: string | undefined; };
   const onSubmit = async (data: z.infer<typeof ProductSchema>) => {
     const form = new FormData();
     form.append("image", data.image);
-    form.append("data", JSON.stringify({...data, categories:data.categories.map((item: categoryProps)=>item._id)}));
+    form.append(
+      "data",
+      JSON.stringify({
+        ...data,
+        categories: data.categories.map((item: categoryProps) => item._id),
+      })
+    );
     try {
-      setShowAlert(true);
       if (product) {
         response = await updateProduct({ id: product?._id, product: form });
       } else {
@@ -46,11 +55,18 @@ const ProductsForm = ({ product, categories }: { product?: productProps, categor
       }
 
       if (response.error) {
-        setIsSuccess(false);
-        setMessage(response.error);
+        message = response.error;
+        toast({
+          title: "Error",
+          description: message,
+        });
       } else {
-        setIsSuccess(true);
-        setMessage(response.message);
+        message = response.message!;
+        router.push("/categories");
+        toast({
+          title: "Success",
+          description: message,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -59,15 +75,6 @@ const ProductsForm = ({ product, categories }: { product?: productProps, categor
 
   return (
     <>
-      <Toast
-        open={showAlert}
-        close={() => {
-          setShowAlert(false);
-        }}
-        message={message}
-        success={isSuccess}
-      />
-
       <>
         <Form {...form}>
           <form
@@ -108,18 +115,16 @@ const ProductsForm = ({ product, categories }: { product?: productProps, categor
                     name="description"
                     defaultValue={product?.description}
                     render={({ field }) => (
-                        <div className="md:flex md:gap:4">
-                          <FormLabel className="font-bold text-[14px] w-1/2">
-                            description
-                          </FormLabel>
-                          <div className="flex w-full flex-col">
-                            <FormControl>
-                              <Textarea
-                               {...field}
-                               placeholder="description..." />
-                            </FormControl>
-                            <FormMessage className="form-message mt-2" />
-                          </div>
+                      <div className="md:flex md:gap:4">
+                        <FormLabel className="font-bold text-[14px] w-1/2">
+                          description
+                        </FormLabel>
+                        <div className="flex w-full flex-col">
+                          <FormControl>
+                            <Textarea {...field} placeholder="description..." />
+                          </FormControl>
+                          <FormMessage className="form-message mt-2" />
+                        </div>
                       </div>
                     )}
                   />
@@ -128,22 +133,24 @@ const ProductsForm = ({ product, categories }: { product?: productProps, categor
                     name="image"
                     render={({ field: { value, onChange, ...fieldProps } }) => (
                       <div className="md:flex">
-                        <FormLabel className="font-bold text-[14px] w-1/2">Picture</FormLabel>
+                        <FormLabel className="font-bold text-[14px] w-1/2">
+                          Picture
+                        </FormLabel>
                         <div className="flex flex-col w-full">
-                        <FormControl>
-                          <Input
-                            {...fieldProps}
-                            placeholder="Picture"
-                            type="file"
-                            accept="image/*, application/pdf"
-                            onChange={(event) =>
-                              onChange(
-                                event.target.files && event.target.files[0]
-                              )
-                            }
-                          />
-                        </FormControl>
-                        <FormMessage />
+                          <FormControl>
+                            <Input
+                              {...fieldProps}
+                              placeholder="Picture"
+                              type="file"
+                              accept="image/*, application/pdf"
+                              onChange={(event) =>
+                                onChange(
+                                  event.target.files && event.target.files[0]
+                                )
+                              }
+                            />
+                          </FormControl>
+                          <FormMessage />
                         </div>
                       </div>
                     )}
@@ -155,7 +162,8 @@ const ProductsForm = ({ product, categories }: { product?: productProps, categor
                     label="categories"
                     name="categories"
                     placeholder="Enter product categories"
-                    products={categories} />
+                    products={categories}
+                  />
                 </div>
               </div>
             </div>

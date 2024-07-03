@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import CustomInput from "./CustomInput";
+import Image from "next/image";
 
 export default function Home() {
   const useFormSchema = formSchema("login");
@@ -39,13 +40,19 @@ export default function Home() {
   };
 
   return (
-    <div className=" bg-white flex flex-col justify-center p-8 rounded shadow-sm max-w-2xl w-full mx-auto">
+    <div className="flex flex-col justify-center p-8 rounded shadow-sm max-w-2xl w-full mx-auto items-center">
+      <Image 
+          src="/images/e-shopper logo(3).png"
+          alt=""
+          width={0}
+          height={0}
+          className="mb-8"
+          sizes="100vw"
+          style={{ width: '50%', height: 'auto' }}
+        />
       <h1 className="2xl:text-26 font-ibm-plex-serif text-[24px] font-bold max-xl:hidden;">
         Login to account
       </h1>
-      <p className="text-gray-600 text-[14px] mb-10">
-        Enter your email & password to login
-      </p>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}

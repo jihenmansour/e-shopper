@@ -22,36 +22,39 @@ import {
 
 import { deleteProduct } from "@/lib/actions/product.actions";
 import { apiURL, createQueryString } from "@/lib/utils";
+import { Pencil, Trash } from 'lucide-react';
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useState } from "react";
-import { sharedIcons } from "../../../constants";
-import CustomSvg from "../CustomSvg";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 import CustomPagination from "../Pagination";
-import Toast from "../Toast";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useToast } from "../ui/use-toast";
 
 const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
-  const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>();
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const router = useRouter();
   const path = usePathname();
   const searchParams = useSearchParams();
   const sortFilterValue = searchParams.get("sort");
+  const { toast } = useToast();
+  let message: string;
+  let isSuccess: "Success" | "Error";
 
+  
   const handleDelete = async (id?: string) => {
     try {
       const response = await deleteProduct(id);
-      setShowAlert(true);
-      setMessage("product deleted successfully");
-      setIsSuccess(true);
+      message = "product deleted successfully";
+      isSuccess = "Success";
     } catch (e) {
-      setShowAlert(true);
-      setMessage("Cannot delete this product");
+      message = "Cannot delete this product";
+      isSuccess = "Error";
     }
+    toast({
+      title: isSuccess,
+      description: message,
+    });
   };
 
 
@@ -61,14 +64,14 @@ const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
 
   return (
     <>
-      <Toast
+      {/* <Toast
         open={showAlert}
         close={() => {
           setShowAlert(false);
         }}
         message={message}
         success={isSuccess}
-      />
+      /> */}
       <div className=" w-full overflow-auto bg-white rounded-sm py-6 px-4">
         <div className="flex justify-between mb-2">
           <div className="flex gap-2  items-center">
@@ -127,30 +130,12 @@ const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
                 <TableCell>{item.totalOrderedItems}</TableCell>
                 <TableCell className="flex justify-end gap-4">
                   <Link href={`/products/${item._id}`}>
-                    <CustomSvg
-                      title={sharedIcons.pen.title}
-                      style="w-6 h-6 cursor-pointer"
-                      color={sharedIcons.pen.color}
-                      d={sharedIcons.pen.d}
-                      stroke={sharedIcons.pen.stroke}
-                      strokeLine={sharedIcons.pen.strokeLine}
-                      strokeWidth={sharedIcons.pen.strokeWidth}
-                      viewBox={sharedIcons.pen.viewBox}
-                    />
+                  <Pencil color="#22c55e"/>
                   </Link>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <div>
-                        <CustomSvg
-                          title={sharedIcons.trash.title}
-                          style="w-6 h-6 cursor-pointer"
-                          color={sharedIcons.trash.color}
-                          d={sharedIcons.trash.d}
-                          stroke={sharedIcons.trash.stroke}
-                          strokeLine={sharedIcons.trash.strokeLine}
-                          strokeWidth={sharedIcons.trash.strokeWidth}
-                          viewBox={sharedIcons.trash.viewBox}
-                        />
+                      <Trash color="#ff5200"/>
                       </div>
                     </AlertDialogTrigger>
                     <AlertDialogContent>

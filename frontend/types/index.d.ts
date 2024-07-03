@@ -56,7 +56,7 @@ declare interface MenuItemProps {
   route?: string;
   label: string;
   subMenuItems?: MenuItemProps[];
-  icon?: SvgPros;
+  icon?: React.ComponentType;
 }
 
 declare interface SvgPros {

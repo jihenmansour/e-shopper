@@ -2,7 +2,6 @@ import { cn, formatMonth } from "@/lib/utils";
 import { Chart as ChartJS, registerables } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { StatsCardStyle } from "../../constants";
-import CustomSvg from "./CustomSvg";
 
 ChartJS.register(...registerables);
 
@@ -13,12 +12,13 @@ const LineChartCard = ({type, stats, total}: LineChartCardProps) => {
   const totals = stats.map((a) => a.total);
   const currentMonth = new Date().getMonth()+1;
   const ThisMonthIndex =  stats?.findIndex(a => a.month === currentMonth)!;
+  const LastMonthIndex =  stats?.findIndex(a => a.month === currentMonth-1)!;
   const ThisMonthTotal = stats[ThisMonthIndex].total;
-  const LastMonthTotal = stats[ThisMonthIndex-1]?.total;
-  const growthRate = (
+  const LastMonthTotal = stats[LastMonthIndex]?stats[LastMonthIndex].total:0;
+  const growthRate = LastMonthTotal?(
     ((ThisMonthTotal! - LastMonthTotal!) / LastMonthTotal!) *
     100
-  ).toFixed(2);
+  ).toFixed(2):0;
 
   const dataset = {
     labels: months,
@@ -64,17 +64,11 @@ const LineChartCard = ({type, stats, total}: LineChartCardProps) => {
         <div className="flex gap-[14px]">
           <div
             className={cn(
-              "w-14 h-14 flex items-center justify-center rounded-full",
+              "w-14 h-14 flex items-center justify-center rounded-full text-white",
               IconBackground
             )}
           >
-            <CustomSvg 
-            style={Icon.style}
-            color={Icon.fill}
-            stroke={Icon.stroke} 
-            strokeWidth={Icon.strokeWidth}
-            viewBox={Icon.viewBox} 
-            d={Icon.d} />
+          <Icon/>  
           </div>
           <div>
             <p>{type}</p>

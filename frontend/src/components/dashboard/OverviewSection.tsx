@@ -5,6 +5,7 @@ import LineChartCard from "../LineChartCard";
 
 const OverviewSection = ({ stats }: { stats: OverviewSectionProps }) => {
   const cardsData = formatStats(stats);
+
   return (
     <div className="grid grid-flow-row lg:grid-cols-3 gap-4 w-full">
       {cardsData.map((item, index) => {

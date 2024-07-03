@@ -1,23 +1,13 @@
+import { Home, Layers, ShoppingCart, FileClock, User, Users, DollarSign, ShoppingBag  } from "lucide-react";
+
 export const sidebarLinks = [
   {
+    icon: Home,
     route: "/",
-    label: "Dashboard",
-    icon: {
-      style: "w-7 h-7 fill-none stroke-black group-hover:stroke-primary",
-      open: "stroke-white",
-      strokeLine: "round",
-      strokeWidth: 2,
-      d: "M8 17h8M11.018 2.764 4.235 8.039c-.453.353-.68.53-.843.75a2 2 0 0 0-.318.65C3 9.704 3 9.991 3 10.565V17.8c0 1.12 0 1.68.218 2.108a2 2 0 0 0 .874.874C4.52 21 5.08 21 6.2 21h11.6c1.12 0 1.68 0 2.108-.218a2 2 0 0 0 .874-.874C21 19.48 21 18.92 21 17.8v-7.235c0-.574 0-.861-.074-1.126a2.002 2.002 0 0 0-.318-.65c-.163-.22-.39-.397-.843-.75l-6.783-5.275c-.351-.273-.527-.41-.72-.462a1 1 0 0 0-.523 0c-.194.052-.37.189-.721.462Z",
-    },
+    label: "Dashboard"
   },
   {
-    icon: {
-      style: "w-7 h-7 fill-none stroke-black group-hover:stroke-primary",
-      open: "stroke-white",
-      strokeLine: "round",
-      strokeWidth: 2,
-      d: "M9 12h12M9 4v16m-2.8 0h11.6c1.12 0 1.68 0 2.108-.218a2 2 0 0 0 .874-.874C21 18.48 21 17.92 21 16.8V7.2c0-1.12 0-1.68-.218-2.108a2 2 0 0 0-.874-.874C19.48 4 18.92 4 17.8 4H6.2c-1.12 0-1.68 0-2.108.218a2 2 0 0 0-.874.874C3 5.52 3 6.08 3 7.2v9.6c0 1.12 0 1.68.218 2.108a2 2 0 0 0 .874.874C4.52 20 5.08 20 6.2 20Z",
-    },
+    icon: Layers,
     label: "Categories",
     subMenuItems: [
       { route: "/categories/add-category", label: "Add Category" },
@@ -25,12 +15,7 @@ export const sidebarLinks = [
     ],
   },
   {
-    icon: {
-      style: "w-7 h-7 fill-black group-hover:fill-primary",
-      open: "fill-white",
-      viewBox: "0 0 512 512",
-      d: "m256 34.347 192 110.85V366.9L256 477.752 64 366.9V145.198L256 34.347Zm-64.001 206.918.001 150.27 42.667 24.636V265.899l-42.668-24.634ZM106.667 192v150.267l42.666 24.635v-150.27L106.667 192Zm233.324-59.894-125.578 72.836L256 228.952l125.867-72.669-41.876-24.177ZM256 83.614l-125.867 72.669 41.662 24.053L297.374 107.5 256 83.614Z",
-    },
+    icon: ShoppingCart ,
     label: "Products",
     subMenuItems: [
       { route: "/products/add-product", label: "Add Product" },
@@ -39,26 +24,12 @@ export const sidebarLinks = [
   },
 
   {
-    icon: {
-      style: "w-7 h-7 fill-none stroke-black group-hover:stroke-primary",
-      open: "stroke-white",
-      viewBox: "0 0 24 24",
-      strokeLine: "round",
-      strokeWidth: 2,
-      d: "M10 15h4m-2-2v4m1-14H8.2c-1.12 0-1.68 0-2.108.218a2 2 0 0 0-.874.874C5 4.52 5 5.08 5 6.2v11.6c0 1.12 0 1.68.218 2.108a2 2 0 0 0 .874.874C6.52 21 7.08 21 8.2 21h7.6c1.12 0 1.68 0 2.108-.218a2 2 0 0 0 .874-.874C19 19.48 19 18.92 19 17.8V9m-6-6 6 6m-6-6v4.4c0 .56 0 .84.109 1.054a1 1 0 0 0 .437.437C13.76 9 14.04 9 14.6 9H19",
-    },
+    icon: FileClock,
     label: "Orders",
     subMenuItems: [{ route: "/orders", label: "List Order" }],
   },
   {
-    icon: {
-      style: "w-7 h-7 fill-none stroke-black group-hover:stroke-primary",
-      open: "stroke-white",
-      stroke: "#000",
-      strokeLine: "round",
-      strokeWidth: 2,
-      d: "M13 20V18C13 15.2386 10.7614 13 8 13C5.23858 13 3 15.2386 3 18V20H13ZM13 20H21V19C21 16.0545 18.7614 14 16 14C14.5867 14 13.3103 14.6255 12.4009 15.6311M11 7C11 8.65685 9.65685 10 8 10C6.34315 10 5 8.65685 5 7C5 5.34315 6.34315 4 8 4C9.65685 4 11 5.34315 11 7ZM18 9C18 10.1046 17.1046 11 16 11C14.8954 11 14 10.1046 14 9C14 7.89543 14.8954 7 16 7C17.1046 7 18 7.89543 18 9Z",
-    },
+    icon: User,
     label: "Users",
     subMenuItems: [
       { route: "/users/add-user", label: "Add User" },
@@ -70,7 +41,7 @@ export const sidebarLinks = [
 export const sharedIcons = {
   arrow: {
     color: "w-7 h-7 fill-black group-hover:fill-primary",
-    open: "fill-white",
+    open: "fill-primary",
     viewBox: "0 0 24 24",
     width: 5,
     height: 5,
@@ -139,40 +110,19 @@ export const OrdersStatusStyles = {
 
 export const StatsCardStyle = {
   "Total sales": {
-    Icon: {
-      style: "w-8 h-8",
-      fill:"none",
-      stroke:"#ffff",
-      strokeWidth:2,
-      viewBox: "0 0 24 24",
-      d: "M9 8a3 3 0 1 0 6 0M3 16.8V7.2c0-1.12 0-1.68.218-2.108.192-.377.497-.682.874-.874C4.52 4 5.08 4 6.2 4h11.6c1.12 0 1.68 0 2.107.218.377.192.683.497.875.874.218.427.218.987.218 2.105v9.607c0 1.118 0 1.677-.218 2.104a2.002 2.002 0 0 1-.875.874c-.427.218-.986.218-2.104.218H6.197c-1.118 0-1.678 0-2.105-.218a2 2 0 0 1-.874-.874C3 18.48 3 17.92 3 16.8Z",
-    },
+    Icon: ShoppingBag ,
     IconBackground: "bg-green-500",
     ChartBorderColor: "#22C55E",
     ChartBackgroundColor: "#C2EFD2",
   },
   "Total incomes": {
-    Icon: {
-      style: "w-8 h-8",
-      fill:"none",
-      stroke:"#ffff",
-      strokeWidth:2,
-      viewBox: "0 0 24 24",
-      d: "M18 8.5v-.146A3.354 3.354 0 0 0 14.646 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H9.427A3.427 3.427 0 0 1 6 15.573V15.5M12 3v18",
-    },
+    Icon: DollarSign ,
     IconBackground: "bg-red-500",
     ChartBorderColor: "#FF5301",
     ChartBackgroundColor: "#FFD1BB",
   },
   "Total customers": {
-    Icon: {
-      style: "w-8 h-8",
-      fill:"none",
-      stroke:"#ffff",
-      strokeWidth:2,
-      viewBox: "0 0 24 24",
-      d: "M13 20v-2a5 5 0 0 0-10 0v2h10Zm0 0h8v-1c0-2.945-2.239-5-5-5-1.413 0-2.69.626-3.6 1.631M11 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm7 2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z",
-    },
+    Icon: Users,
     IconBackground: "bg-blue-500",
     ChartBorderColor: "#2377FC",
     ChartBackgroundColor: "#CEE1FE",

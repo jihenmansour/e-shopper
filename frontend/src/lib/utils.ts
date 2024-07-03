@@ -46,7 +46,7 @@ export const CategorySchema = z
   name: z.string(),
   description: z.string().optional(),
   image:   z.any().optional(),
-  products: z.array(z.any())
+  products: z.array(z.any()).nonempty()
 })
 
 export const parseStringify = (value: any) => JSON.parse(JSON.stringify(value));
@@ -55,6 +55,18 @@ export const parseStringifyError = (value: any) => JSON.parse(JSON.stringify({er
 
 export const formatStats = (stats: OverviewSectionProps) => {
   const monthlyStats: LineChartCardProps[] = [];
+  const currentMonth = new Date().getMonth() + 1; 
+
+  const currentMonthExists = stats.data.some(item => item.month === currentMonth);
+if(!currentMonthExists){
+  stats.data.push({
+    totalIncome: 0,
+    totalSales: 0,
+    month: currentMonth,
+    totalClients: 0
+  })
+}
+  stats
    monthlyStats.push({
      type: 'Total incomes',
      stats: stats.data.map((item) => ({

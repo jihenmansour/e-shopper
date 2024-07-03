@@ -11,7 +11,8 @@ const DoughnutChartCard = ({ categories, data }: CategoriesChartProps) => {
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
   const ThisMonthIndex = data?.findIndex((a) => a.month === currentMonth)!;
-  const ThisMonthTotal = data[ThisMonthIndex].totalIncome;
+  const ThisMonthTotal = data[ThisMonthIndex]?data[ThisMonthIndex]?.totalIncome:0;
+  
   const DaughnutData = {
     labels: categories.map((a) => a.category),
     datasets: [

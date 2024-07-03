@@ -25,29 +25,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { useCallback, useEffect, useState } from "react";
-import Toast from "../Toast";
+import { useToast } from "../ui/use-toast";
 
 const UsersForm = ({user}: {user?:userProps}) => {
-  const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>();
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
-
+  const { toast } = useToast();
   const router = useRouter();
+  let response: { error: string | undefined; message: string | undefined };
+  let message: string;
  
   const authformSchema = formSchema(user?'edit user': '');
 
   const form = useForm<z.infer<typeof authformSchema>>({
     resolver: zodResolver(authformSchema),
   });
-  let response: { error: string | undefined; message: string | undefined; };
   const onSubmit = async (data: z.infer<typeof authformSchema>) => {
     const form = new FormData();
 
     form.append("image", data.image);
     form.append("data", JSON.stringify(data));
     try {
-      setShowAlert(true);
       if(user){
       response = await updateUser({id: user._id, user: form})
       }else{
@@ -55,13 +51,18 @@ const UsersForm = ({user}: {user?:userProps}) => {
     }
 
     if (response.error) {
-      setIsSuccess(false);
-      setMessage(response.error);
-      
+      message = response.error;
+      toast({
+        title: "Error",
+        description: message,
+      });
     } else {
-      setIsSuccess(true);
-      setMessage(response.message);
-     
+      message = response.message!;
+      router.push("/users");
+      toast({
+        title: "Success",
+        description: message,
+      });
     }
     
     } catch (error) {
@@ -72,15 +73,6 @@ const UsersForm = ({user}: {user?:userProps}) => {
 
   return (
     <>
-      <Toast
-        open={showAlert}
-        close={() => {
-          setShowAlert(false);
-        }}
-        message={message}
-        success={isSuccess}
-      />
- 
 
         <>
           <Form {...form}>

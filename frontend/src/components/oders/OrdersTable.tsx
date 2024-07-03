@@ -20,14 +20,13 @@ import {
 } from "@/components/ui/table";
 import { deleteOrder, exportExcel } from "@/lib/actions/order.actions";
 import { apiURL, cn } from "@/lib/utils";
+import { Trash } from 'lucide-react';
 import Image from "next/image";
-import { useState } from "react";
-import { OrdersStatusStyles, sharedIcons } from "../../../constants";
-import CustomSvg from "../CustomSvg";
+import { OrdersStatusStyles } from "../../../constants";
 import CustomPagination from "../Pagination";
-import Toast from "../Toast";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { useToast } from "../ui/use-toast";
 
 const StatusBadge = ({ status }: { status: string }) => {
   const { borderColor, backgroundColor, textColor, circleBg } =
@@ -48,31 +47,26 @@ const StatusBadge = ({ status }: { status: string }) => {
 };
 
 const OrdersTable = ({ orders }: { orders: OrdersTableProps }) => {
-  const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>();
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const { toast } = useToast();
+  let message: string;
+  let isSuccess: "Success" | "Error";
   const handleDelete = async (id?: string) => {
     try {
       const response = await deleteOrder(id);
-      setShowAlert(true);
-      setMessage("order deleted successfully");
-      setIsSuccess(true);
+      message = "order deleted successfully";
+      isSuccess = "Success";
     } catch (e) {
-      setShowAlert(true);
-      setMessage("Cannot delete this order");
+      message = "Cannot delete this order";
+      isSuccess = "Error";
     }
+    toast({
+      title: isSuccess,
+      description: message,
+    });
   };
 
   return (
     <>
-      <Toast
-        open={showAlert}
-        close={() => {
-          setShowAlert(false);
-        }}
-        message={message}
-        success={isSuccess}
-      />
       <div className=" w-full overflow-auto bg-white rounded-sm py-6 px-4">
         <div className="flex justify-between mb-2">
           <Input
@@ -135,16 +129,7 @@ const OrdersTable = ({ orders }: { orders: OrdersTableProps }) => {
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <div>
-                        <CustomSvg
-                          title={sharedIcons.trash.title}
-                          style="w-6 h-6 cursor-pointer"
-                          color={sharedIcons.trash.color}
-                          d={sharedIcons.trash.d}
-                          stroke={sharedIcons.trash.stroke}
-                          strokeLine={sharedIcons.trash.strokeLine}
-                          strokeWidth={sharedIcons.trash.strokeWidth}
-                          viewBox={sharedIcons.trash.viewBox}
-                        />
+                      <Trash color="#ff5200"/>
                       </div>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
