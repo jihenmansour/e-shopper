@@ -2,6 +2,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { z } from "zod";
+import { LineChartCardProps, OverviewSectionProps } from "../../types";
 
 
 export const apiURL = process.env.NEXT_PUBLIC_APP_API_URL;
@@ -37,16 +38,18 @@ export const ProductSchema = z
   price: z.coerce.number({message: 'required, enter number please'}),
   quantity: z.coerce.number({message: 'required, enter number please'}),
   description: z.string().optional(),
-  image:   z.any().optional(),
-  categories: z.array(z.any())
+  images:   z.array(z.any())
+  .min(1, {message: 'at least one image is required'})
+  .max(4, {message: 'no more than 4 images are required'}).default([]),
+  categories: z.array(z.any()).optional()
 })
 
 export const CategorySchema = z
 .object({
   name: z.string(),
   description: z.string().optional(),
-  image:   z.any().optional(),
-  products: z.array(z.any()).nonempty()
+  images: z.array(z.any()).length(1, {message: 'one image is required'}).default([]),
+  products: z.array(z.any()).optional()
 })
 
 export const parseStringify = (value: any) => JSON.parse(JSON.stringify(value));

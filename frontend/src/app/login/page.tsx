@@ -1,12 +1,13 @@
 "use client";
-import Login from "@/components/Login";
+
 import React from "react";
 import Image from "next/image";
+import LoginForm from "@/components/login/login-form";
 
 function page() {
   return (
     <div className="min-h-screen grid grid-flow-row lg:grid-cols-2 items-center">
-      <Login />
+      <LoginForm/>
       <div className="flex h-screen w-full items-center justify-end relative  max-lg:hidden">
         <Image
           src="/images/main.png"

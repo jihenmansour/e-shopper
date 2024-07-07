@@ -21,9 +21,8 @@ const ProductSchema = mongoose.Schema(
       description: {
         type: String,
       },
-      image :{
-        type: String,
-        default: "1719418313830.png"
+      images:{
+        type: [String]
       },
       categories : [
         {

@@ -5,13 +5,13 @@ const Category = require("../models/category.model");
 // Create Prodcut
 const createProduct = async (req, res) => {
   const parsedData = JSON.parse(req.body.data);
-  const imageUrl = req.file?.filename;
+  const images = req.files.length > 0 ? 
+  req.files?.map((file)=> file.filename) : ['1719418313830.png'];
 
   const productData = {
     ...parsedData,
-    image: imageUrl,
+    images: images,
   };
-
   const product = new Product(productData);
   await product.validate();
 
@@ -132,8 +132,9 @@ const updateProduct = async (req, res) => {
     ...parsedData,
   };
 
-  updatedProduct.image = req.file ? req.file.filename : parsedData.image;
-
+  updatedProduct.images = req.files.length > 0 ? 
+  req.files?.map((file)=> file.filename) : parsedData.images;
+  
   const product = await Product.findById({ _id: id });
 
   if (!product) {

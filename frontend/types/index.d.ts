@@ -1,3 +1,5 @@
+import { UserInfo } from "os";
+
 declare interface signUpProps {
   name: string;
   email: string;
@@ -34,7 +36,7 @@ declare interface productProps {
   price?: string;
   quantity?: string;
   description?: string;
-  image?: any;
+  images: string[];
   categories: categoryProps[];
   totalOrderedItems?: number;
 }
@@ -110,7 +112,7 @@ declare interface categoryProps {
   _id?: string;
   name?: string;
   description?: string;
-  image?: any;
+  images: string[];
   products: productProps[];
 }
 
@@ -123,17 +125,22 @@ declare interface CatgoriesTableProps {
   previousPage?: number;
 }
 
+declare interface orderItem {
+  product: productProps;
+  quantity: number;
+}
+
 declare interface orderProps {
   _id?: string;
-  status: string;
-  OrderItems: Array<{
-    product: productProps;
-    quantity: number;
-  }>;
+  status: "pending"| "processing"| "shipped"| "cancelled";
+  OrderItems: orderItem [];
   total: number;
   user: userProps;
   shippingAddress: string;
 }
+
+
+
 
 declare interface OrdersTableProps {
   data: orderProps[];
@@ -158,6 +165,13 @@ declare interface OverviewSectionProps {
   totalClients: number;
 }
 
+declare interface DashboardProps {
+  stats: OverviewSectionProps;
+  categories: MonthlyStats[];
+  data: MonthlyStats[];
+  products: productProps[]
+}
+
 declare interface LineChartCardProps {
   type: string;
   stats: Array<{month: number; total: number}>;
@@ -177,6 +191,6 @@ declare interface CategoriesChartProps {
   products?: productProps[]
 }
 
-declare interface TopProductsTable{
+declare interface TopProductsTableProps{
   products: productProps[];
 }

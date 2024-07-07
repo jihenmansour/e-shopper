@@ -2,10 +2,10 @@
 
 import axios from "axios";
 import { apiURL, parseStringifyError } from "../utils";
+import { categoryProps, CatgoriesTableProps } from "../../../types";
 
 export const createCategory = async (category: FormData) => {
   try {
-
     const response = await axios.post(`${apiURL}/category`, category, {
       headers: {
         "Content-Type": "multipart/form-data",

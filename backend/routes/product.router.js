@@ -4,11 +4,11 @@ const { createProduct, getProducts, getProduct, updateProduct, deleteProduct, ge
 
 const router = Router();
 
-router.post('/product',upload.single("image"),  createProduct);
+router.post('/product',upload.array("images"),  createProduct);
 router.get('/products/all', getAllProducts);
 router.get('/products', getProducts);
 router.get('/product/:id', getProduct);
-router.put("/product/:id", upload.single("image"), updateProduct);
+router.put("/product/:id", upload.array("images"), updateProduct);
 router.delete("/product/:id", deleteProduct);
 
 module.exports = router;

@@ -4,11 +4,11 @@ const { upload } = require("../utils/multer.config")
 
 const router = Router();
 
-router.post('/category',upload.single("image"),  createCategory);
+router.post('/category',upload.array("images"),  createCategory);
 router.get('/categories/all', getAllCategories);
 router.get('/categories', getCategories);
 router.get('/category/:id', getCategory);
-router.put("/category/:id", upload.single("image"), updateCategory);
+router.put("/category/:id", upload.array("images"), updateCategory);
 router.delete("/category/:id", deleteCategory);
 
 module.exports = router;

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { apiURL } from "../utils";
+import { orderProps, OrdersTableProps } from "../../../types";
 
 
 export const getOrders = async (
@@ -8,6 +9,12 @@ export const getOrders = async (
     const response = await axios.get(`${apiURL}/orders?page=${page}`);
     return response.data;
   };
+
+  export const getOrder = async (id: string): Promise<orderProps> => {
+    const response = await axios.get(`${apiURL}/order/${id}`);
+    return response.data.order;
+  };
+
 export const deleteOrder = async(id?: string) => {
     try {
         const response = await axios.delete(`${apiURL}/order/${id}`);

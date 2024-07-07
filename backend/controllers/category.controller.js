@@ -5,11 +5,12 @@ const Product = require("../models/product.model");
 // Create Category
 const createCategory = async (req, res) => {
   const parsedData = JSON.parse(req.body.data);
-  const imageUrl = req.file?.filename;
- console.log(imageUrl)
+  const images = req.files.length > 0 ? 
+  req.files?.map((file)=> file.filename) : ['1719418313830.png'];
+
   const categoryData = {
     ...parsedData,
-    image: imageUrl,
+    images: images,
   };
 
   const category = new Category(categoryData);
@@ -80,7 +81,8 @@ const updateCategory = async (req, res) => {
     ...parsedData,
   };
 
-  updatedCategory.image = req.file ? req.file.filename : parsedData.image;
+  updatedCategory.images = req.files.length > 0 ? 
+  req.files?.map((file)=> file.filename) : parsedData.images;
 
   const category = await Category.findById({ _id: id });
 

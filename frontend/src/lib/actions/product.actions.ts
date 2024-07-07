@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import { apiURL, parseStringifyError } from "../utils";
+import { productProps, ProductsTableProps } from "../../../types";
 
 export const createProduct = async (product: FormData) => {
   try {
