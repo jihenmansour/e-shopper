@@ -28,13 +28,13 @@ import {
 import { useToast } from "../ui/use-toast";
 import { userProps } from "../../../types";
 
-const UsersForm = ({user}: {user?:userProps}) => {
+const UsersForm = ({ user }: { user?: userProps }) => {
   const { toast } = useToast();
   const router = useRouter();
   let response: { error: string | undefined; message: string | undefined };
   let message: string;
- 
-  const authformSchema = formSchema(user?'edit user': '');
+
+  const authformSchema = formSchema(user ? "edit user" : "");
 
   const form = useForm<z.infer<typeof authformSchema>>({
     resolver: zodResolver(authformSchema),
@@ -45,70 +45,70 @@ const UsersForm = ({user}: {user?:userProps}) => {
     form.append("image", data.image);
     form.append("data", JSON.stringify(data));
     try {
-      if(user){
-      response = await updateUser({id: user._id, user: form})
-      }else{
-      response = await register(form);
-    }
+      if (user) {
+        response = await updateUser({ id: user._id, user: form });
+      } else {
+        response = await register(form);
+      }
 
-    if (response.error) {
-      message = response.error;
-      toast({
-        title: "Error",
-        description: message,
-      });
-    } else {
-      message = response.message!;
-      router.push("/users");
-      toast({
-        title: "Success",
-        description: message,
-      });
-    }
-    
+      if (response.error) {
+        message = response.error;
+        toast({
+          title: "Error",
+          description: message,
+        });
+      } else {
+        message = response.message!;
+        router.push("/users");
+        toast({
+          title: "Success",
+          description: message,
+        });
+      }
     } catch (error) {
-     console.log(error)
+      console.log(error);
     }
   };
 
-
   return (
     <>
-
-        <>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
-              <div className="md:flex md:gap:4 bg-white py-6 px-4 rounded-sm">
-                <div className="flex flex-col w-1/2">
-                   <h1 className="text-lg font-bold">
-                      Account
-                   </h1>
-                   <p className="text-gray-600 text-[14px]">Fill in the information below to add a new account</p>
-                </div>
-                <div className="w-full">
+      <>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-4"
+          >
+            <div className="box md:flex md:gap:4">
+              <div className="flex flex-col md:w-1/2">
+                <h1>Account</h1>
+                <p className="body-text">
+                  Fill in the information below to add a new account
+                </p>
+              </div>
+              <div className="w-full">
                 <div className="grid-cols-2 mt-3 gap-8 md:grid">
-                <InputField
+                  <InputField
                     control={form.control}
                     name="email"
                     label="Email"
                     data={user?.email}
                     placeholder="Enter your email"
                   />
-                   <InputField
+                  <InputField
                     control={form.control}
                     name="password"
                     label="Password"
                     type="password"
                     placeholder="Enter your password"
                   />
-                    <InputField
+                  <InputField
                     control={form.control}
                     name="fullname"
                     label="Full name"
                     data={user?.fullname}
                     placeholder="Enter your full name"
                   />
-                    <FormField
+                  <FormField
                     control={form.control}
                     name="role"
                     defaultValue={user?.role}
@@ -121,8 +121,7 @@ const UsersForm = ({user}: {user?:userProps}) => {
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue 
-                              placeholder="Choose a role" />
+                              <SelectValue placeholder="Choose a role" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -139,26 +138,20 @@ const UsersForm = ({user}: {user?:userProps}) => {
                       </FormItem>
                     )}
                   />
-                 
-
-                </div>
-
                 </div>
               </div>
+            </div>
 
-
-
-
-              <div className="md:flex md:gap:4 bg-white py-6 px-4 rounded-sm">
-                <div className="flex flex-col w-1/2">
-                   <h1 className="text-lg font-bold">
-                   Additional Details
-                   </h1>
-                   <p className="text-gray-600 text-[14px]">Add more details to make your profile complete</p>
-                </div>
-                <div className="w-full">
+            <div className="box md:flex md:gap:4">
+              <div className="flex flex-col md:w-1/2">
+                <h1>Additional Details</h1>
+                <p className="body-text">
+                  Add more details to make your profile complete
+                </p>
+              </div>
+              <div className="w-full">
                 <div className="grid-cols-2 mt-3 gap-8 md:grid">
-                <InputField
+                  <InputField
                     control={form.control}
                     name={`address.${0}.country`}
                     label="Country"
@@ -179,14 +172,14 @@ const UsersForm = ({user}: {user?:userProps}) => {
                     data={user?.address![0]?.city}
                     placeholder="Enter your city"
                   />
-                   <InputField
+                  <InputField
                     control={form.control}
                     name={`address.${0}.address`}
                     label="Address"
                     data={user?.address![0]?.address}
                     placeholder="Enter your full address"
                   />
-                   <InputField
+                  <InputField
                     control={form.control}
                     name={`address.${0}.zip`}
                     label="Zip"
@@ -200,7 +193,7 @@ const UsersForm = ({user}: {user?:userProps}) => {
                     data={user?.phone}
                     placeholder="Enter your phone"
                   />
-                 <FormField
+                  <FormField
                     control={form.control}
                     name="image"
                     render={({ field: { value, onChange, ...fieldProps } }) => (
@@ -223,22 +216,16 @@ const UsersForm = ({user}: {user?:userProps}) => {
                       </FormItem>
                     )}
                   />
-
-                </div>
-
                 </div>
               </div>
+            </div>
 
-
-  
-                <Button className="ml-auto mt-4" type="submit">
-                  {user? 
-                  <p>update</p>: 
-                  <p>create</p>}
-                </Button>
-            </form>
-          </Form>
-        </>
+            <Button className="ml-auto mt-4" type="submit">
+              {user ? <p>update</p> : <p>create</p>}
+            </Button>
+          </form>
+        </Form>
+      </>
     </>
   );
 };

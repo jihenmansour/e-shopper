@@ -7,6 +7,9 @@ const page = async({ params }: { params: { orderId: string } }) => {
     const order = await getOrder(orderId)
   return (
     <div>
+        <h3 >
+          Order detail
+        </h3>
         <OrderDetail order={order}/>
     </div>
   )

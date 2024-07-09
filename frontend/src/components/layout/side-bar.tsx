@@ -103,7 +103,7 @@ const MenuItem = ({
       <div>
         <div
           className={cn(
-            "flex items-center justify-between py-1 2xl:p-4 max-lg:pr-4 rounded-lg cursor-pointer font-medium text-gray-800",
+            "flex items-center justify-between py-1 lg:p-4 max-lg:pr-4 rounded-lg cursor-pointer font-medium text-gray-800",
             {
               "transition-all duration-300 ease-in-out bg-primary-foreground text-primary ":
                 subMenuOpen,

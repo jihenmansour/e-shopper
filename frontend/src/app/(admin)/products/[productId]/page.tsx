@@ -10,6 +10,9 @@ const page = async ({ params }: { params: { productId: string } }) => {
   const categories = await getAllcategories()
   return (
     <div>
+        <h3 >
+          Update product
+        </h3>
       <ProductsForm product={product} categories={categories}/>
     </div>
   );

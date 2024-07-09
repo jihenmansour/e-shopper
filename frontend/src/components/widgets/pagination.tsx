@@ -41,11 +41,6 @@ import { PaginationProps } from "../../../types";
             </PaginationLink>
           </PaginationItem>
           ))}
-          {/* {page<totalPages &&
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
- } */}
           <PaginationItem>
             <PaginationNext
             onClick={()=>{handleNavigation(page+1)}} 

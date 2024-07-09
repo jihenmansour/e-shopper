@@ -45,12 +45,12 @@ const MobileNav = () => {
 }, [pathname]);
 
   return (
-    <section className="w-full max-w-[264px]">
+    <section className="w-full max-w-1/2">
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
         <SheetTrigger className="text-gray-800">
           <Menu/>
         </SheetTrigger>
-        <SheetContent side="left" className="border-none bg-white">
+        <SheetContent side="left" className="border-none bg-white w-2/3">
           <Link
             href="/"
             className="flex cursor-pointer items-center gap-1 px-4"
@@ -65,7 +65,7 @@ const MobileNav = () => {
           />
           </Link>
 
-          <div className="flex h-[calc(100vh-72px)] flex-col justify-between overflow-y-auto;">
+          <div className="flex h-[calc(100vh-72px)] flex-col justify-between overflow-y-auto">
             <nav className="flex h-full flex-col gap-6 pt-8 text-white">
               {sidebarLinks.map((item, index) => {
                 return (

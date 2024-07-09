@@ -54,17 +54,14 @@ const CategoriesTable = ({
 
   return (
     <>
-      <div className=" w-full overflow-auto bg-white rounded-sm py-6 px-4">
-        <div className="flex justify-between mb-2">
-          <Input
-            className="w-1/3 max-lg:w-1/2"
-            type="text"
-            placeholder="Search here..."
-          />
+     <div className="box">
+        <div className="table-header">
+          <Input type="text" placeholder="Search here..." />
           <Link href="/categories/add-category">
-            <Button className="justify-end md:px-10">+ Add new</Button>
+            <Button className="md:px-10">+ Add new</Button>
           </Link>
         </div>
+        <div className="overflow-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -97,12 +94,12 @@ const CategoriesTable = ({
                 </TableCell>
                 <TableCell className="flex justify-end gap-4">
                   <Link href={`/categories/${item._id}`}>
-                    <Pencil color="#22c55e"/>
+                    <Pencil className="text-green-500"/>
                   </Link>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <div>
-                        <Trash color="#ff5200"/>
+                        <Trash className="text-red-500"/>
                       </div>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
@@ -140,6 +137,7 @@ const CategoriesTable = ({
           }
           </TableBody>
         </Table>
+        </div>
         {categories.data.length>0&&
         <CustomPagination
           page={categories.page}

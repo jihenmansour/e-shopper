@@ -15,8 +15,8 @@ import { TopProductsTableProps } from "../../../types";
 const TopProductsTable = ({ products }: TopProductsTableProps) => {
   return (
     <>
-      <div className=" w-full overflow-auto bg-white rounded-xl flex flex-col gap-6 py-6 px-4">
-        <div className="flex justify-between">
+      <div className="  box flex flex-col gap-6 ">
+        <div className="flex justify-between ">
           <h5 className="text-xl font-semibold">Top Products</h5>
           <Link href="/products?sort=totalOrderedItems">
             <p className="text-gray-500 text-sm">View all</p>

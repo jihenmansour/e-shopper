@@ -40,7 +40,7 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center p-8 rounded shadow-sm max-w-2xl w-full mx-auto items-center">
+    <div className="login-box">
       <Image 
           src="/images/e-shopper logo(3).png"
           alt=""
@@ -50,9 +50,9 @@ const LoginForm = () => {
           sizes="100vw"
           style={{ width: '50%', height: 'auto' }}
         />
-      <h1 className="2xl:text-26 font-ibm-plex-serif text-[24px] font-bold max-xl:hidden;">
+      <h3>
         Login to account
-      </h1>
+      </h3>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}

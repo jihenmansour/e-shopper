@@ -28,6 +28,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
 import Link from "next/link";
+import { OrdersTableProps } from "../../../types";
 
 const StatusBadge = ({ status }: { status: string }) => {
   const { borderColor, backgroundColor, textColor, circleBg } =
@@ -68,17 +69,16 @@ const OrdersTable = ({ orders }: { orders: OrdersTableProps }) => {
 
   return (
     <>
-      <div className=" w-full overflow-auto bg-white rounded-sm py-6 px-4">
-        <div className="flex justify-between mb-2">
-          <Input
-            className="w-1/3 max-lg:w-1/2"
-            type="text"
-            placeholder="Search here..."
-          />
-          <Button className="justify-end md:px-10" onClick={exportExcel}>
+       <div className="box">
+        <div className="table-header">
+          <Input type="text" placeholder="Search here..." />
+          <div>
+          <Button  onClick={exportExcel}>
             Download excel
           </Button>
-        </div>
+          </div>
+          </div>
+          <div className="overflow-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -129,12 +129,12 @@ const OrdersTable = ({ orders }: { orders: OrdersTableProps }) => {
                 </TableCell>
                 <TableCell className="flex justify-end gap-4">
                 <Link href={`/orders/${order._id}`}>
-                  <Eye color="#22c55e"/>
+                  <Eye className="text-green-500"/>
                   </Link>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <div>
-                      <Trash color="#ff5200"/>
+                      <Trash className="text-red-500"/>
                       </div>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
@@ -171,6 +171,7 @@ const OrdersTable = ({ orders }: { orders: OrdersTableProps }) => {
       }
           </TableBody>
         </Table>
+        </div>
         {orders.data.length>0&&
         <CustomPagination
           page={orders.page}

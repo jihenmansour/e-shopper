@@ -9,6 +9,9 @@ const page = async({ searchParams: { page } }: SearchParamProps) => {
     const orders = await getOrders(currentPage)
   return (
     <div>
+        <h3 >
+          Orders list
+        </h3>
         <OrdersTable orders={orders}/>
     </div>
   )

@@ -2,6 +2,7 @@
 import CategoriesTable from '@/components/categories/categories-table';
 import { getCategories } from '@/lib/actions/category.actions'
 import React from 'react'
+import { SearchParamProps } from '../../../../types';
 
 const page = async ({ searchParams: { page } }: SearchParamProps) => {
 

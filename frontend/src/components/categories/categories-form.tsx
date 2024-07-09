@@ -22,6 +22,7 @@ import MultiSelectorField from "../ui/multi-selector-field";
 import { Textarea } from "../ui/textarea";
 import { useToast } from "../ui/use-toast";
 import ImageField from "../ui/image-field";
+import { categoryProps, productProps } from "../../../types";
 
 const CategoriesForm = ({ category, products }: { category?: categoryProps, products: productProps[] }) => {
   const {toast} = useToast()
@@ -78,7 +79,7 @@ const CategoriesForm = ({ category, products }: { category?: categoryProps, prod
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-4"
           >
-            <div className="md:flex md:gap:4 bg-white py-6 px-4 rounded-sm">
+            <div className="box md:flex md:gap:4">
               <div className="w-full">
                 <div className="flex flex-col mt-3 gap-8 md:grid">
                   <InputField

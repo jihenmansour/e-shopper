@@ -14,15 +14,10 @@ const  page = async({ searchParams: { page } }: SearchParamProps) =>  {
 
   return (
     <div>
-      <Suspense fallback={<p>Fetching data...</p>}>
-      <header className="flex flex-col gap-2 mb-4">
-        <h1 className="text-2xl font-ibm-plex-serif font-bold text-black-1 ">
-          All users
-        </h1>
-      </header>
+        <h3>
+          Users list
+        </h3>
       <UsersTable users={users} />
-      </Suspense>
-
     </div>
   )
 }

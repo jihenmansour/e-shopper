@@ -18,6 +18,7 @@ import React, {
   useContext,
   useState,
 } from "react";
+import { productProps } from "../../../types";
 
 type MultiSelectorProps = {
   values: productProps[];

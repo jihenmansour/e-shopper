@@ -46,13 +46,14 @@ const getProducts = async (req, res) => {
   const limit = req.query.limit ? parseInt(req.query.limit) : 10;
   const page = req.query.page ? parseInt(req.query.page) : 1;
   const sortField = req.query.sort || 'createdAt';
+  const search = req.query.search;
   const skip = limit * (page - 1);
   const total = await Product.find().count();
 
   const totalPages = Math.ceil(total / limit);
   const nextPage = page < totalPages ? page + 1 : null;
   const previousPage = page > 1 ? page - 1 : null;
-  const data = await await Product.aggregate([
+  const data = await Product.aggregate([
     {
       $lookup: {
         from: "orders",
@@ -92,8 +93,6 @@ const getProducts = async (req, res) => {
         [sortField]: -1
       },
     },
-
-
     { $skip: skip },
     { $limit: limit }
     

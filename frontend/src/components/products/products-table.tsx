@@ -65,26 +65,30 @@ const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
 
   return (
     <>
-      <div className=" w-full overflow-auto bg-white rounded-sm py-6 px-4">
-        <div className="flex justify-between mb-2">
-          <div className="flex gap-2  items-center">
-            <p className="text-gray-500 text-sm whitespace-nowrap">sort by</p>
+      <div className="box">
+        <div className="table-header">
+          <div className="flex max-md:flex-col gap-2">
+          <div className="table-header-item">
+            <p className="text-tiny">sort by</p>
             <select 
-            className="border border-gray-300 rounded-md p-1 cursor-pointer"
              onChange={handleSelect}
              value={sortFilterValue!}>
               <option value="createdAt">created at</option>
               <option value="totalOrderedItems">total ordered items</option>
               <option value="price">price</option>
             </select>
-            <p className="text-gray-500 text-sm whitespace-nowrap">entries</p>
-            <Input type="text" placeholder="Search here..." />
-          </div>
+            </div>
+            <div className="table-header-item">
+            <p className="text-tiny">entries</p>
+            <Input  type="text" placeholder="Search here..." />
+            </div>
+            </div>
           <Link href="/products/add-product">
-            <Button className="justify-end md:px-10">+ Add new</Button>
+            <Button className="md:px-10">+ Add new</Button>
           </Link>
         </div>
-        <Table>
+        <div className="overflow-auto">
+        <Table >
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">Product</TableHead>
@@ -124,12 +128,12 @@ const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
                 <TableCell>{item.totalOrderedItems}</TableCell>
                 <TableCell className="flex justify-end gap-4">
                   <Link href={`/products/${item._id}`}>
-                  <Pencil color="#22c55e"/>
+                  <Pencil className="text-green-500"/>
                   </Link>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <div>
-                      <Trash color="#ff5200"/>
+                      <Trash className="text-red-500"/>
                       </div>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
@@ -166,6 +170,7 @@ const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
           }
           </TableBody>
         </Table>
+        </div>
         {products.data.length>0&&
         <CustomPagination
           page={products.page}
@@ -174,6 +179,7 @@ const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
           previousPage={products.previousPage}
         />
         }
+        
       </div>
     </>
   );

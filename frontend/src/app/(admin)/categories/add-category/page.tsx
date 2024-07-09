@@ -7,6 +7,9 @@ const page = async () => {
   const products = await getAllproducts()
   return (
     <div>
+        <h3>
+          Add category
+        </h3>
         <CategoriesForm products={products}/>
     </div>
   )

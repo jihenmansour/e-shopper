@@ -8,6 +8,9 @@ const page = async ({ params }: { params: { userId: string } }) => {
   const user = await getUser(userId);
   return (
     <div>
+        <h3 >
+          Update user
+        </h3>
       <UsersForm user={user}/>
     </div>
   );
