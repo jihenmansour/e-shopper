@@ -23,7 +23,7 @@ const OrderDetail = ({ order }: { order: orderProps }) => {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex max-md:flex-col gap-5">
-        <div className=" box overflow-auto flex flex-col">
+        <div className=" box overflow-auto h-full flex flex-col">
           <Table>
             <TableHeader>
               <TableRow>
@@ -67,11 +67,14 @@ const OrderDetail = ({ order }: { order: orderProps }) => {
               <TableRow className="font-bold">
                 <TableCell colSpan={3}>Total price</TableCell>
                 <TableCell className="text-right text-red-500">
-                  $2,500.00
+                  {order.total}
                 </TableCell>
               </TableRow>
             </TableFooter>
           </Table>
+          <div>
+            
+          </div>
         </div>
         <div className="flex gap-5 flex-col md:w-1/3">
           <div className="box">

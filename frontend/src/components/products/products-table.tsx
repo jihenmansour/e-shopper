@@ -26,18 +26,18 @@ import { Pencil, Search, Trash } from 'lucide-react';
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
-import CustomPagination from "../widgets/pagination";
+import { ProductsTableProps } from "../../../types";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
-import { ProductsTableProps } from "../../../types";
+import CustomPagination from "../widgets/pagination";
 
 const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
   const router = useRouter();
   const path = usePathname();
   const searchParams = useSearchParams();
   const sortFilterValue = searchParams.get("sort");
+  const searchFilterValue = searchParams.get("search");
   const { toast } = useToast();
   let message: string;
   let isSuccess: "Success" | "Error";
@@ -62,6 +62,10 @@ const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
  const handleSelect = (e: any) => {
   router.push(path + '?' + createQueryString('sort', e.target.value, searchParams));
  }
+ const handleSearch = (e: any) => {
+  router.push(path + '?' + createQueryString('search', e.target.value, searchParams));
+ }
+ 
 
   return (
     <>
@@ -80,7 +84,11 @@ const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
             </div>
             <div className="table-header-item">
             <p className="text-tiny">entries</p>
-            <Input  type="text" placeholder="Search here..." />
+            <Input 
+             type="text"
+             onChange={handleSearch}
+             value={searchFilterValue!}
+            placeholder="Search here..." />
             </div>
             </div>
           <Link href="/products/add-product">

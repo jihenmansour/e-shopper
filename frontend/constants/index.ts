@@ -3,7 +3,7 @@ import { Home, Layers, ShoppingCart, FileClock, User, Users, DollarSign, Shoppin
 export const sidebarLinks = [
   {
     icon: Home,
-    route: "/",
+    route: "/dashboard",
     label: "Dashboard"
   },
   {
@@ -83,28 +83,20 @@ export const sharedIcons = {
 
 export const OrdersStatusStyles = {
   pending: {
-    borderColor: "border-pink-400",
-    backgroundColor: "bg-pink-25",
-    textColor: "text-pink-500",
-    circleBg:"bg-pink-400"
+    backgroundColor: "bg-pink-100",
+    textColor: "text-pink-500"
   },
   processing: {
-    borderColor: "border-blue-400",
-    backgroundColor: "bg-blue-25",
-    textColor: "text-blue-500",
-    circleBg:"bg-blue-400"
+    backgroundColor: "bg-blue-100",
+    textColor: "text-blue-500"
   },
   shipped: {
-    borderColor: "border-green-600",
-    backgroundColor: "bg-green-500",
-    textColor: "text-green-700",
-    circleBg:"bg-green-400"
+    backgroundColor: "bg-green-100",
+    textColor: "text-green-700"
   },
   cancelled: {
-    borderColor: "border-red-600",
-    backgroundColor: "bg-red-500",
-    textColor: "text-red-700",
-    circleBg:"bg-red-400"
+    backgroundColor: "bg-red-100",
+    textColor: "text-red-700"
   },
 };
 

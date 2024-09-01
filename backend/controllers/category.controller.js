@@ -5,8 +5,10 @@ const Product = require("../models/product.model");
 // Create Category
 const createCategory = async (req, res) => {
   const parsedData = JSON.parse(req.body.data);
-  const images = req.files.length > 0 ? 
-  req.files?.map((file)=> file.filename) : ['1719418313830.png'];
+  const images =
+    req.files.length > 0
+      ? req.files?.map((file) => file.filename)
+      : ["1719418313830.png"];
 
   const categoryData = {
     ...parsedData,
@@ -33,22 +35,37 @@ const createCategory = async (req, res) => {
 const getAllCategories = async (req, res) => {
   const categories = await Category.find({});
   res.status(200).json(categories);
-}
+};
 
 // Get Categories
 const getCategories = async (req, res) => {
-  const page = req.query.page ? parseInt(req.query.page) : 1;
-  const limit = req.query.limit ? parseInt(req.query.limit) : 10;
-
-  const total = await Category.find().count();
+  const limit = parseInt(req.query.limit) || 10;
+  const page = parseInt(req.query.page) || 1;
+  const search = req.query.search || "";
+  const skip = limit * (page - 1);
+  const total = await Category.find({ name: { $regex: search } }).count();
 
   const totalPages = Math.ceil(total / limit);
   const nextPage = page < totalPages ? page + 1 : null;
   const previousPage = page > 1 ? page - 1 : null;
-  const data = await Category.find({})
-    .sort({ createdAt: -1 })
-    .limit(limit)
-    .skip(limit * (page - 1));
+
+  // Define the aggregation pipeline
+  const pipeline = [
+    {
+      $match: {
+        name: { $regex: search },
+      },
+    },
+    {
+      $sort: {
+        createdAt: -1,
+      },
+    },
+    { $skip: skip },
+    { $limit: limit },
+  ];
+
+  const data = await Category.aggregate(pipeline);
 
   res.status(200).json({
     data,
@@ -81,8 +98,10 @@ const updateCategory = async (req, res) => {
     ...parsedData,
   };
 
-  updatedCategory.images = req.files.length > 0 ? 
-  req.files?.map((file)=> file.filename) : parsedData.images;
+  updatedCategory.images =
+    req.files.length > 0
+      ? req.files?.map((file) => file.filename)
+      : parsedData.images;
 
   const category = await Category.findById({ _id: id });
 
@@ -113,7 +132,7 @@ const updateCategory = async (req, res) => {
     runValidators: true,
   });
   res.status(200).json({
-    message: "Category updated successfully"
+    message: "Category updated successfully",
   });
 };
 

@@ -4,10 +4,11 @@ import { getCategories } from '@/lib/actions/category.actions'
 import React from 'react'
 import { SearchParamProps } from '../../../../types';
 
-const page = async ({ searchParams: { page } }: SearchParamProps) => {
+const page = async ({ searchParams: { page, search  } }: SearchParamProps) => {
 
   const currentPage = Number(page as string) || 1;
-  const getAllCategories = await getCategories(currentPage)
+  const searchFilter = search as string;
+  const getAllCategories = await getCategories(currentPage, searchFilter)
   return (
     <div>
       <CategoriesTable categories={getAllCategories}/>

@@ -8,6 +8,7 @@ const Product = require("../models/product.model");
 const createOrder = async (req, res) => {
   try {
     const { OrderItems, user } = req.body;
+
     const findUser = await User.findById({ _id: user });
 
     if (!findUser) {
@@ -18,12 +19,13 @@ const createOrder = async (req, res) => {
       if (!product) {
         throw new CustomError("product or products doesnt exist");
       }
-      if(product.quantity===0 | product.quantity < item.quantity){
+      if ((product.quantity === 0) | (product.quantity < item.quantity)) {
         throw new CustomError(`${product.name} quantity is not enough`);
       }
       await Product.findOneAndUpdate(
         { _id: item.product },
-        { $inc:{quantity: -item.quantity} })
+        { $inc: { quantity: -item.quantity } }
+      );
     });
 
     await Promise.all(findProducts);
@@ -34,7 +36,7 @@ const createOrder = async (req, res) => {
       { _id: order.user },
       { $push: { orders: order._id } }
     );
-    res.status(200).json({message: "Order created successfully"});
+    res.status(200).json({ message: "Order created successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -54,23 +56,81 @@ const getAllOrders = async (req, res) => {
 
 // Get Orders
 const getOrders = async (req, res) => {
-  const page = req.query.page ? parseInt(req.query.page) : 1;
-  const limit = req.query.limit ? parseInt(req.query.limit) : 10;
-  const search = req.query.search ? req.query.search : "";
-  const total = await Order.find().count();
+  const limit = req.query.limit || 10;
+  const page = parseInt(req.query.page) || 1;
+  const search = req.query.search || "";
+  const skip = limit * (page - 1);
 
+  const pipeline = [
+    {
+      $lookup: {
+        from: "users",
+        localField: "user",
+        foreignField: "_id",
+        as: "user",
+      },
+    },
+    { $unwind: "$user" },
+    {
+      $unwind: "$OrderItems",
+    },
+    {
+      $lookup: {
+        from: "products",
+        localField: "OrderItems.product",
+        foreignField: "_id",
+        as: "productDetails",
+      },
+    },
+    {
+      $unwind: "$productDetails",
+    },
+    {
+      $addFields: {
+        "OrderItems.product": "$productDetails",
+      },
+    },
+    {
+      $group: {
+        _id: "$_id",
+        status: { $first: "$status" },
+        total: { $first: "$total" },
+        user: { $first: "$user" },
+        shippingAddress: { $first: "$shippingAddress" },
+        createdAt: { $first: "$createdAt" },
+        updatedAt: { $first: "$updatedAt" },
+        __v: { $first: "$__v" },
+        OrderItems: {
+          $push: {
+            product: "$OrderItems.product",
+            quantity: "$OrderItems.quantity",
+          },
+        },
+      },
+    },
+    {
+      $facet: {
+        orders: [
+          { $match: { "OrderItems.product.name": { $regex: search } } },
+          { $sort: { createdAt: -1 } },
+          { $skip: skip },
+          { $limit: limit },
+        ],
+        count: [
+          { $match: { "OrderItems.product.name": { $regex: search } } },
+          { $count: "total" },
+        ],
+      },
+    },
+  ];
+
+  await Order.aggregate(pipeline).then((result) => {
+    data = result[0].orders;
+    total = result[0].count[0]?.total || 0;
+  });
   const totalPages = Math.ceil(total / limit);
   const nextPage = page < totalPages ? page + 1 : null;
   const previousPage = page > 1 ? page - 1 : null;
-  const data = await Order.find({})
-    .populate({
-      path: "OrderItems.product",
-      model: "Product",
-    })
-    .populate("user")
-    .sort({ createdAt: -1 })
-    .limit(limit)
-    .skip(limit * (page - 1));
 
   res.status(200).json({
     data,
@@ -101,21 +161,26 @@ const getOrder = async (req, res) => {
 
 // Update Order
 const updateOrder = async (req, res) => {
-  const { id } = req.params;
+  const orders = JSON.parse(req.body.orders);
+  const updatedOrder = JSON.parse(req.body.updatedOrder);
+  const newUser = updatedOrder.user;
 
-  const order = await Order.findById({ _id: id });
+  const findOrders = orders.map(async (item) => {
+    const order = await Order.findById({ _id: item });
+    if (!order) {
+      throw new CustomError({ message: "Order not found" });
+    }
+    const oldUser = order.user.toString();
 
-  if (!order) {
-    throw new CustomError({ message: "Product not found" });
-  }
-  const oldUser = order.user.toString();
-  const newUser = req.body.user;
+    if (oldUser !== newUser) {
+      await User.updateOne({ _id: newUser }, { $push: { orders: item } });
+      await User.updateOne({ _id: oldUser }, { $pull: { orders: item } });
+    }
+  });
 
-  if (oldUser !== newUser) {
-    await User.updateMany({ _id: newUser }, { $push: { orders: id } });
-    await User.updateMany({ _id: oldUser }, { $pull: { orders: id } });
-  }
-  await Order.updateOne({ _id: id }, req.body);
+  await Promise.all(findOrders);
+  await Order.updateMany({ _id: {$in: orders} }, updatedOrder);
+
   res.status(200).json({
     message: "Order updated successfully",
   });
@@ -123,12 +188,57 @@ const updateOrder = async (req, res) => {
 
 // Export Excel
 const exportExcel = async (req, res) => {
-  const orders = await Order.find({})
-    .populate({
-      path: "OrderItems.product",
-      model: "Product",
-    })
-    .populate("user");
+  const search = req.query.search ? req.query.search : "";
+  const pipeline = [
+    {
+      $lookup: {
+        from: "users",
+        localField: "user",
+        foreignField: "_id",
+        as: "user",
+      },
+    },
+    { $unwind: "$user" },
+    {
+      $unwind: "$OrderItems",
+    },
+    {
+      $lookup: {
+        from: "products",
+        localField: "OrderItems.product",
+        foreignField: "_id",
+        as: "productDetails",
+      },
+    },
+    {
+      $unwind: "$productDetails",
+    },
+    {
+      $addFields: {
+        "OrderItems.product": "$productDetails",
+      },
+    },
+    {
+      $group: {
+        _id: "$_id",
+        status: { $first: "$status" },
+        total: { $first: "$total" },
+        user: { $first: "$user" },
+        shippingAddress: { $first: "$shippingAddress" },
+        createdAt: { $first: "$createdAt" },
+        updatedAt: { $first: "$updatedAt" },
+        __v: { $first: "$__v" },
+        OrderItems: {
+          $push: {
+            product: "$OrderItems.product",
+            quantity: "$OrderItems.quantity",
+          },
+        },
+      },
+    },
+    { $match: { "OrderItems.product.name": { $regex: search } } },
+  ];
+  const orders = await Order.aggregate(pipeline);
 
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("orders list");

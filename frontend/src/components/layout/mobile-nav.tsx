@@ -52,7 +52,7 @@ const MobileNav = () => {
         </SheetTrigger>
         <SheetContent side="left" className="border-none bg-white w-2/3">
           <Link
-            href="/"
+            href="/dashboard"
             className="flex cursor-pointer items-center gap-1 px-4"
           >
              <Image

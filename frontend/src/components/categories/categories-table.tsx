@@ -19,7 +19,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { deleteCategory } from "@/lib/actions/category.actions";
-import { apiURL } from "@/lib/utils";
+import { apiURL, createQueryString } from "@/lib/utils";
 import { Pencil, Trash, Search } from 'lucide-react';
 import Image from "next/image";
 import Link from "next/link";
@@ -28,12 +28,17 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
 import { CatgoriesTableProps } from "../../../types";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const CategoriesTable = ({
   categories,
 }: {
   categories: CatgoriesTableProps;
 }) => {
+  const router = useRouter();
+  const path = usePathname();
+  const searchParams = useSearchParams();
+  const searchFilterValue = searchParams.get("search");
   const { toast } = useToast();
   let message: string;
   let isSuccess: "Success" | "Error";
@@ -51,12 +56,19 @@ const CategoriesTable = ({
       description: message,
     });
   };
+  const handleSearch = (e: any) => {
+    router.push(path + '?' + createQueryString('search', e.target.value, searchParams));
+   }
 
   return (
     <>
      <div className="box">
         <div className="table-header">
-          <Input type="text" placeholder="Search here..." />
+          <Input 
+          type="text"
+          onChange={handleSearch}
+          value={searchFilterValue!}
+          placeholder="Search here..." />
           <Link href="/categories/add-category">
             <Button className="md:px-10">+ Add new</Button>
           </Link>

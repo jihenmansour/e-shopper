@@ -20,7 +20,7 @@ declare interface userProps {
   email: string;
   password?: string;
   address?: Array<addressProps>;
-  role?: "administrator" | "responsible" | "client";
+  role: "administrator" | "responsible" | "client";
   phone?: string;
   image?: any;
 }
@@ -130,16 +130,16 @@ declare interface orderItem {
   quantity: number;
 }
 
+type Status = "pending" | "processing" | "shipped" | "cancelled";
+
 declare interface orderProps {
   _id?: string;
-  status: "pending"| "processing"| "shipped"| "cancelled";
-  OrderItems: orderItem [];
-  total: number;
-  user: userProps;
-  shippingAddress: string;
+  status?: Status;
+  OrderItems?: orderItem [];
+  total?: number;
+  user?: userProps;
+  shippingAddress?: string;
 }
-
-
 
 
 declare interface OrdersTableProps {

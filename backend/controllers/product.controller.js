@@ -48,12 +48,14 @@ const getProducts = async (req, res) => {
   const sortField = req.query.sort || 'createdAt';
   const search = req.query.search;
   const skip = limit * (page - 1);
-  const total = await Product.find().count();
+  const total = await Product.find(search&&{name: { $regex: search}}).count();
 
   const totalPages = Math.ceil(total / limit);
   const nextPage = page < totalPages ? page + 1 : null;
   const previousPage = page > 1 ? page - 1 : null;
-  const data = await Product.aggregate([
+
+  // Define the aggregation pipeline
+  const pipeline = [
     {
       $lookup: {
         from: "orders",
@@ -82,7 +84,6 @@ const getProducts = async (req, res) => {
         },
       },
     },
-
     {
       $project: {
         orders: 0,
@@ -95,10 +96,18 @@ const getProducts = async (req, res) => {
     },
     { $skip: skip },
     { $limit: limit }
-    
-    
-  ]);
+  ];
 
+  // Conditionally add the $match stage if search query is provided
+  if (search) {
+    pipeline.unshift({
+      $match: {
+        name: { $regex: search }
+      }
+    });
+  }
+
+  const data = await Product.aggregate(pipeline);
   res.status(200).json({
     data,
     page,
@@ -108,6 +117,7 @@ const getProducts = async (req, res) => {
     previousPage,
   });
 };
+
 
 
 //Get Product

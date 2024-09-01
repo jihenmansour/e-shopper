@@ -3,8 +3,6 @@ const CustomError = require("../error/custom.error");
 const { createJWT, isTokenValid } = require("../utils/jwt");
 const { hashPassword, comparePassword } = require("../utils/password");
 
-
-
 // Register User
 const register = async (req, res) => {
   const parsedData = JSON.parse(req.body.data);
@@ -33,8 +31,6 @@ const register = async (req, res) => {
   });
 };
 
-
-
 // Login User
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -58,8 +54,6 @@ const login = async (req, res) => {
     throw new CustomError("Username incorrect");
   }
 };
-
-
 
 // get authenticated User
 const authentification = (req, res) => {

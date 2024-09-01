@@ -29,9 +29,15 @@ export const getCategory = async (id: string): Promise<categoryProps> => {
 };
 
 export const getCategories = async (
-  page: number
+  page: number,
+  search?: string
 ): Promise<CatgoriesTableProps> => {
-  const response = await axios.get(`${apiURL}/categories?page=${page}`);
+  const response = await axios.get(`${apiURL}/categories`,{
+    params: {
+      page,
+      search
+    }
+  });
   return response.data;
 };
 
