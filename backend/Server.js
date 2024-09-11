@@ -23,7 +23,7 @@ app.use(cors("*"))
 app.use(express.static('public'));
 
 try {
-     mongoose.connect(`mongodb://0.0.0.0:27017/${process.env.DATABASE}`)
+     mongoose.connect(process.env.MONGODB_CONNECT_URL)
 
     console.log('MongoDB connected!')
 } catch {

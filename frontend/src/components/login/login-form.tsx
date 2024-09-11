@@ -5,7 +5,7 @@ import { login } from "@/lib/actions/user.actions";
 import { formSchema } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -16,6 +16,7 @@ const LoginForm = () => {
   const useFormSchema = formSchema("login");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<String>();
+
 
   const form = useForm<z.infer<typeof useFormSchema>>({
     resolver: zodResolver(useFormSchema),

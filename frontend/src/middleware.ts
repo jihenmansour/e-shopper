@@ -4,7 +4,7 @@ import { getUserInfo } from './lib/actions/user.actions';
 
 function authorizeUser(userInfo: userProps, requestedPath: string): boolean {
   const roleRequiredForPath: { [key: string]: string[] } = {
-    "/dashboard": ["administrator"]
+    "administrator": ["/dashboard"]
   };
 
   const rolesRequired = roleRequiredForPath[requestedPath];
@@ -17,30 +17,21 @@ function authorizeUser(userInfo: userProps, requestedPath: string): boolean {
 
 export async function middleware(request: NextRequest) {
   const { pathname }: { pathname: string } = request.nextUrl;
-  const token = request.cookies.get('token')?.value;
+  const token:string|undefined = request.cookies.get('token')?.value;
   
   const user: userProps = await getUserInfo();
-  
-  const Redirect = () => {
-    const isAuthorized = authorizeUser(user, pathname);
-    if (user?.role === "administrator") {
-      return NextResponse.redirect(new URL('/dashboard', request.url));
-    } else if (user?.role === "client") {
-      return NextResponse.redirect(new URL('/', request.url));
-    }
-    // else{
-    //   return NextResponse.redirect(new URL('/login', request.url));
-    // }
-  }
 
-  if (token && pathname === '/login') {
-    return Redirect();
-  }
-  
+ if(!token && !pathname.includes("login")){
+   return NextResponse.redirect(new URL("/login", request.url));
+ }
 
-  return NextResponse.next();
+ if(token && pathname.includes("login")){
+  return NextResponse.redirect(new URL("/dashboard", request.url));
+ }
+
+
 }
 
 export const config = {
-  matcher: ['/((?!api|_next|.*\\..*).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
 }
