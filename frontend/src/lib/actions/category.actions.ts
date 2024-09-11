@@ -13,6 +13,7 @@ export const createCategory = async (category: FormData) => {
     });
     return response.data;
   } catch (error) {
+    console.log(error.response.data.message)
     return parseStringifyError(error.response.data.message);
   }
 };
