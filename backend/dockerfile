@@ -1,0 +1,19 @@
+FROM node:16
+
+#Create a app directory
+WORKDIR /app
+
+#install app dependencies
+COPY package*.json ./
+
+#Run npm install
+RUN npm install
+
+#Bundle app source
+COPY . .
+
+ENV PORT 3000
+
+EXPOSE ${PORT}
+
+CMD ["npm", "run", "dev"]
