@@ -1,6 +1,6 @@
 const {Router} = require('express');
 const {createOrder, getAllOrders, getOrders, getOrder, updateOrder, deleteOrder, exportExcel} = require('../controllers/order.controller')
-const { upload } = require("../utils/multer.config")
+const { upload } = require("../multer.config")
 
 const router = Router();
 

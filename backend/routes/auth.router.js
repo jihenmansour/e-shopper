@@ -4,7 +4,7 @@ const {
   login,
   authentification
 } = require("../controllers/auth.controller");
-const { upload } = require("../utils/multer.config")
+const { upload } = require("../multer.config")
 
 
 const router = Router();

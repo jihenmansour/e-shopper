@@ -5,7 +5,7 @@ const {
   deleteUser,
   updateUser
 } = require("../controllers/user.controller");
-const { upload } = require("../utils/multer.config")
+const { upload } = require("../multer.config")
 
 
 const router = Router();
