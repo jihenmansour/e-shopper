@@ -1,6 +1,6 @@
 const {Router} = require('express');
 const { createCategory, getCategories, getCategory, updateCategory, deleteCategory, getAllCategories } = require('../controllers/category.controller');
-const { upload } = require("../multer.config")
+const { upload } = require("../utils/multer.config")
 
 const router = Router();
 
