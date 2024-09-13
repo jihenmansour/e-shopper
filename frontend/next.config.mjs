@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: ["localhost", "e-shopper-api.vercel.app"]
+        domains: ["localhost", "e-shopper-wafq.onrender.com"]
       }
 };
 

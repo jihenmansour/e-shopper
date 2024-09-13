@@ -35,7 +35,7 @@ const OrderDetail = ({ order }: { order: orderProps }) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {order.OrderItems.map((item, index) => (
+              {order.OrderItems?.map((item, index) => (
                 <TableRow key={index}>
                   <TableCell className="flex gap-1 items-center">
                     <div className="w-12 h-12 rounded-sm ">
@@ -81,13 +81,13 @@ const OrderDetail = ({ order }: { order: orderProps }) => {
             <h1 className="mb-2">Customer:</h1>
             <div className="grid grid-cols-2 gap-4">
               <p className="body-text">Full name</p>
-              <p className="text-sm">{order.user.fullname}</p>
+              <p className="text-sm">{order.user?.fullname}</p>
 
               <p className="body-text">Phone number</p>
-              <p className="text-sm">{order.user.phone}</p>
+              <p className="text-sm">{order.user?.phone}</p>
 
               <p className="body-text">Address</p>
-              <p className="text-sm">{order.user.address![0]?.address}</p>
+              <p className="text-sm">{order.user?.address![0]?.address}</p>
             </div>
           </div>
 
