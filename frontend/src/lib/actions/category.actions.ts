@@ -3,6 +3,7 @@
 import axios from "axios";
 import { apiURL, parseStringifyError } from "../utils";
 import { categoryProps, CatgoriesTableProps } from "../../../types";
+import { revalidatePath } from "next/cache";
 
 export const createCategory = async (category: FormData) => {
   try {
@@ -13,7 +14,6 @@ export const createCategory = async (category: FormData) => {
     });
     return response.data;
   } catch (error) {
-    console.log(error.response.data.message)
     return parseStringifyError(error.response.data.message);
   }
 };
@@ -60,6 +60,7 @@ export const updateCategory = async ({
 export const deleteCategory = async (id?: string) => {
   try {
     const response = await axios.delete(`${apiURL}/category/${id}`);
+    revalidatePath('/categories')
     return response.data;
   } catch (error) {
     console.log("error: ", error);

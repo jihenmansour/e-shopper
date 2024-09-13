@@ -3,6 +3,7 @@
 import axios from "axios";
 import { apiURL, parseStringifyError } from "../utils";
 import { productProps, ProductsTableProps } from "../../../types";
+import { revalidatePath } from "next/cache";
 
 export const createProduct = async (product: FormData) => {
   try {
@@ -65,6 +66,7 @@ export const updateProduct = async ({
 export const deleteProduct = async (id?: string) => {
   try {
     const response = await axios.delete(`${apiURL}/product/${id}`);
+    revalidatePath('/products')
     return response.data;
   } catch (error) {
     console.log("error: ", error);

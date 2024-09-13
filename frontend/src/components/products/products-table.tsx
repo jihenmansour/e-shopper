@@ -31,6 +31,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
 import CustomPagination from "../widgets/pagination";
+import { revalidatePath } from "next/cache";
 
 const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
   const router = useRouter();
@@ -44,10 +45,13 @@ const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
 
   
   const handleDelete = async (id?: string) => {
+    
     try {
       const response = await deleteProduct(id);
+
       message = "product deleted successfully";
       isSuccess = "Success";
+
     } catch (e) {
       message = "Cannot delete this product";
       isSuccess = "Error";
@@ -56,6 +60,8 @@ const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
       title: isSuccess,
       description: message,
     });
+
+
   };
 
 

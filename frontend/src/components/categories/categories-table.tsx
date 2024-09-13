@@ -29,6 +29,7 @@ import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
 import { CatgoriesTableProps } from "../../../types";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 const CategoriesTable = ({
   categories,
@@ -45,6 +46,7 @@ const CategoriesTable = ({
   const handleDelete = async (id?: string) => {
     try {
       const response = await deleteCategory(id);
+      revalidatePath('/categories')
       message = "category deleted successfully";
       isSuccess = "Success";
     } catch (e) {
@@ -55,6 +57,7 @@ const CategoriesTable = ({
       title: isSuccess,
       description: message,
     });
+
   };
   const handleSearch = (e: any) => {
     router.push(path + '?' + createQueryString('search', e.target.value, searchParams));

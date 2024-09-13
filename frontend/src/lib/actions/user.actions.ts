@@ -4,6 +4,7 @@ import axios from "axios";
 import { cookies } from "next/headers";
 import { apiURL, parseStringify, parseStringifyError } from "../utils";
 import { LoginProps, userProps, UsersTableProps } from "../../../types";
+import { revalidatePath } from "next/cache";
 
 
 
@@ -80,6 +81,7 @@ export const getAllusers = async (page: number): Promise<UsersTableProps> => {
 export const deleteUser = async (id?: string) => {
 try{
       const response = await axios.delete(`${apiURL}/user/${id}`);
+      revalidatePath('/users')
       return response.data
 }catch(error){
   console.log('error: ', error)

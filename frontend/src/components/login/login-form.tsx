@@ -32,6 +32,7 @@ const LoginForm = () => {
     setIsLoading(true);
     try {
       const response = await login(values);
+      router.push("/dashboard")
       // else setMessage('Email or Password incorrect')
     } catch (error) {
       console.log("error: ", error);

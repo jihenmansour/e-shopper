@@ -81,7 +81,6 @@ const OrdersTable = ({ orders }: { orders: OrdersTableProps }) => {
         JSON.stringify(updatedOrder));
     try {
       const response = await updateOrder(form);
-      console.log(response);
       message = "order updated successfully";
       isSuccess = "Success";
     } catch (e) {

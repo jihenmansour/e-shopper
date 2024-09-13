@@ -1,6 +1,9 @@
+"use server"
+
 import axios from "axios";
 import { apiURL, parseStringifyError } from "../utils";
 import { orderProps, OrdersTableProps } from "../../../types";
+import { revalidatePath } from "next/cache";
 
 export const getOrders = async (
   page: number,
@@ -27,6 +30,9 @@ export const updateOrder = async (order: FormData) => {
         "Content-Type": "multipart/form-data",
       }
     });
+    console.log(response)
+    revalidatePath('/orders')
+
     return response.data;
   } catch (error) {
     return parseStringifyError(error.response.data.message);
@@ -36,6 +42,7 @@ export const updateOrder = async (order: FormData) => {
 export const deleteOrder = async (id?: string) => {
   try {
     const response = await axios.delete(`${apiURL}/order/${id}`);
+    revalidatePath('/orders')
     return response.data;
   } catch (error) {
     console.log("error: ", error);
