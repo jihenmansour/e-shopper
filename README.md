@@ -10,9 +10,9 @@ Welcome to E-shopper, an e-commerce shopping admin dashboard built using the MER
 
 ## Demo
 
-### Admin Dashboard Link
+### Admin Area
 
-https://e-shopper-frontend.vercel.app/dashboard
+https://github.com/jihenmansour/e-shopper/assets/48207144/641489f3-8e05-4c63-aa16-e8f550c7f44
 
 ## Dummy User Accounts
 
