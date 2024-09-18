@@ -19,7 +19,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
-import { deleteOrder, exportExcel, updateOrder } from "@/lib/actions/order.actions";
+import { deleteOrder,  updateOrder } from "@/lib/actions/order.actions";
 import { apiURL, cn, createQueryString } from "@/lib/utils";
 import { Eye, Search, Trash } from "lucide-react";
 import Image from "next/image";
@@ -33,6 +33,7 @@ import { useToast } from "../ui/use-toast";
 import CustomPagination from "../widgets/pagination";
 import { useState } from "react";
 import { CheckedState } from "@radix-ui/react-checkbox";
+import { exportExcel } from "@/lib/actions/stats.actions";
 
 const StatusBadge = ({ status }: { status: string }) => {
   const { backgroundColor, textColor } =

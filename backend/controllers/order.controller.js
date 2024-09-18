@@ -188,7 +188,7 @@ const updateOrder = async (req, res) => {
 
 // Export Excel
 const exportExcel = async (req, res) => {
-  const search = req.query.search ? req.query.search : "";
+  const search = req.query.search || "";
   const pipeline = [
     {
       $lookup: {

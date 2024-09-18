@@ -46,7 +46,6 @@ const CategoriesTable = ({
   const handleDelete = async (id?: string) => {
     try {
       const response = await deleteCategory(id);
-      revalidatePath('/categories')
       message = "category deleted successfully";
       isSuccess = "Success";
     } catch (e) {

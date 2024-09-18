@@ -30,7 +30,6 @@ export const updateOrder = async (order: FormData) => {
         "Content-Type": "multipart/form-data",
       }
     });
-    console.log(response)
     revalidatePath('/orders')
 
     return response.data;
@@ -49,22 +48,4 @@ export const deleteOrder = async (id?: string) => {
   }
 };
 
-export const exportExcel = async (search?: string) => {
-  try {
-    const response = await axios.get(`${apiURL}/orders/export`, {
-      params: { search },
-      responseType: "blob",
-    });
-    const href = URL.createObjectURL(response.data);
-    const link = document.createElement("a");
-    link.href = href;
-    link.setAttribute("download", "orders list.xlsx");
-    document.body.appendChild(link);
-    link.click();
 
-    document.body.removeChild(link);
-    URL.revokeObjectURL(href);
-  } catch (error) {
-    console.log("error: ", error);
-  }
-};
