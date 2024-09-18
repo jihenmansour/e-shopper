@@ -6,11 +6,13 @@ import { LineChartCardProps } from "../../../types";
 
 ChartJS.register(...registerables);
 
-const LineChartCard = ({type, stats, total}: LineChartCardProps) => {
+const LineChartCard = ({type, stats}: LineChartCardProps) => {
   const { Icon, IconBackground, ChartBorderColor, ChartBackgroundColor } =
     StatsCardStyle[type as keyof typeof StatsCardStyle];
+    console.log(stats)
   const months = stats.map((a) => formatMonth(a.month!));
   const totals = stats.map((a) => a.total);
+  console.log(totals)
   const currentMonth = new Date().getMonth()+1;
   const ThisMonthIndex =  stats?.findIndex(a => a.month === currentMonth)!;
   const LastMonthIndex =  stats?.findIndex(a => a.month === currentMonth-1)!;

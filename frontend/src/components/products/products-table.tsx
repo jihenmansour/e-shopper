@@ -31,7 +31,6 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
 import CustomPagination from "../widgets/pagination";
-import { revalidatePath } from "next/cache";
 
 const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
   const router = useRouter();
@@ -120,7 +119,7 @@ const ProductsTable = ({ products }: { products: ProductsTableProps }) => {
                 <TableCell className="flex gap-1 items-center">
                   <div className="w-12 h-12 rounded-sm ">
                     <Image
-                      src={`${apiURL}/images/${item.images[0]}`}
+                      src={item.images.length>0?`${apiURL}/images/${item.images[0]}`:"/images/default-picture.png"}
                       alt=""
                       width={0}
                       height={0}

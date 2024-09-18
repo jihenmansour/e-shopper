@@ -3,22 +3,44 @@ const CustomError = require("../error/custom.error");
 const { hashPassword } = require("../utils/password");
 
 
+// Get All Users
+const getAllUsers = async (req, res) => {
+  const users = await User.find({});
+  res.status(200).json(users)
+}
+
 
 // Get Users
 const getUsers = async (req, res) => {
-  const page = req.query.page ? parseInt(req.query.page) : 1;
-  const limit = req.query.limit ? parseInt(req.query.limit) : 10;
-
-
+  const limit = parseInt(req.query.limit) || 10;
+  const page = parseInt(req.query.page) || 1;
+  const search = req.query.search?.toLowerCase() || "";
+  const skip = limit * (page - 1);
   const total = await User.find().count();
 
   const totalPages = Math.ceil(total / limit);
   const nextPage = page < totalPages ? page + 1 : null;
   const previousPage = page > 1 ? page - 1 : null;
-  const data = await User.find()
-    .sort({ createdAt: -1 })
-    .limit(limit)
-    .skip(limit * (page - 1));
+
+  const data = await User.aggregate( [
+    {
+      $match: {
+        $expr: {
+          $regexMatch: {
+            input: {$toLower: "$fullname"},
+            regex: search
+          }
+        }
+      },
+    },
+    {
+      $sort: {
+        createdAt: -1,
+      },
+    },
+    { $skip: skip },
+    { $limit: limit },
+  ]);
  
 
   res.status(200).json({
@@ -60,7 +82,6 @@ const updateUser = async (req, res) => {
     const password = parsedData.password;
     updatedUser.password = await hashPassword(password);
   }
-  updatedUser.image = req.file ? req.file.filename : parsedData.image;
 
   const user = await User.findOneAndUpdate({ _id: id }, updatedUser, {
     new: true,
@@ -89,6 +110,7 @@ const deleteUser = async (req, res) => {
 };
 
 module.exports = {
+  getAllUsers,
   getUsers,
   getUser,
   updateUser,

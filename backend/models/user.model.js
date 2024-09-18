@@ -50,8 +50,7 @@ const userSchema = new mongoose.Schema({
         type: String
     },
     image: {
-        type: String,
-        default: '1719418294252.png'
+        type: String
     },
     orders: [
         {

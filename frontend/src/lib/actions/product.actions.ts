@@ -7,7 +7,6 @@ import { revalidatePath } from "next/cache";
 
 export const createProduct = async (product: FormData) => {
   try {
-
     const response = await axios.post(`${apiURL}/product`, product, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -20,30 +19,28 @@ export const createProduct = async (product: FormData) => {
 };
 
 export const getProduct = async (id: string): Promise<productProps> => {
-
   const response = await axios.get(`${apiURL}/product/${id}`);
   return response.data.product;
 };
 
 export const getAllproducts = async () => {
   const response = await axios.get(`${apiURL}/products/all`);
-  return response.data
-}
-
+  return response.data;
+};
 
 export const getProducts = async (
   page: number,
-  limit?: number ,
+  limit?: number,
   sort?: string,
   search?: string
 ): Promise<ProductsTableProps> => {
-  const response = await axios.get(`${apiURL}/products`,{
+  const response = await axios.get(`${apiURL}/products`, {
     params: {
       page,
       limit,
       sort,
-      search
-    }
+      search,
+    },
   });
   return response.data;
 };
@@ -66,7 +63,7 @@ export const updateProduct = async ({
 export const deleteProduct = async (id?: string) => {
   try {
     const response = await axios.delete(`${apiURL}/product/${id}`);
-    revalidatePath('/products')
+    revalidatePath("/products");
     return response.data;
   } catch (error) {
     console.log("error: ", error);

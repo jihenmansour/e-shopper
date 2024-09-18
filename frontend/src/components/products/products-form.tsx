@@ -40,17 +40,18 @@ const ProductsForm = ({
   });
   const onSubmit = async (data: z.infer<typeof ProductSchema>) => {
     const form = new FormData();
-    data.images?.map( (file: File)=> {
+    data.images?.files.map((file: File) => {
       form.append("images", file);
-      }
-    )
+    });
     form.append(
       "data",
       JSON.stringify({
         ...data,
         categories: data.categories?.map((item: categoryProps) => item._id),
+        images: data.images.updatedImages?.map((item: string) => item),
       })
     );
+
     try {
       if (product) {
         response = await updateProduct({ id: product?._id, product: form });
@@ -133,10 +134,14 @@ const ProductsForm = ({
                     )}
                   />
                   <ImageField
-                 control={form.control}
-                 name="images"
-                 data={product?.images}
-                 />
+                    control={form.control}
+                    name="images"
+                    data={product?.images}
+                    defaultValue={{
+                      files: [],
+                      updatedImages: product?.images ?? [],
+                    }}
+                  />
                   <MultiSelectorField
                     control={form.control}
                     data={product?.categories}

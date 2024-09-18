@@ -38,11 +38,16 @@ const CategoriesForm = ({ category, products }: { category?: categoryProps, prod
 
   const onSubmit = async (data: z.infer<typeof CategorySchema>) => {
     const form:any = new FormData();
-    data.images?.map( (file: File)=> {
+    data.images?.files.map( (file: File)=> {
     form.append("images", file);
     }
   )
-    form.append("data", JSON.stringify(data));
+    form.append("data",
+       JSON.stringify({
+        ...data,
+        products: data.products?.map((item: productProps) => item._id),
+        images: data.images.updatedImages?.map((item: string) => item)
+       }));
     try {
       if (category) {
         response = await updateCategory({ id: category?._id, category: form });
@@ -114,6 +119,7 @@ const CategoriesForm = ({ category, products }: { category?: categoryProps, prod
                  control={form.control}
                  name="images"
                  data={category?.images}
+                 defaultValue={{files:[], updatedImages: category?.images??[]}}
                  />
                   <MultiSelectorField
                     control={form.control}

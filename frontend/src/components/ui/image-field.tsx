@@ -1,22 +1,23 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
-import { FormControl, FormField, FormLabel, FormMessage } from "./form";
-import { Control, FieldValues, Path, PathValue } from "react-hook-form";
+import { apiURL } from "@/lib/utils";
+import { ImagePlus, X } from "lucide-react";
 import Image from "next/image";
-import { ImagePlus, X  } from 'lucide-react';
-import { apiURL, cn } from "@/lib/utils";
+import React, { useState } from "react";
+import { Control, FieldValues, Path, PathValue } from "react-hook-form";
+import { ImagesProps } from "../../../types";
+import { FormControl, FormField, FormLabel, FormMessage } from "./form";
 import { InputProps } from "./input";
 
 interface ImageSelectorProps<T extends FieldValues> {
   control: Control<T>;
   name: Path<T>;
   data?: PathValue<T, Path<T>>;
+  defaultValue: PathValue<T, Path<T>>;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {
-
     return (
       <div>
         <label
@@ -26,12 +27,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <ImagePlus />
           <span className="font-medium text-center">Upload image</span>
         </label>
-        <input
-          type={type}
-          className="hidden"
-          ref={ref}
-          {...props}
-        />
+        <input type={type} className="hidden" ref={ref} {...props} />
       </div>
     );
   }
@@ -43,14 +39,18 @@ const ImageField = <T extends FieldValues>({
   control,
   name,
   data,
+  defaultValue,
 }: ImageSelectorProps<T>) => {
-  const [Files, setFiles] = useState<File[]>([]);
+  const [images, setImages] = useState<ImagesProps>({
+    files: [],
+    updatedImages: data ?? [],
+  });
 
   return (
     <FormField
       control={control}
       name={name}
-      defaultValue={data}
+      defaultValue={defaultValue}
       render={({ field: { value, onChange, ...fieldProps } }) => (
         <div className="md:flex">
           <FormLabel className="font-bold text-[14px] w-1/2">Picture</FormLabel>
@@ -66,39 +66,92 @@ const ImageField = <T extends FieldValues>({
                 onChange={(event) => {
                   if (event.target.files && event.target.files.length > 0) {
                     const selectedFile = event.target.files[0];
-                    setFiles((prevImages) => [...prevImages, selectedFile]);
-                    onChange([...Files, selectedFile]);
-                    
+                    setImages((prevState) => {
+                      const updatedFiles = [
+                        ...(prevState?.files || []),
+                        selectedFile,
+                      ];
+                      onChange({ ...prevState, files: updatedFiles });
+                      return { ...prevState, files: updatedFiles };
+                    });
                   }
                 }}
               />
             </FormControl>
             <FormMessage />
-            {Files.length>0  &&
-              Files.map((file, index) => {
+            {images.files &&
+              images.files.length > 0 &&
+              images.files.map((file, index) => {
                 return (
-                  <div 
-                  key={index}
-                  className="rounded-md border border-gray-200 bg-gray-50 p-3 h-36">
-                    <div onClick={() => {
-                      setFiles((prevState) => {
-                        const updatedFiles = prevState.filter((prevItem) => prevItem !== file);
-                        onChange(updatedFiles);
-                        return updatedFiles;
-                      });
-                    }}
-                    className="text-gray-600 cursor-pointer">
-                      <X size={18}/>
-                      </div>
+                  <div
+                    key={index}
+                    className="rounded-md border border-gray-200 bg-gray-50 p-3 h-36"
+                  >
+                    <div
+                      onClick={() => {
+                        setImages((prevState) => {
+                          const updatedFiles =
+                            prevState?.files?.filter(
+                              (prevItem) => prevItem !== file
+                            ) || [];
+                          onChange({
+                            ...prevState,
+                            files: updatedFiles,
+                          });
+
+                          return { ...prevState, files: updatedFiles };
+                        });
+                      }}
+                      className="text-gray-600 cursor-pointer"
+                    >
+                      <X size={18} />
+                    </div>
                     <Image
                       src={URL.createObjectURL(file)}
                       alt=""
                       width={0}
                       height={0}
                       sizes="100vw"
-                      className='h-full w-full object-contain'
+                      className="h-full w-full object-contain"
                     />
+                  </div>
+                );
+              })}
 
+            {images.updatedImages &&
+              images.updatedImages.length > 0 &&
+              images.updatedImages.map((image, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="rounded-md border border-gray-200 bg-gray-50 p-3 h-36"
+                  >
+                    <div
+                      onClick={() => {
+                        setImages((prevState) => {
+                          const updatedFiles =
+                            prevState?.updatedImages?.filter(
+                              (prevItem) => prevItem !== image
+                            ) || [];
+                          onChange({
+                            ...prevState,
+                            updatedImages: updatedFiles,
+                          });
+                          return { ...prevState, updatedImages: updatedFiles };
+                        });
+                      }}
+                      className="text-gray-600 cursor-pointer"
+                    >
+                      <X size={18} />
+                    </div>
+                    <Image
+                      src={`${apiURL}/images/${image}`}
+                      alt=""
+                      width={0}
+                      height={0}
+                      sizes="100vw"
+                      className="h-full w-full object-contain"
+                    />
                   </div>
                 );
               })}

@@ -93,7 +93,7 @@ const CategoriesTable = ({
                   <div className="w-12 h-12 rounded-sm ">
                     <div className="w-12 h-12 rounded-sm ">
                       <Image
-                        src={`${apiURL}/images/${item.images[0]}`}
+                        src={item.images.length>0?`${apiURL}/images/${item.images[0]}`:"/images/default-picture.png"}
                         alt=""
                         width={0}
                         height={0}

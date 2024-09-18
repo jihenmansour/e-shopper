@@ -12,6 +12,7 @@ export const createCategory = async (category: FormData) => {
         "Content-Type": "multipart/form-data",
       },
     });
+    revalidatePath("/categories")
     return response.data;
   } catch (error) {
     return parseStringifyError(error.response.data.message);
@@ -51,6 +52,7 @@ export const updateCategory = async ({
 }) => {
   try {
     const response = await axios.put(`${apiURL}/category/${id}`, category);
+    revalidatePath('/categories')
     return response.data;
   } catch (error) {
     return parseStringifyError(error.response.data.message);

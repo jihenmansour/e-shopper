@@ -38,9 +38,28 @@ export const ProductSchema = z
   price: z.coerce.number({message: 'required, enter number please'}),
   quantity: z.coerce.number({message: 'required, enter number please'}),
   description: z.string().optional(),
-  images:   z.array(z.any())
-  .min(1, {message: 'at least one image is required'})
-  .max(4, {message: 'no more than 4 images are required'}).default([]),
+  // files: z.array(z.any())  .min(1, {message: 'at least one image is required'})
+  // .max(4, {message: 'no more than 4 images are required'}).default([]),
+  images:   z.object({
+    files: z.array(z.any()),
+    updatedImages: z.array(z.string())
+  })
+  .superRefine((val, ctx)=> {
+    const length = val.files.length + val.updatedImages.length;
+    if(length < 1) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "at least one image is required"
+      })
+  }
+
+  if(length > 4) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+    message: "no more than 4 images are required"
+  })
+  }
+}),
   categories: z.array(z.any()).optional()
 })
 
@@ -48,7 +67,14 @@ export const CategorySchema = z
 .object({
   name: z.string(),
   description: z.string().optional(),
-  images: z.array(z.any()).length(1, {message: 'one image is required'}).default([]),
+  images: z.object({
+    files: z.array(z.any()),
+    updatedImages: z.array(z.string())
+  })
+  .refine((val)=> val.files.length + val.updatedImages.length <= 1 &&
+   val.files.length + val.updatedImages.length >= 1, {
+    message: "one image is required"
+  }),
   products: z.array(z.any()).optional()
 })
 

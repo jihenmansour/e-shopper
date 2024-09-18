@@ -194,3 +194,8 @@ declare interface CategoriesChartProps {
 declare interface TopProductsTableProps{
   products: productProps[];
 }
+
+declare interface ImagesProps{
+  files?: File[],
+  updatedImages?: string[]
+}

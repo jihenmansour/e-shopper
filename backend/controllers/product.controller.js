@@ -2,11 +2,10 @@ const Product = require("../models/product.model");
 const CustomError = require("../error/custom.error");
 const Category = require("../models/category.model");
 
-// Create Prodcut
+// Create Product
 const createProduct = async (req, res) => {
   const parsedData = JSON.parse(req.body.data);
-  const images = req.files.length > 0 ? 
-  req.files?.map((file)=> file.filename) : ['1719418313830.png'];
+  const images = req.files?.map((file)=> file.filename) ;
 
   const productData = {
     ...parsedData,
@@ -43,19 +42,29 @@ const getAllProducts = async (req, res) => {
 
 // Get Products
 const getProducts = async (req, res) => {
-  const limit = req.query.limit ? parseInt(req.query.limit) : 10;
-  const page = req.query.page ? parseInt(req.query.page) : 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const page = parseInt(req.query.page) || 1;
   const sortField = req.query.sort || 'createdAt';
-  const search = req.query.search;
+  const search = req.query.search?.toLowerCase() || "";
   const skip = limit * (page - 1);
-  const total = await Product.find(search&&{name: { $regex: search}}).count();
+  const total = await Product.find({name: { $regex: search}}).count();
 
   const totalPages = Math.ceil(total / limit);
   const nextPage = page < totalPages ? page + 1 : null;
   const previousPage = page > 1 ? page - 1 : null;
 
-  // Define the aggregation pipeline
-  const pipeline = [
+
+  const data = await Product.aggregate([
+    {
+      $match: {
+        $expr: {
+         $regexMatch: {
+          input: { $toLower: "$name"},
+          regex: search
+         }
+    }
+  }
+},
     {
       $lookup: {
         from: "orders",
@@ -96,18 +105,9 @@ const getProducts = async (req, res) => {
     },
     { $skip: skip },
     { $limit: limit }
-  ];
+  ]);
 
-  // Conditionally add the $match stage if search query is provided
-  if (search) {
-    pipeline.unshift({
-      $match: {
-        name: { $regex: search }
-      }
-    });
-  }
 
-  const data = await Product.aggregate(pipeline);
   res.status(200).json({
     data,
     page,
@@ -137,12 +137,14 @@ const updateProduct = async (req, res) => {
   const { id } = req.params;
   const parsedData = JSON.parse(req.body.data);
 
+  const updatedImages = [...req.files?.map((file)=> file.filename), 
+    ...parsedData.images]
+
   const updatedProduct = {
     ...parsedData,
+    images: updatedImages
   };
 
-  updatedProduct.images = req.files.length > 0 ? 
-  req.files?.map((file)=> file.filename) : parsedData.images;
   
   const product = await Product.findById({ _id: id });
 
@@ -175,8 +177,7 @@ const updateProduct = await Product.findOneAndUpdate(
       new: true,
       runValidators: true, 
     }
-  ).populate('categories');
-
+  );
   res.status(200).json({
     message: "Product updated successfully",
     updateProduct,

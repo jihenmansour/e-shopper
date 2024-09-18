@@ -16,7 +16,7 @@ const Header = async () => {
       <div className="flex gap-2 pr-8">
         <div className="w-12 h-12 rounded-sm ">
           <Image
-            src={`${apiURL}/images/${user?.image}`}
+            src={user?.image?`${apiURL}/images/${user.image}`:"/images/default-user.png"}
             alt=""
             width={0}
             height={0}

@@ -74,7 +74,7 @@ const UsersTable = ({ users }: { users: UsersTableProps }) => {
                 <TableCell className="flex gap-1">
                   <div className="w-12 h-12 rounded-sm ">
                     <Image
-                      src={`${apiURL}/images/${item.image}`}
+                      src={item.image?`${apiURL}/images/${item.image}`:"/images/default-user.png"}
                       alt=""
                       width={0}
                       height={0}

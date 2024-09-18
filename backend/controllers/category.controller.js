@@ -5,10 +5,7 @@ const Product = require("../models/product.model");
 // Create Category
 const createCategory = async (req, res) => {
   const parsedData = JSON.parse(req.body.data);
-  const images =
-    req.files.length > 0
-      ? req.files?.map((file) => file.filename)
-      : ["1719418313830.png"];
+  const images = req.files?.map((file) => file.filename);
 
   const categoryData = {
     ...parsedData,
@@ -41,7 +38,7 @@ const getAllCategories = async (req, res) => {
 const getCategories = async (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
   const page = parseInt(req.query.page) || 1;
-  const search = req.query.search || "";
+  const search = req.query.search?.toLowerCase() || "";
   const skip = limit * (page - 1);
   const total = await Category.find({ name: { $regex: search } }).count();
 
@@ -49,11 +46,15 @@ const getCategories = async (req, res) => {
   const nextPage = page < totalPages ? page + 1 : null;
   const previousPage = page > 1 ? page - 1 : null;
 
-  // Define the aggregation pipeline
-  const pipeline = [
+  const data = await Category.aggregate( [
     {
       $match: {
-        name: { $regex: search },
+        $expr: {
+          $regexMatch: {
+            input: {$toLower: "$name"},
+            regex: search
+          }
+        }
       },
     },
     {
@@ -63,9 +64,7 @@ const getCategories = async (req, res) => {
     },
     { $skip: skip },
     { $limit: limit },
-  ];
-
-  const data = await Category.aggregate(pipeline);
+  ]);
 
   res.status(200).json({
     data,
@@ -94,8 +93,12 @@ const updateCategory = async (req, res) => {
   const { id } = req.params;
   const parsedData = JSON.parse(req.body.data);
 
+  const updatedImages = [...req.files?.map((file)=> file.filename), 
+    ...parsedData.images]
+
   const updatedCategory = {
     ...parsedData,
+    images: updatedImages
   };
 
   updatedCategory.images =

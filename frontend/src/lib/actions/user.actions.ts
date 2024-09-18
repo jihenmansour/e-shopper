@@ -14,6 +14,7 @@ export const register = async (user: FormData) => {
         headers: {
           'Content-Type': 'multipart/form-data'
         }});
+        revalidatePath("/users")
       return response.data;
     } catch (error) {
       return parseStringifyError(error.response.data.message)
@@ -71,6 +72,7 @@ export const getAllusers = async (page: number): Promise<UsersTableProps> => {
   export const updateUser = async ({id, user}: {id?: string, user:FormData}) => {
     try {
       const response = await axios.put(`${apiURL}/user/${id}`, user);
+      revalidatePath("/users")
       return response.data
     } catch (error) {
       return parseStringifyError(error.response.data.message)

@@ -59,6 +59,7 @@ const UsersForm = ({ user }: { user?: userProps }) => {
         });
       } else {
         message = response.message!;
+        console.log(message)
         router.push("/users");
         toast({
           title: "Success",
