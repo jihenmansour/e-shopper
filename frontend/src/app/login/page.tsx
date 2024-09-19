@@ -21,7 +21,7 @@ function page() {
         <Image
           src="/images/products.png"
           alt=""
-          className="absolute shadow-xl animate-infinite-bounce bottom-20 left-16"
+          className="absolute shadow-xl bottom-20 left-16"
           width={0}
           height={0}
           sizes="100vw"
