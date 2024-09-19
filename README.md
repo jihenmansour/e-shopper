@@ -12,7 +12,7 @@ Welcome to E-shopper, an e-commerce shopping admin dashboard built using the MER
 
 ### Admin Area
 
-https://github.com/jihenmansour/e-shopper/assets/48207144/641489f3-8e05-4c63-aa16-e8f550c7f44
+[https://github.com/jihenmansour/e-shopper/assets/48207144/641489f3-8e05-4c63-aa16-e8f550c7f44](https://github.com/user-attachments/assets/01028b56-f0f5-4367-b52d-562d4afdc4d4)
 
 ## Dummy User Accounts
 
