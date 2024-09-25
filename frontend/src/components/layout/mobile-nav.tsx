@@ -75,9 +75,11 @@ const MobileNav = () => {
             <nav className="flex flex-col gap-6 pt-8 text-white">
               {sidebarLinks.map((item, index) => {
                 return (
-                  <Link href={item.route ? item.route : ""}>
+                  <Link
+                    key={index}
+                    href={item.route ? item.route : ""}>
                     <MenuItem
-                      key={index}
+                     
                       item={item}
                       subMenuOpen={menu === item.label}
                       handleToggle={() => {

@@ -67,7 +67,7 @@ const MultiSelector = ({
         onValueChange([...value, val]);
       }
     },
-    [value]
+    [value, onValueChange]
   );
 
   // TODO : change from else if use to switch case statement
