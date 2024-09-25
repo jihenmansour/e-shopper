@@ -20,7 +20,7 @@ const Dashboard = ({ stats, categories, data, products }: DashboardProps) => {
         total={item.total}/>;
       })}
     </div>
-    <div className='grid grid-flow-row lg:grid-cols-3 gap-4'>
+    <div className='flex flex-col xl:flex-row gap-4'>
       <DoughnutChartCard categories={categories} data={data}/>
       <div className='col-span-2'>
         <TopProductsTable products={products} />

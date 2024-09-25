@@ -98,6 +98,7 @@ const MenuItem = ({
 }) => {
   const pathname = usePathname();
   const IconComponent = item.icon;
+  const [link, setLink] = useState<String>()
   return (
     <div>
       <div>
@@ -143,6 +144,7 @@ const MenuItem = ({
               return (
                 <Link
                   href={subItem.route!}
+  
                   key={index}
                   className={cn(
                     "flex gap-3 p-4 rounded-lg justify-center text-gray-600 font-semibold hover:text-primary",

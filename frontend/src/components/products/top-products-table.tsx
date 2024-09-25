@@ -15,13 +15,14 @@ import { TopProductsTableProps } from "../../../types";
 const TopProductsTable = ({ products }: TopProductsTableProps) => {
   return (
     <>
-      <div className="  box flex flex-col gap-6 ">
+      <div className=" box flex flex-col gap-6 ">
         <div className="flex justify-between ">
           <h5 className="text-xl font-semibold">Top Products</h5>
           <Link href="/products?sort=totalOrderedItems">
             <p className="text-gray-500 text-sm">View all</p>
           </Link>
         </div>
+        <div className="overflow-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -38,7 +39,7 @@ const TopProductsTable = ({ products }: TopProductsTableProps) => {
                 <TableCell className="flex gap-1 items-center">
                   <div className="w-12 h-12 rounded-sm ">
                     <Image
-                      src={`${apiURL}/images/${item.images[0]}`}
+                      src={item.images.length>0?`${apiURL}/images/${item.images[0]}`:"/images/default-picture.png"}
                       alt=""
                       width={0}
                       height={0}
@@ -62,6 +63,7 @@ const TopProductsTable = ({ products }: TopProductsTableProps) => {
             ))}
           </TableBody>
         </Table>
+        </div>
       </div>
     </>
   );
